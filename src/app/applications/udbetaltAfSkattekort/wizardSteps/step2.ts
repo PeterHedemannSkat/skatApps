@@ -1,121 +1,159 @@
-import {Component,OnInit,skattekortText,WizardState,languageText} from '../infrastructure/wizardressources';
-import { taxableIncome } from '../services/taxableincome.service';
-
-interface radioValues {
-    value:string,
-    text:string
-}
-
-interface input {
-    labelText:string,
-    postfix:string
-} 
-
-interface select {
-    text:string,
-    value:string
-}
-
+import {Component,OnInit,WizardState} from '../infrastructure/wizardressources';
+import {Validator} from '../../../shared/shared';
 
 interface Income {
     appliedTaxCard:string,
     sum:string,
     period:string,
-    type:string
+    type:string,
+    from:string
 }
-
 
 @Component ({
 
     template:`
         
-        <!--<h2>#{{wizardState.thisincome + 1}} udbetaler </h2>-->
-
         <div class = "well">
 
+            <h2>{{headingDynamic()}}</h2> 
+            <p>{{content.step2GeneralTxt}}</p>
+
             <selector 
-                [label]   = "incomeTypeText[wizardState.language]" 
-                [default] = "thisincome.type" 
-                [options] = "indkomstTyper"   
-                (changed) = "thisincome.type = $event">
-            </selector> 
-
-           
-            <regular-input *ngIf = "thisincome.type === 'loonIndkomst'"       
-                [label]   = "udbetaler.label" 
-                [default] = "thisincome.from"
-                [placeholder] = "udbetaler.placeholder" 
-                (changed) = "thisincome.from = $event">
-            </regular-input>  
-
-            <bootstrapRadio *ngIf = "thisincome.type === 'loonIndkomst'" 
-                [label] = "periodLabel"
-                [default] = "thisincome.period"
-                [options] = "periodOptions"
-                name      = "periodIncome"      
-                (changed) = "thisincome.period = $event">
-            </bootstrapRadio>
+                [(value)]       = "thisincome.type" 
+                [label]         = "content.indkomstTyperLabel" 
+                [helpTxt]       = "content.indkomstTyperHelp"
+                [options]       = "selects.loonindkomstTyper"   
+                (changed)       = "changePeriod();"
+            ></selector> 
 
             <regular-input 
-                [label] = "monthSaleryTextTotal()"
-                [default] = "thisincome.sum"
-                [postfix] = "monthSaleryInput.postfix"
-                [placeholder] = "monthSaleryInput.placeholder"   
-                (changed) = "thisincome.sum = $event">
-            </regular-input>  
+                *ngIf           = "thisincome.type === 'loonIndkomst'"
+                [(value)]       = "thisincome.from"         
+                [label]         = "content.udbetalerLabel" 
+                [helpTxt]       = "content.navnUdbetalerHelp"
+                [validateType]  = "[wizardState.errorTxt.notEmpty]"
+                [placeholder]   = "content.udbetalerPlaceholder" 
+                (changed)       = "changeIncomeName()"
+            ></regular-input>  
 
             <bootstrapRadio 
-                [label] = "textLabelonTaxCardType[wizardState.language]"
-                [default] = "thisincome.appliedTaxCard"
-                [options] = "taxCardTypes"
-                name      = "appliedtaxcard"      
-                (changed) = "thisincome.appliedTaxCard = $event;updateskattekort($event)">
-            </bootstrapRadio>
+                *ngIf           = "thisincome.type === 'loonIndkomst'" 
+                [(value)]       = "thisincome.period"
+                [helpTxt]       = "content.perioderHelp"
+                [label]         = "content.udbetalingsfrekvensLabel"
+                [options]       = "selects.indkomstperioder"
+                name            = "periodIncome"      
+             ></bootstrapRadio>
 
-            <div *ngIf = "hovedkortchange === true">Hovedkortet er nu flyttet fra <b>{{previousHovedkort}}</b> til <b>{{thisincome.from}}</b> (hovedkortet kan kun være hos én udbetaler) </div>
+            <regular-input 
+                [(value)]       = "thisincome.sum"
+                [label]         = "monthSaleryTextTotal()"
+                [helpTxt]       = "correctIncomeHelperTxt()"
+                [validateType]  = "getNumberType()"
+                postfix         = "kr"
+                [placeholder]   = "content.skrivbeloeb"
+                (changed)       = "validate()"   
+            ></regular-input>  
 
+            <bootstrapRadio 
+                [(value)]       = "thisincome.appliedTaxCard"
+                [label]         = "content.skattekortTyperLabel"
+                [helpTxt]       = "content.valgSkatteKortHelp"
+                [options]       = "selects.skattekortsTyper"
+                name            = "appliedtaxcard"      
+                (changed)       = "updateskattekort()"
+            ></bootstrapRadio>
 
-        
+            <div *ngIf = "hovedkortchange === true">
+                {{content.hovedkortFlyttet}}
+                {{previousHovedkort}}
+                {{content.til}}
+                {{newHovedkort}}
+                {{content.kunKunBrugesEtSted}}
+            </div>
+
         </div>
     `
 })
 
 export class basicSkattekort {
 
+    constructor (
+        private wizardState:WizardState
+    ) {}
 
-    textLabelonTaxCardType = {};
-    taxCardTypes:radioValues[] = [];
+    thisincome:Income;
+    content:Object = {};
+    selects:Object = {};
+    hovedkortchange:boolean = false;
+    previousHovedkort:string = "";
+    newHovedkort:string = "";
+    indkomstTyper:Object = {}
 
-    periodOptions:radioValues[] = [];
-    periodLabel:string = "";
-    periodOptionsName = {
-        monthly:"",
-        twoweeks:""
+    ngOnInit () {
+
+        this.wizardState.trin = 1;  
+
+        this.thisincome     = this.wizardState.incomes[this.wizardState.thisincome].income;
+        this.content        = this.wizardState.currentWizardStepContent
+        this.selects        = this.wizardState.currentStepLists
+        this.hovedkortchange = false; 
+
+        this.wizardState.printLocalContent([['step2','general'],['general','placeholderTexts']]);
+        this.wizardState.printLocalLists(['loonindkomstTyper','skattekortsTyper','indkomstperioder']);
+        this.validate();
+
+        this.wizardState.getselect('selects','loonindkomstTyper').subscribe(indkomstTyper => {
+            indkomstTyper.forEach(element => {
+                this.indkomstTyper[element.value] = element.text
+            })
+        })
+
+        window.scrollTo(0,0)
     }
 
-    monthSaleryText:string = "";
+    correctIncomeHelperTxt () {
+
+        return (this.thisincome.type === 'loonIndkomst') ? this.content['helpIndkomst'] : this.content['helpOtherThanSalery']
+
+
+    }
+
+    getNumberType () {
+        return [this.wizardState.errorTxt['notEmpty'],this.wizardState.errorTxt['number']]
+    }
+
+    validate () {
+
+        var numbers     = [{type:'number'},{type:'notEmpty'}];
+
+        /* validates values on this step that should contain numbers */
+        var validates   = [this.thisincome.sum]
+                .map(el => {
+                    return {element:el,regExContainer:numbers}    
+                })
+
+        this.wizardState.stepValidationOk = new Validator().add(validates).checkAll(); 
+
+    }
+
+    isNew () {
+        return this.wizardState.thisincome === this.wizardState.incomes.length-1
+    }
+
+    headingDynamic () {
+        return !this.wizardState.editingIncome ? this.content['headingNy'] : this.content['headingEdit']
+    }
 
     monthSaleryTextTotal ():string {
 
-        var period = this.thisincome.period 
-        var name = this.periodOptionsName[period]
+        var period  = this.thisincome.period, 
+            id      = (period === 'monthly') ? 'indkomstLabelDel2Monthly' : 'indkomstLabelDel2TwoWeekly',
+            part2   = this.content[id]
 
-        return this.monthSaleryText + " " + name
+        return `${this.content['indkomstLabelDel1']} ${part2}`
+
     }
-
-    monthSaleryInput = {
-        label:{},
-        postfix:"kr-month",
-        placeholder:""
-    }
-
-    udbetaler = {
-        label:{},
-        placeholder:""
-    }
-
-    hovedkortchange:boolean = false
-    previousHovedkort:string = ""
 
     updateskattekort () {
 
@@ -127,75 +165,38 @@ export class basicSkattekort {
         },-1)  
 
         if (hovedkortExists > -1) {
-            this.hovedkortchange = true 
-            this.previousHovedkort = this.wizardState.incomes[hovedkortExists].income.from
+
+            let typePrev    = this.wizardState.incomes[hovedkortExists].income.type;
+            let typeNow     = this.thisincome.type
+
+            this.previousHovedkort     = (typePrev !== 'loonIndkomst') ? this.indkomstTyper[typePrev] : this.wizardState.incomes[hovedkortExists].income.from  
+            this.newHovedkort          = (typeNow !== 'loonIndkomst') ? this.indkomstTyper[typeNow] : this.thisincome.from  
+
+            this.hovedkortchange    = true 
             this.wizardState.moveHovedkort(hovedkortExists,this.wizardState.thisincome)
+
         } else {
+
             this.hovedkortchange = false 
         }
-
     }
 
-    incomeTypeText = {}
-    indkomstTyper:select[]; 
-    thisincome:Income
+    changeIncomeName () {
 
-    constructor (
-        private textServices: skattekortText,
-        private wizardState:WizardState
-    ) {}
+        var thisType = this.thisincome.type,
+            thisName = this.thisincome.from
 
-    ngOnInit () {
+        switch (thisType) {
+            case 'loonIndkomst':{
+                thisName = (thisName === '') ? 'Arbejdsgiver' : thisName  
+            }
+        }
+    }
 
-        this.wizardState.trin = 1;    
-        this.thisincome = this.wizardState.incomes[this.wizardState.thisincome].income
-        this.hovedkortchange = false 
+    changePeriod () {
+
+        if (this.thisincome.type !== 'loonIndkomst') this.thisincome.period = 'monthly'    
         
-
-
-        this.textServices.getText().subscribe(text => {
-
-
-            this.monthSaleryInput.placeholder   = text.find(element => element.id === 'placeholder_1')[this.wizardState.language];
-            
-            this.udbetaler.placeholder          = text.find(element => element.id === 'placeholder_2')[this.wizardState.language];
-            this.udbetaler.label                = text.find(element => element.id === 'udbetalerlabel')[this.wizardState.language];
-        
-            this.periodLabel                    =  text.find(element => element.id === 'indkomstperiodeLabel')[this.wizardState.language];
-            this.periodOptions                  =  text.filter(element => element.group === 'indkomstperiode')
-                .map(element => {
-                    return {
-                        value:element.id,
-                        text:element[this.wizardState.language]           
-                    }
-                })
-
-            this.incomeTypeText                  = text.find(element => element.id === 'maanedsindkomstTypeLabel');  
-            this.indkomstTyper                   = text.filter(element => element.group === 'indkomsttyper')
-                .map(element => {
-                    return {
-                        value:element.id,
-                        text:element[this.wizardState.language]   
-                    }
-                });  
-            this.monthSaleryInput.label          = text.find(element => element.id === 'maanedsindkomst');
-            this.monthSaleryText                 = text.find(element => element.id === 'maanedsindkomst')[this.wizardState.language];
-        
-
-            this.textLabelonTaxCardType          = text.find(element => element.id === 'skattekortsTypeLabel')
-            this.taxCardTypes                    = text.filter(element => element.group === 'taxCardTypes')
-                .map(radio => {
-                    return {
-                        text:radio[this.wizardState.language],
-                        value:radio.id
-                    }    
-                })
-            this.periodOptionsName.monthly      = text.find(element => element.id === 'prmonth')[this.wizardState.language];
-            this.periodOptionsName.twoweeks     = text.find(element => element.id === 'prtwoweeks')[this.wizardState.language];
-                      
-
-        });
-
     }
 
  } 

@@ -10,16 +10,21 @@ interface input {
     template:`
         <div class="row skts-process-form-section form-group">
             <div class = "col-sm-12">       
-                <label for = "indkomstTypeChosen">{{label}}</label>
-                <select #sel [(ngModel)] = "default" class="form-control" (change) = "changed.emit(sel.value)" >
+                <label for = "indkomstTypeChosen">{{label}}<span *ngIf = "showHelper()" class = "skts-rounded-icon hover" (click) = "toggleHelpTxt = !toggleHelpTxt">?</span></label>
+                <div *ngIf = "showHelper()" [hidden] = "toggleHelpTxt" class = "helper-txt">{{helpTxt}}</div>  
+                <select #sel [(ngModel)] = "value" class="form-control" (change) = "valueChange.emit(sel.value);changed.emit(null)" >
                     <option *ngFor = "let option of options" [value] = "option.value">{{option.text}}</option>
                 </select>
             </div>
         </div>
-    `
+    `,
+    styleUrls:['../styles/helperTxt.css'] 
 })
 
 export class selector {
+
+    _value:string;
+    toggleHelpTxt:boolean = true
 
     @Input()
     label:string
@@ -28,10 +33,23 @@ export class selector {
     default:string
 
     @Input()
+    helpTxt:string;
+
+    @Input()
     options:Array<input>
 
     @Output()
     changed: EventEmitter<any> = new EventEmitter(); 
+
+    @Input() value:string 
+
+    @Output()
+    valueChange:EventEmitter<any> = new EventEmitter();
+
+    showHelper () {
+        return (this.helpTxt && this.helpTxt.length > 2)   
+    } 
+
 
 
 } 

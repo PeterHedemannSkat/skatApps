@@ -7,7 +7,7 @@ import '@angular/http';
 import '@angular/router';
 // RxJS
 import 'rxjs';
-import 'json-data/skattekort.text.json'
+
 
 // Other vendors for example jQuery, Lodash or Bootstrap
 // You can import js, ts, css, sass, ...

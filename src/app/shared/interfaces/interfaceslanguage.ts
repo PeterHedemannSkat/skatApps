@@ -1,9 +1,17 @@
 export interface languageText {
 
-    da:string;
+    da?:string;
     id:string;
     en?:string;
     description?:string;
-    group?:string
+    children?:Array<languageText>
 
 }
+
+ export interface validateSet {
+     element:string,
+     regExpression?:string,
+     id:string,
+     type?:string
+ }
+

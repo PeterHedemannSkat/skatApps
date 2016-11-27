@@ -3,7 +3,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var helpers = require('./helpers');
 
-var application = "udbetaltAfSkattekort"
+var application = "kalenderApp"
 
 module.exports = {
   entry: {

@@ -1,6 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-
-import { skattekortText } from '../services/skattekort.text';
 import { WizardState } from '../services/app.wizardState.service';
 
 @Component({
@@ -8,8 +6,8 @@ import { WizardState } from '../services/app.wizardState.service';
     template:`
         <hr class = "skts-divider">
             <div class = "clearfix skts-wizard-buttons">
-            <input *ngIf = "wizardState.trin > 0 && wizardState.trin < links.length-1"  [value] = "back" type = "button" class = "btn skts-btn-secondary pull-left" [routerLink] = "links[wizardState.trin - 1]">   
-            <input *ngIf = "wizardState.trin < links.length-1"  [value] = "forward" type = "button" class = "btn btn-primary pull-right" [routerLink] = "links[wizardState.trin +1]">     
+            <input *ngIf = "wizardState.trin > 0 && wizardState.trin < links.length-1"  [value] = "content.back" type = "button" class = "btn skts-btn-secondary pull-left" [routerLink] = "links[wizardState.trin - 1]">   
+            <input *ngIf = "wizardState.trin < links.length-1"  [value] = "content.next" type = "button" class = "btn btn-primary pull-right" [routerLink] = "links[wizardState.trin +1]" [disabled] = "disable">     
         </div>
     `
 })
@@ -18,22 +16,25 @@ export class globalButtoms {
 
     @Input()
     links:string[];
-    forward:string;
-    back:string;
+
+    @Input()
+    disable:boolean;
+
+    content:Object = {};
 
     constructor (
-        private textServices: skattekortText,
         private wizardState: WizardState
     ) {}
 
     ngOnInit () {
-        
-        this.textServices.getText().subscribe(text => {
 
-            this.forward = text.find(element => element.id === 'next')[this.wizardState.language]
-            this.back    = text.find(element => element.id === 'back')[this.wizardState.language]
-        
+        this.wizardState.getText('general','globalbuttons').subscribe(text => {
+            text.forEach(element => {
+                this.content[element.id] = element[this.wizardState.language]
+            })
         })
-        
+
     }
+
+
 }

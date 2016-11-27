@@ -6,7 +6,15 @@ import { Component,Input } from '@angular/core';
         <ul class = "skts-navbar-wizard">
             <li *ngFor = "let step of steps; let i = index" [class.active] = "setTrin(i)"><span>{{step}}</span></li>
         </ul>
-    `
+    `,
+    styles:[`
+    
+        .skts-navbar-wizard li {
+            line-height:3em !important
+        }    
+    
+    `]
+
 })
 
 export class wizardBar {

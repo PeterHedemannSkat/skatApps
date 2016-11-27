@@ -1,0 +1,239 @@
+.virkkalender {
+	width: 23em;
+margin: 4em auto;
+}
+#frister_container {
+    width: 100%;
+    position: relative;
+    font-size: 1em;
+	overflow:auto;
+}
+
+div {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#frister_container h2 {
+    -webkit-margin-after: 0;
+	-webkit-margin-before: 0;
+	margin: 0;
+	padding: 1.3em 1.3em 0em 0.8em;
+	width: 100%;
+	position: relative;
+	font-size: 23px;
+	font-weight: 100;
+	display: inline-block;
+	color: #000;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	height: 2.44em;
+	line-height: 0.19em;
+	border-left: 1px solid #9B9B9A;
+	border-top: 1px solid #9B9B9A;
+	border-right: 1px solid #9B9B9A;
+}
+
+#frister_container a.hjalp {
+    color: #FFDC78;
+    font-size: 75%;
+}
+
+#frister_container a.hjalp:hover {
+    color: #FFF6DD;
+    cursor: pointer;
+}
+
+
+
+#frister_container .special {
+    position: absolute;
+	right: 0.8em;
+	top: 0.7em;
+	margin: 0;
+	display: inline-block;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	cursor: pointer;
+	background: url("images/sprite.svg") no-repeat -258px -131px;
+	width: 1.6em;
+	height: 1.6em;
+}
+#frister_container .special:hover {
+-webkit-filter: brightness(0.5);
+filter: brightness(0.5);
+}
+a.special#abnIndstillinger {
+	color:white;
+	text-decoration:none;
+}
+#frister_container .special:after {
+    content: "";
+    clear: both;
+}
+
+
+
+#frister_container a.luk#lukIndstllinger {
+    float: right;
+	cursor: pointer;
+	text-decoration: none;
+	font-weight: normal;
+	color: #FFF;
+	background: url("images/sprite.svg") no-repeat -292px -135px;
+	width: 2.2em;
+	height: 2em;
+	position: absolute;
+	right: 1.4em;
+top: 1.2em;
+}
+
+#frister_container a.luk#lukIndstllinger:hover {
+	opacity:0.8;
+}
+
+#frister_container #frister {
+    overflow: auto;
+	border-left: 1px solid #9B9B9A;
+	border-bottom: 1px solid #9B9B9A;
+	border-right: 1px solid #9B9B9A;
+	-webkit-overflow-scrolling: touch;
+	display: block;
+	min-height: 4em;
+}
+
+#frister_container #indstillinger, #frister_container #hjalpFrist {
+    position: absolute;
+    right: 0;
+    top: 0;
+    overflow: auto;
+    overflow-x: hidden;
+    z-index: 99;
+    width: 100%;
+    background: #395f77;
+    display: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+#frister_container #hjalpFrist {
+    font-size: 80%;
+    width: 80%;
+}
+
+#frister_container #hjalpFrist ul {
+    margin: 0;
+    padding: 3% 0 0 10%;
+}
+
+
+#frister_container #hjalpFrist ul li {
+    margin: 3% 0 0 0;
+}
+
+#frister_container h3 {
+    padding: 1.5em 1.3em 2em 2.3em;
+    margin: 0;
+    font-size: 1em;
+    font-weight: normal;
+}
+
+#frister_container #indstillinger fieldset {
+    margin: -2em 0 0 0.4em;
+    padding: 0 0 1.8em 0;
+    border: none;
+}
+
+#frister_container #indstillinger legend {
+    float: left;
+clear: both;
+width: 100%;
+margin: 1em 0 0.3em 0.55em;
+font-weight: 100;
+font-size: 1.3em;
+color: rgba(255, 255, 255, 0.8);
+border-bottom:none;
+}
+#frister_container #indstillinger legend:first-child {
+	margin-top:0;
+}
+#frister_container span.warning {
+    color: red;
+}
+
+#frister_container #frister ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    font-size: 90%;
+}
+
+#frister_container #frister li {
+    padding: 1.3em 1.3em 0 1.3em;
+	margin:0;
+}
+#frister_container #frister li:last-child {
+    padding: 1.3em;
+}
+
+#frister_container #frister span.frist-overskrift {
+    font-weight: bold;
+}
+
+#frister_container #frister li span.frist-dato {
+    border-top: 1px solid #9B9B9A;
+	padding-top: 1.3em;
+}
+
+#frister_container #frister li.linjeskift-lys {
+    background: white;
+}
+
+#frister_container #frister span.frist-dato {
+    display: block;
+}
+
+
+#frister_container label {
+    float: left;
+    margin-left: 0.3em;
+    font-size: 1em;
+	color:white;
+	font-weight:normal;
+	cursor: pointer;
+}
+#frister_container label:hover {
+	text-decoration:underline;
+}
+
+#frister_container input[type='checkbox'], #frister_container input[type='radio'] {
+    float: left;
+    clear: left;
+    margin: 0.4em 0 0 0.1em;
+    width: 10%;
+	cursor: pointer;
+}
+
+/*@media only screen and (max-width: 979px) {*/
+@media only screen and (max-width: 959px) {
+    .virkkalender {
+	    margin:4em auto 0;
+    }
+}
+@media only screen and (max-width: 490px) {    
+    .virkkalender {
+	    width:18.2em;
+    }
+	#frister_container h2 {
+		font-size: 21px;
+		padding: 1.4em 1.3em 0em 0.8em;
+}
+
+#frister_container .special {
+background: url("images/sprite.svg") no-repeat -258px -131px;
+width: 1.8em;
+height: 1.8em;
+}
+}

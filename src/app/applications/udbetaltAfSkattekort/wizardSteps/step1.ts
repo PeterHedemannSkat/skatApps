@@ -1,17 +1,5 @@
-import {Component,OnInit,skattekortText,WizardState,languageText} from '../infrastructure/wizardressources';
-
-interface input {
-    text:string,
-    postfix:string,
-    placeholder:string
-} 
-
-interface Income {
-    appliedTaxCard:string,
-    sum:number,
-    period:string,
-    type:string
-}
+import {Component,OnInit,WizardState} from '../infrastructure/wizardressources';
+import {Validator} from '../../../shared/shared';
 
 @Component ({
 
@@ -19,25 +7,29 @@ interface Income {
 
         <div class = "well">
 
-            <p>{{headingForSkattekortsDetail}}</p>
+            <p>{{content.overskrift1}}</p>
+            <p>{{content.step1GeneralTxt}}</p>
 
             <regular-input
-                [label] = "traekProcentInput.text"
-                [default] = "wizardState.taxcard.withHoldingRate"
-                [placeholder] = "traekProcentInput.placeholder"
-                [postfix] = "traekProcentInput.postfix"
-                (changed) = "wizardState.taxcard.withHoldingRate = $event">
-            </regular-input>
+                [(value)]       = "wizardState.taxcard.withHoldingRate"
+                [label]         = "content.traekprocentLabel"
+                [helpTxt]       = "content.helptraekprocent"
+                [validateType]  = "wizardState.getValitionSet(['notEmpty','number','!range?from=30&to=99'])"
+                [placeholder]   = "content.skrivprocent"
+                postfix         = "procent"     
+                (changed)       = "validate()"
+            ></regular-input>
 
             <regular-input 
-                [label] = "maanedsFradragInput.text" 
-                [default] = "wizardState.taxcard.deduction"
-                [postfix] = "maanedsFradragInput.postfix"
-                [placeholder] = "maanedsFradragInput.placeholder"
-                (changed) = "wizardState.taxcard.deduction = $event">
-            </regular-input>
+                [(value)]       = "wizardState.taxcard.deduction"
+                [label]         = "content.maanedsfradragLabels" 
+                [helpTxt]       = "content.helpMaanedsfradrag"
+                [validateType]  = "wizardState.getValitionSet(['notEmpty','number'])"
+                postfix         = "kr"
+                [placeholder]   = "content.skrivbeloeb"
+                (changed)       = "validate()"
+            ></regular-input>
 
-       
         </div>
     `
 })
@@ -45,47 +37,41 @@ interface Income {
 export class basicIncome {
 
     constructor (
-        private textServices: skattekortText,
         private wizardState:WizardState
     ) {}
 
-    maanedsFradragInput:input = {
-        text:"",
-        placeholder:"",
-        postfix:"kr"
-    }
-    traekProcentInput: input = {
-        text:"",
-        postfix:"procent",
-        placeholder:""            
-    }
-    
-    actualIncome:any;
-    headingForSkattekortsDetail:string;
-
+    content:Object = {};
 
     ngOnInit () {
   
         this.wizardState.trin = 0;
+        this.content = this.wizardState.currentWizardStepContent
+        this.wizardState.printLocalContent([['step1','general'],['general','placeholderTexts']])
+        this.validate();
 
-        console.log(this.wizardState.taxcard)
-
-        this.textServices.getText().subscribe(text => {
-
-
-            var placeholder = text.find(element => element.id === 'placeholder_1')[this.wizardState.language];
-
-            //console.log(placeholder)
-            this.headingForSkattekortsDetail     = text.find(element => element.id === 'heading_gui2')[this.wizardState.language];  
-
-            this.maanedsFradragInput.text   = text.find(element => element.id === 'maanedsfradrag')[this.wizardState.language];
-            this.traekProcentInput.text     = text.find(element => element.id === 'traekprocent')[this.wizardState.language];  
-            this.traekProcentInput.placeholder      = placeholder;
-            this.maanedsFradragInput.placeholder    = placeholder;              
-
-
-
-
-        })
     }
+
+    getNumberType () {
+        return [this.wizardState.errorTxt['notEmpty'],this.wizardState.errorTxt['number']]
+    }
+
+
+    validate () {
+
+        var validateTraekProcent = {
+            element:this.wizardState.taxcard.withHoldingRate,
+            regExContainer: this.wizardState.getValitionSet(['notEmpty','number','!range?from=30&to=99'])
+        }
+
+        var validateMaanedsFradrag = {
+            element:this.wizardState.taxcard.deduction,
+            regExContainer: this.wizardState.getValitionSet(['notEmpty','number'])
+        }
+        
+        this.wizardState.stepValidationOk = new Validator().add([validateTraekProcent,validateMaanedsFradrag]).checkAll(); 
+
+    }
+
  } 
+
+

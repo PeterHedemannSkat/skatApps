@@ -1,0 +1,12 @@
+.hover:hover {
+    cursor:pointer
+}
+
+.hover {
+    display:inline-block;
+    margin-left:0.5em
+}
+
+.helper-txt {
+    margin:0.5em 0;
+}

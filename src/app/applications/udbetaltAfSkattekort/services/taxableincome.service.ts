@@ -19,14 +19,11 @@ export class taxableIncome {
     taxcard:TaxCard = {withHoldingRate:"",deduction:""};
     income:Income = {appliedTaxCard:"hovedkort",sum:"",period:"monthly",type:"loonIndkomst",from:""};
 
-
-    
     constructor (private wizardState:WizardState, income?:Income ) {
         this.taxcard = this.wizardState.taxcard
         if (income) {
             this.income = income
         }
-
     }
     
     deductionForPeriod (): number {
@@ -34,12 +31,12 @@ export class taxableIncome {
         let converter          = {monthly:12,twoweeks:26},
             deductionprYear    = +this.taxcard.deduction * 12
 
-        return deductionprYear/converter[this.income.period] 
+        return Math.round(deductionprYear/converter[this.income.period]) 
 
     }
 
     netincome ():number {
-        return (this.deductableAmount() > this.netincome_ambidrag()) ? this.netincome_ambidrag() : (this.netincome_ambidrag() - this.deductableAmount())  
+        return (this.deductableAmount() > this.netincome_ambidrag()) ? 0  : (this.netincome_ambidrag() - this.deductableAmount())  
     }
 
     deductableAmount ():number {
