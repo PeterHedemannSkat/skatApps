@@ -1,21 +1,35 @@
 import { Injectable,Inject } from '@angular/core';
-import { Rules,Exceptions } from '../data/rulesForPligter';
-import { deadlineRule,findDateObj,deadlineManualDate,period,datePeriod,deadlineInfo,data,deadlineView,interval } from '../infrastructure/types';
+import { Rules,Exceptions,hierachy } from '../data/rulesForPligter';
+import { deadlineRule,findDateObj,deadlineManualDate,period,datePeriod,deadlineInfo,data,deadlineView,interval,findRate } from '../infrastructure/types';
 import { Observable } from 'rxjs/Observable'; 
-import { CalenderServices,excludeDates,getJSONdata } from '../../../shared/shared'
+import { CalenderServices,excludeDates,getJSONdata,MathCalc,multiGears } from '../../../shared/shared'
+
+interface extendedNumber extends Number {
+    highherThan?: Function
+}
 
 @Injectable()
 export class Deadline {
 
+
+    /* 
+        skat.dk produktions url 
+        https://www.skat.dk/websrv/jsong.ashx?Id=66594 
+
+        *** HUSK module change here developmentMode AND getJSONdata production keys ***
+
+    */
+         
+
     from:Date = new Date(2016,0,1)
     to:Date = new Date(2016,1,1)
     limitYears:boolean = true
-    minLimitYears:number = 5;
-    topLimitYears:number = 5;
-    now:Date = new Date(2016,11,3);
-    developmentMode:boolean = true;
-    url:string; 
-    urlManualDeadlines:string;
+    minLimitYears:number = 1;
+    topLimitYears:number = 4;
+    now:Date = new Date();
+    developmentMode:boolean = false; // remember json-service change and module change !!!
+    url:string = 'websrv/jsong.ashx?Id=66594'; 
+    urlManualDeadlines:string = 'websrv/jsong.ashx?Id=134179';
     testDate:boolean = false;
     showDaysBefore:number = 4;
     isViewed:boolean = true;
@@ -32,7 +46,10 @@ export class Deadline {
         EUsalgUdenMoms:[],
         OneStopMoms:[],
         selvangivelse:['erhvervsdrivende'],
-        punktafgifter:[]
+        punktafgifter:[],
+        selskabsskat:[],
+        bSkatteRater:['bSkatteRater'],
+        momsRefusion:[]
     }
 
     deadlines:Promise<deadlineInfo[]>;
@@ -47,25 +64,29 @@ export class Deadline {
 
         this.setPligter();
 
-        console.log(this.isViewed)
-
     }
-
+    
     dateShiftCoefficent () {
         /* kan præciseres afhængig af antallet af viste pligter og pligternes hyppighed, */
         return 100
+
     }
 
     setPligter () {
-
-       
 
         let firstCalenderLook = localStorage.getItem('calenderIsViewed') 
 
         if (JSON.parse(firstCalenderLook)) {
 
             this.isViewed = true
-            this.state = JSON.parse(localStorage.getItem('pligter'))
+
+            let pligterStored = JSON.parse(localStorage.getItem('pligter'));
+
+            for (let pligtgroup in hierachy) {
+                if (!(pligtgroup in pligterStored)) pligterStored[pligtgroup] = []  
+            }
+
+            this.state = pligterStored
 
         } else {
 
@@ -83,12 +104,13 @@ export class Deadline {
 
     }
 
-
     /*  KEY METHOD - 200 code-lines, can it be smaller?  */ 
 
     fetchTenDeadlines(direction:string):Promise<deadlineInfo[]> {
 
-        return new Promise (resolve => {
+        return new Promise(resolve => {
+
+            
             /* current View edge dates */
             let fromDate    = this.viewData.dateInterval.from,
                 toDate      = this.viewData.dateInterval.to,
@@ -101,7 +123,7 @@ export class Deadline {
             let from:Date,to:Date
             let onEdgeDate:boolean = false
 
-
+        
             this.goBackShown = true;
             this.goForwardShown = true;
 
@@ -132,7 +154,8 @@ export class Deadline {
 
                     case 'back':
                         from    = self.dateService.moveDateByDays(fromDate,self.dateShiftCoefficent() * -1 * i)
-                        to      = self.dateService.moveDateByDays(fromDate,-1)
+                        //to      = self.dateService.moveDateByDays(fromDate,-1)
+                        to      = fromDate
                         break
 
                 }
@@ -155,13 +178,21 @@ export class Deadline {
                     
                     if (deadlines.length > listItems || onEdgeDate) {
 
-                        let shownItems:deadlineInfo[] = []
+                        let shownItems:deadlineInfo[] = []  
 
                         if (direction == 'back') {
 
-                            shownItems = deadlines.slice(deadlines.length - self.showItems)
+                            shownItems = deadlines
+                                .filter(el => {
+                                    return !self.viewData.edgeDeadlinesStart.reduce((state,deadline) => {
+                                        return self.compareDeadlineInfo(deadline,el) ? true : state
+                                    },false)   
+                                })
+
+                            shownItems = shownItems.slice(shownItems.length - self.showItems)
+
                             
-                        } else {
+                        } else if (direction == 'next') {
 
                             shownItems = deadlines
                                 .filter(el => {
@@ -170,21 +201,29 @@ export class Deadline {
                                     },false)   
                                 })
                                 .slice(0,self.showItems)
-                                
+
+                        } else {
+
+                            shownItems = deadlines.slice(0,self.showItems)
+
                         }
 
                         let lastDate        = (shownItems.length > 0) ? shownItems[shownItems.length - 1].date : to,
                             firstDate       = (shownItems.length > 0) ? shownItems[0].date : from,
-                            catchedGroup    = shownItems.filter(el => el.date.getTime() == lastDate.getTime())
+                            catchedGroup    = shownItems.filter(el => el.date.getTime() == lastDate.getTime()),
+                            cachedFirst     = shownItems.filter(el => el.date.getTime() == firstDate.getTime())
                         
                         /* 
                             when moving back we move TO one day back (FROM goes back with dateShiftCoefficent * i), but moving forward we take the last date shown and catches 
                             edge TO dates, so they aren't show in the new View-list   
                         */
 
-                        self.viewData.edgeDeadlinesEnd = catchedGroup;
-                        self.viewData.dateInterval.from = firstDate;
-                        self.viewData.dateInterval.to = lastDate;
+                        self.viewData.edgeDeadlinesEnd      = catchedGroup;
+                        self.viewData.edgeDeadlinesStart    = cachedFirst;
+                        self.viewData.dateInterval.from     = firstDate;
+                        self.viewData.dateInterval.to       = lastDate;
+
+
 
                         /* 
                             We need to know what hides one back/forward, because of edgeDates they CAN be empty. Thus 
@@ -257,7 +296,7 @@ export class Deadline {
                             resolve([])
                         } 
 
-                    }
+                    } 
                 }) 
         }
 
@@ -268,16 +307,11 @@ export class Deadline {
 
     }
 
-    compareDeadlineInfo (deadlineInfo1:deadlineInfo,deadlineInfo2:deadlineInfo) {
 
-        return   deadlineInfo1.id == deadlineInfo2.id &&
-                 deadlineInfo1.period.year == deadlineInfo2.period.year &&
-                 deadlineInfo1.period.period == deadlineInfo2.period.period           
-    }
 
     getDeadLines (from:Date,to:Date):Promise<deadlineInfo[]> {
 
-        return new Promise (resolve => {
+        return new Promise(resolve => {
 
             let pligter = this.getPligterForCurrentState(),
                 self = this,
@@ -313,7 +347,7 @@ export class Deadline {
 
         }
 
-        let pligter:string[] = [].concat(this.state.moms,newLoonSum,this.state.askat,this.state.EUsalgUdenMoms,this.state.OneStopMoms,this.state.selvangivelse,this.state.punktafgifter) 
+        let pligter:string[] = [].concat(this.state.moms,newLoonSum,this.state.askat,this.state.EUsalgUdenMoms,this.state.OneStopMoms,this.state.selvangivelse,this.state.punktafgifter,this.state.selskabsskat,this.state.bSkatteRater,this.state.momsRefusion) 
 
         return pligter
 
@@ -323,54 +357,53 @@ export class Deadline {
 
         return new Promise(resolve => {
 
-            let fromPromise     = this.closestDeadlineAfterOrBeforeDate(id,from,'after'),
-                afterPromise    = this.closestDeadlineAfterOrBeforeDate(id,to,'before')
+                let rules = Rules.find(rule => rule.id == id)
+
+                let fromPromise = (rules.type == 'rate') ? this.nextRatePeriodBasedOnDate(from,id,'from') : this.closestDeadlineAfterOrBeforeDate(id,from,'after') 
+                let afterPromise = (rules.type == 'rate') ? this.nextRatePeriodBasedOnDate(to,id,'to') : this.closestDeadlineAfterOrBeforeDate(id,to,'before') 
 
             Promise.all([fromPromise,afterPromise]).then(edgeDates => {
 
                 let fromPeriodDate  = edgeDates[0],
                     toPeriodDate    = edgeDates[1]
-                
-                this.getDeadlinesForPeriods(fromPeriodDate.period,toPeriodDate.period,id).then(deadLines => {
-                    resolve(deadLines)
-                })
-                
+
+                    this.getDeadlinesForPeriods(fromPeriodDate.period,toPeriodDate.period,id).then(deadLines => {
+                        resolve(deadLines)
+                    })
+     
             })
         })
     }
 
-    getDeadlinesForPeriods (from:period,to:period,id:string):Promise<deadlineInfo[]> {
+    getDeadlinesForPeriods(from:period,to:period,id:string):Promise<deadlineInfo[]> {
 
         return new Promise(resolve => {
 
             let  period:period = from,
                  rulesObj = Rules.find(el => el.id == id),
                  datesPromises:Promise<Date>[] = [],
-                 periods:period[] = []
+                 periods:period[] = [],
+                 rate = 0
 
-            /* big OR test here, iterating all periods */
+            if (rulesObj.type == 'rate') {
+                rate = rulesObj.rateRules.monthAfterInitial.length
+            }
 
-            while (
-                /* 1. test is the normal case, eg. inside a year */
-                (period.year == from.year && period.year == to.year && period.period >= from.period && period.period <= to.period) ||
-                /* 2. test is fast track, approving all periods when year is between from and to */
-                (period.year > from.year && period.year < to.year) || 
-                /* 3. test is 1. year of 2+ years span  */
-                (period.year == from.year && to.year > period.year && period.period >= from.period) ||
-                /* 4. test is last year of 2+ years span  */
-                (period.year == to.year && from.year < period.year && period.period <= to.period) 
+            let periodObj = new Period(from,rulesObj.periods,rate)
 
-            ) {
+            /*  pga edge kan denne fn spørge på periode, hvor fra ligger efter til. Derfor vil den loope uendeligt  */
+          
+            while (periodObj.isEarlierOrEqualToThisPeriod(to)) {
 
-                let newRulesObj  = Object.assign({period:period},rulesObj),
+               let newRulesObj  = Object.assign({period:periodObj.period},rulesObj),
                     dateObs      = this.getDeadlinePeriod(newRulesObj)
-                
+
                 /* pushing to promise-collection */
                 datesPromises.push(dateObs)
-                periods.push(period)
-
-                /* incrementing period */
-                period = this.movePeriod(period,1,id)
+                periods.push(periodObj.period)
+ 
+                periodObj = periodObj.movePeriodByXSteps(1)
+                
 
             }
 
@@ -386,22 +419,23 @@ export class Deadline {
 
                 resolve(periodsDatesMapping)
             })
-
         })
-    }
+    } 
 
     closestDeadlineAfterOrBeforeDate (id:string,date:Date,include:string):Promise<datePeriod> {
 
         return new Promise(resolve => {
+
+            /* i needs to 1 because in the case of a-skat store where deadline can be before period (30. sep)  */
             
             let self            = this,
-                i               = 0,
+                i               = 1,
                 FN:Object       = {
                     before:function (deadlineDate:datePeriod) {
 
                         if (deadlineDate.date <= date) {
                             resolve(deadlineDate)
-                        } else {      
+                        } else {
                             getDeadline(--i);
                         }
                     },
@@ -434,13 +468,13 @@ export class Deadline {
         return new Promise((resolve:any) => {
             
             let isInPeriod           = this.getPeriodFromDate(date,id),
-                adjacentPeriod       = this.movePeriod(isInPeriod,direction,id),
-                standardRules        = Rules.find(el => el.id === id)
-
-            let rulesObj:findDateObj = Object.assign({period:adjacentPeriod},standardRules)
+                standardRules        = Rules.find(el => el.id === id),
+                newPeriod            = new Period(isInPeriod,standardRules.periods).movePeriodByXSteps(direction)
+      
+            let rulesObj:findDateObj = Object.assign({period:newPeriod.period},standardRules)
 
             this.getDeadlinePeriod(rulesObj).then(date => {
-                resolve({date:date,period:adjacentPeriod})
+                resolve({date:date,period:newPeriod.period})
             })
             
         })
@@ -464,56 +498,60 @@ export class Deadline {
 
     }
 
-    movePeriod (period:period,moves:number,id:string):period {
+    nextRatePeriodBasedOnDate (date:Date,id:string,end:string):Promise<datePeriod> {
 
-        let periods             = Rules.find(el => el.id == id).periods,
-            originalPeriod      = period.period,
-            originalYear        = period.year,
-            movesAbs            = Math.abs(moves),
-            direction           = (moves < 0) ? '<' : '>',
-            newPos              = originalPeriod + moves,
-            newPeriod:number,
-            newYear:number
+        /* 
+            RATE
+            loops all deadlines from year - 1, because selskabsskat rates is spanning 14 month 
+            more than a year. We want the period that equal or later than the start/end date
+            - the start period: the period with deadline immediately after/same as input date
+            - the end period: the period with deadline immediately before/same as input  date
 
-        /* first check if it's an easy one - in the same year - otherwise do math look in logik  */
-        if (newPos <= periods && newPos > 0) {
+        */
 
-            newPeriod   = newPos;
-            newYear     = originalYear;
+        return new Promise((resolve:any) => {
 
-        } else {
+            let obj      = Rules.find(el => el.id == id),
+                periods  = obj.periods,
+                rates    = obj.rateRules.monthAfterInitial.length,   
+                prevYear = date.getFullYear() - 1
 
-            /* rest is the moves BEYOND moves in the starting (period-block) [which is different depending on moving down or up]. Years and end period can be deffered from this  */
-
-            let rest                = (direction == '>') ? (movesAbs - (periods - originalPeriod)) : (movesAbs - (originalPeriod - 1)),      
-                yearsChange         = Math.ceil(rest/periods),
-                yearDirection       = (direction == '>') ? 1 : -1,
-                mod                 = rest % periods,
-                patternKey:number[] = [],
-                patternFn:Object    = {
-                    '>':function (i:number) {
-                        if (i == periods-1) patternKey.push(0); else patternKey.push(i+1);
-                    },
-                    '<':function (i:number) {
-                        if (i == 0) patternKey.push(0); else patternKey.push(periods - i);
-                    }
-                }       
+            this.getDeadlinesForPeriods({year:prevYear,period:1,rate:1},{year:date.getFullYear() + 1,period:1,rate:rates},id).then(deadlines => {
                 
-            for (let i = 0;i < periods;i++) patternFn[direction](i)
+                let deadLines:Date[] = deadlines.map(el => el.date) 
 
-            newPeriod   = patternKey.indexOf(mod) + 1
-            newYear     = originalYear + Math.ceil(yearDirection * yearsChange)
+                deadLines.unshift(new Date(prevYear,0,1))
+                deadLines.push(new Date(date.getFullYear()+1,11,31))
 
-        } 
-        
-        return {
-            period:newPeriod,
-            year:newYear
-        }
-        
+                for (let i = 1;i < deadLines.length; i++) {
+
+                    if (
+                       deadLines[i-1].getTime() == date.getTime() ||    
+                        deadLines[i-1] < date && deadLines[i] > date
+                    ) {
+
+                        let periodDateIndex = (end == 'from') ? i-1 : i-2
+                        resolve(deadlines[periodDateIndex])
+
+                    } else if (deadLines[i].getTime() == date.getTime()) {
+
+                         //let periodDateIndex = (end == 'from') ? i : i-1
+                         let periodDateIndex = i-1
+                         resolve(deadlines[periodDateIndex])
+                    }        
+
+                }
+            })
+
+        })
+
+
+
     }
-    
-     getDeadlinePeriod (defaultRules:findDateObj):Promise<Date> {
+ 
+    /* helper method  */
+
+     getDeadlinePeriod(defaultRules:findDateObj):Promise<Date> {
 
         return new Promise((resolve:any) => {
 
@@ -524,6 +562,15 @@ export class Deadline {
         })
     }
 
+    compareDeadlineInfo (deadlineInfo1:deadlineInfo,deadlineInfo2:deadlineInfo) {
+
+        return   deadlineInfo1.id               == deadlineInfo2.id &&
+                 deadlineInfo1.period.year      == deadlineInfo2.period.year &&
+                 deadlineInfo1.period.period    == deadlineInfo2.period.period &&
+                 deadlineInfo1.period.rate      == deadlineInfo2.period.rate           
+    }
+
+
     checkForManuelExceptions (defaultRules:findDateObj):Observable<deadlineManualDate> {
 
         return Observable.create((observer:any) => {
@@ -533,12 +580,24 @@ export class Deadline {
                 let returndate:any;
 
                 let isSame =    defaultRules.id                == el.id &&
-                                defaultRules.period.period     == el.period.period && 
-                                defaultRules.period.year       == el.period.year
+                                defaultRules.period.period     == el.children.period && 
+                                defaultRules.period.year       == el.children.year 
+
+
+                                //(defaultRules.period.rate       == Number(el.children.id))
+
+                if (defaultRules.period.rate > 0) {
+
+                    isSame = isSame && defaultRules.period.rate == Number(el.children.id)
+
+                } 
+
     
                 if (isSame) {
 
-                    let split   = el.deadline.split('/'),
+                    /* check format!!!    */
+
+                    let split   = el.Frist.split(' ')[0].split('-'),
                         year    = parseFloat(split[2]),
                         month   = parseFloat(split[1]),
                         date    = parseFloat(split[0])
@@ -564,15 +623,24 @@ export class Deadline {
         if (exception) {
             var exceptionsRules = Object.assign({period:defaultRules.period,periods:defaultRules.periods},exception)
         }
-        
-        return exception ? this.getdefaultDeadlineFromPeriod(exceptionsRules) : this.getdefaultDeadlineFromPeriod(defaultRules)
+ 
+        if (defaultRules.type == 'rate') {
+
+            return this.getRateDeadlineDefault(defaultRules)
+
+        } else {
+
+            return exception ? this.getdefaultDeadlineFromPeriod(exceptionsRules) : this.getdefaultDeadlineFromPeriod(defaultRules)
+
+        }
+   
+        //return exception ? this.getdefaultDeadlineFromPeriod(exceptionsRules) : this.getdefaultDeadlineFromPeriod(defaultRules)
 
     }
 
     getdefaultDeadlineFromPeriod (rulesObj:findDateObj):Date  {
 
         /* 
-            year of deadline, month of deadline (zero-index)
             period <-> dealine relation
             In - the period data and data about the time-span to deadlineMonth and deadline default day in month
             out - day corrected for holiday,weekends  
@@ -587,16 +655,41 @@ export class Deadline {
             month   -=  12
         }
 
-        if (rulesObj.rules.special == 'lastDayOfMonth') day = this.dateService.daysInMonthOfYear(year)[month]  
+        if (rulesObj.rules.special == 'lastDayOfMonth') day = this.dateService.daysInMonthOfYear(year)[month] 
 
         let exclude = {
             weekends:rulesObj.rules.onWeekends,
-            holidays:rulesObj.rules.onHolidays
+            holidays:rulesObj.rules.onHolidays,
+            bankholidays:rulesObj.rules.onHolidays
         }
 
         return this.dateService.findClosest(new Date(year,month,day),rulesObj.rules.direction,exclude)
          
     } 
+
+    getRateDeadlineDefault (rules:findDateObj) {
+
+        let 
+            startMonth   = (rules.period.period/rules.periods) - 1,
+            yearBasic    = rules.period.year,
+            month        = startMonth + rules.rateRules.monthAfterInitial[rules.period.rate - 1],
+            year         = (month > 11) ? (yearBasic + 1) : yearBasic,
+            day          = (rules.rateRules.dayInMonthIsStatic) ? rules.rateRules.dayInMonth : rules.rateRules.dayInMonthDynamic[rules.period.rate - 1] 
+
+        if (month > 11) month = month % 12
+
+        let exclude = {
+            weekends:rules.rateRules.onWeekends,
+            holidays:rules.rateRules.onHolidays,
+            bankholidays:rules.rateRules.onHolidays
+        }
+
+        let date = new Date(year,month,day)
+
+        return this.dateService.findClosest(date,rules.rateRules.direction,exclude)
+
+
+    }
 
 } 
 
@@ -614,6 +707,79 @@ class ViewDeadline {
     } 
     edgeDeadlinesStart:deadlineInfo[] = []
     edgeDeadlinesEnd:deadlineInfo[] = []
+
+}
+
+class Period {
+
+    constructor (public period:period,public periods:number,public ratesInPeriod?:number) {
+  
+    }
+
+    isEalierThanThisPeriod (period:period) {
+
+        let yearIsequal     = period.year == this.period.year,
+            periodIdEqual   = period.period == this.period.period
+
+        if (period.year > this.period.year) return true 
+        else if (yearIsequal && period.period > this.period.period) return true
+        else if (yearIsequal && periodIdEqual && (this.period.rate == undefined || period.rate > this.period.rate)) return true
+
+        return false
+         
+    }
+
+    isEqualTo (period:period) {
+
+        return  period.year      == this.period.year &&
+                period.period    == this.period.period &&
+                (this.period.rate == undefined || period.rate == this.period.rate)
+
+    }
+
+    isEarlierOrEqualToThisPeriod(period:period) {
+        return this.isEalierThanThisPeriod(period) || this.isEqualTo(period)
+
+    }
+
+    movePeriodByXSteps (moves:number)  {
+
+       /* return new period object  */
+
+        let 
+            gearArray:multiGears[] = [],
+            math        = new MathCalc(),
+            subs        = this.ratesInPeriod && this.ratesInPeriod > 0,
+            direction   = (moves < 0) ? '<' : '>'
+
+        gearArray.push({gears:this.periods,startingPosition:this.period.period})
+
+        if (subs) {
+
+            let subGearsNumber  = this.ratesInPeriod,
+                rateNumber      = this.period.rate
+
+            gearArray.unshift({gears:subGearsNumber,startingPosition:rateNumber})
+
+        }
+
+        let 
+            spin        = math.multidimensionGearMove(gearArray,moves,direction),
+            lastArray   = gearArray.length - 1,
+            newPeriod   = spin[lastArray].position,
+            newYear     = spin[lastArray].rounds    
+
+        let 
+            newPeriodObj:period = {
+                period:newPeriod,
+                year:newYear + this.period.year
+            }
+
+        if (subs) newPeriodObj.rate = spin[0].position
+
+        return new Period(newPeriodObj,this.periods,this.ratesInPeriod)
+
+    }
 
 }
 

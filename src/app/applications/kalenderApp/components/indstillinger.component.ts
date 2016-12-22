@@ -28,7 +28,7 @@ interface subPligter {
                 </div>
             </div>
 
-            <p class = "small-text">Dine valg gemmes via cookies, så du kun behøver vælge én gang.</p>
+            <p class = "small-text">{{getText('general','subTextIndstillinger') | async}}</p>
             
             <div *ngFor = "let pligt of pligterTxtLanguage">
                 <checkbox-group  
@@ -66,9 +66,12 @@ export class settingsCalender {
             this.pligtService.state.loonsum         = ['loonsum_method1','loonsum_method2','loonsum_method3','loonsum_method4A','loonsum_method4B'],
             this.pligtService.state.askat           = ['AskatStoreVirksomhed','AskatSmaaVirksomheder']
             this.pligtService.state.OneStopMoms     = ['oneStopMoms'],
-            this.pligtService.state.EUsalgUdenMoms  = ['EUsalgUdenMoms'],
+            this.pligtService.state.EUsalgUdenMoms  = ['EUsalgUdenMoms','EusalgKvartal'],
             this.pligtService.state.selvangivelse   = ['erhvervsdrivende'],
-            this.pligtService.state.punktafgifter   = ['punktafgifter']
+            this.pligtService.state.punktafgifter   = ['punktafgifter'],
+            this.pligtService.state.selskabsskat    = ['selskabsskat'],
+            this.pligtService.state.bSkatteRater    = ['bSkatteRater'],
+            this.pligtService.state.momsRefusion    = ['momsRefusion']
             
 
         } else {
@@ -79,7 +82,10 @@ export class settingsCalender {
             this.pligtService.state.EUsalgUdenMoms  = [],
             this.pligtService.state.OneStopMoms     = [],
             this.pligtService.state.selvangivelse   = [],
-            this.pligtService.state.punktafgifter   = []
+            this.pligtService.state.punktafgifter   = [],
+            this.pligtService.state.selskabsskat    = [],
+            this.pligtService.state.bSkatteRater    = [],
+            this.pligtService.state.momsRefusion    = []
         }
 
         this.changesOut.emit(null)

@@ -29,7 +29,7 @@ class serviceSpace <T> {
 @Injectable()
 export class getJSONdata {
 
-    production:boolean = false
+    production:boolean = true;
     private catchedServices:serviceSpace<any>[] = []
     
     constructor (private http:Http) {}
@@ -57,14 +57,21 @@ export class getJSONdata {
   
             } else {
                 service.dataObservable = this.http.get(url).map(response => {
+                    
                     return this.production ? response.json() : response.json().data 
-                })
+                }).share()
 
                 service.fecthingData = true;
                 service.executeSubscribe(observer)
             }    
         })
     }
+
+    fetchAlt () {
+
+
+    }
+
 }
 
 

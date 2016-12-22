@@ -1,4 +1,4 @@
-import {deadlineRule,dateRules,exceptionsDeadlineRules,data} from '../infrastructure/types';
+import {deadlineRule,dateRules,exceptionsDeadlineRules,data,RateRules} from '../infrastructure/types';
 
 const selvangivelse:dateRules = {
     monthAfterPeriod:6, 
@@ -65,6 +65,40 @@ const loonSumMedAnsatte:dateRules = {
     onWeekends:true       
 }
 
+const accontoSkat:RateRules = {
+
+    monthAfterInitial:[2,10,13],
+    dayInMonthIsStatic:false,
+    dayInMonthDynamic:[20,20,1],
+    onHolidays:true,
+    onWeekends:true,
+    direction:'forward'    
+
+}
+
+const bSkatteRater:RateRules = {
+
+    monthAfterInitial:[0,1,2,3,4,6,7,8,9,10],
+    dayInMonthIsStatic:true,
+    dayInMonth:20,
+    onHolidays:true,
+    onWeekends:true,
+    direction:'forward'    
+
+}
+
+const momsRefusion:dateRules = {
+
+    monthAfterPeriod:8, 
+    dateInMonth:30,
+    direction:'forward',
+    onHolidays:false,
+    onWeekends:false       
+
+
+}
+
+
 
 const rules:deadlineRule[] = [
     {
@@ -126,7 +160,37 @@ const rules:deadlineRule[] = [
         id:'punktafgifter',
         periods:12,
         rules:loonSumANDpunkafgifter
+    },
+    {
+        id:'selskabsskat',
+        periods:1,
+        rateRules:accontoSkat,
+        type:'rate'
+    },
+    {
+        id:'bSkatteRater',
+        periods:1,
+        rateRules:bSkatteRater,
+        type:'rate'
+            
+    },
+    {
+        id:'EusalgKvartal',
+        periods:4,
+        rules:moms_momsMaanedAND_EUsalg
+     
+    },
+    {
+        id:'momsRefusion',
+        periods:1,
+        rules:momsRefusion
+     
     }
+
+
+
+
+    
 
     
 ]
@@ -163,9 +227,12 @@ const hierachy:data = {
     loonsum:['loonsum_method1','loonsum_method2','loonsum_method3','loonsum_method4A','loonsum_method4B'],
     askat:['AskatStoreVirksomhed','AskatSmaaVirksomheder'],
     OneStopMoms:['oneStopMoms'],
-    EUsalgUdenMoms:['EUsalgUdenMoms'],
+    EUsalgUdenMoms:['EUsalgUdenMoms','EusalgKvartal'],
     selvangivelse:['erhvervsdrivende'],
-    punktafgifter:['punktafgifter']
+    punktafgifter:['punktafgifter'],
+    selskabsskat:['selskabsskat'],
+    bSkatteRater:['bSkatteRater'],
+    momsRefusion:['momsRefusion']
 
 }
 

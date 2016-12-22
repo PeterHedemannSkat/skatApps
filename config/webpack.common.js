@@ -3,7 +3,9 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var helpers = require('./helpers');
 
-var application = "kalenderApp"
+// kalenderApp gaveAfgift
+
+var application = "gaveAfgift"
 
 module.exports = {
   entry: {

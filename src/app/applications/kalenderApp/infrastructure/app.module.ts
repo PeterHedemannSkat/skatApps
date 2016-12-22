@@ -15,7 +15,12 @@ import { getJSONdata,CheckboxGroup,CalenderServices }  from '../../../shared/sha
 
 
 @NgModule({
-  imports: [ BrowserModule, FormsModule, HttpModule,InMemoryWebApiModule.forRoot( InMemoryDataService )],
+  imports: [ 
+      BrowserModule,
+      FormsModule,
+      HttpModule//,
+      //InMemoryWebApiModule.forRoot( InMemoryDataService )
+  ],
   declarations: [
       virksomhedsKalenderApp,
       settingsCalender,

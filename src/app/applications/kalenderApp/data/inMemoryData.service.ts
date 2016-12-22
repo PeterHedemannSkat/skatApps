@@ -7,13 +7,13 @@ export class InMemoryDataService implements InMemoryDataService {
     createDb() {
 
         let manualDeadLines:deadlineManualDate[] = [
-            {
+            { /* dummy  */
                 id:'moms_kvartal',
-                period:{
+                children:{
                     year:2000,
-                    period:3
+                    period:4
                 },
-                deadline:'29/11/2000'
+                Frist:'10-03-2017 16:45'
 
             }
         ]
@@ -99,11 +99,15 @@ export class InMemoryDataService implements InMemoryDataService {
                     },
                     {
                         id:'EUsalgUdenMoms',
-                        da:'EU-salg',
+                        da:'EU-salg uden Moms (DK-VIES)',
                         children:[
                             {
                                 id:'EUsalgUdenMoms',
-                                da:'EU-salg uden moms (DK-VIES)'
+                                da:'månedsindberetning'
+                            },
+                            {
+                                id:'EusalgKvartal',
+                                da:'kvartalsindberetning'
                             }
                         ]
 
@@ -120,12 +124,43 @@ export class InMemoryDataService implements InMemoryDataService {
 
                     },
                     {
+                        id:'momsRefusion',
+                        da:'Momsrefusion',
+                        children:[
+                            {
+                                id:'momsRefusion',
+                                da:'Momsrefusion'
+                            }
+                        ]
+
+                    },
+                    {
                         id:'punktafgifter',
                         da:'Punktafgifter',
                         children:[
                             {
                                 id:'punktafgifter',
                                 da:'Punktafgifter'
+                            }
+                        ]
+                    },
+                    {
+                        id:'selskabsskat',
+                        da:'Selskabsskat',
+                        children:[
+                            {
+                                id:'selskabsskat',
+                                da:'accontoskat'
+                            }
+                        ]
+                    },
+                    {
+                        id:'bSkatteRater',
+                        da:'B-skatterater',
+                        children:[
+                            {
+                                id:'bSkatteRater',
+                                da:'b-skat'
                             }
                         ]
                     }
@@ -233,7 +268,7 @@ export class InMemoryDataService implements InMemoryDataService {
                 ]
 
             },
-  {
+            {
                 id:'general',
                 da:'',
                 children:[
@@ -298,6 +333,14 @@ export class InMemoryDataService implements InMemoryDataService {
                     {
                         id:'firstTimeView',
                         da:'Vælg din virksomheds pligter (fx lønsum) ved at klikke på ikonet herover, så viser kalenderen dine frister. Den husker dem næste gang du kommer forbi denne side.'
+                    },
+                    {
+                        id:'rate',
+                        da:'rate'
+                    },
+                    {
+                        id:'subTextIndstillinger',
+                        da:'Dine valg gemmes ...'
                     }
                     
                 ]

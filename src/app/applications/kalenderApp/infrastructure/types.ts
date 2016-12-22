@@ -15,19 +15,36 @@ export interface datePeriod {
 }
 
 export interface deadlineInfo extends datePeriod {
-    id:string    
+    id:string,
+    type?:string,    
     txt?:string
 } 
 
 export interface period {
     period:number,
-    year:number
+    year:number,
+    rate?:number
 }
+
+export interface RateRules {
+    monthAfterInitial:number[], 
+    onHolidays?:boolean,
+    onWeekends?:boolean,
+    dayInMonthIsStatic:boolean,
+    dayInMonth?:number,
+    dayInMonthDynamic?:number[],
+    direction:string
+}
+
+
 
 export interface deadlineRule {
     id:string,
     periods:number,
-    rules:dateRules
+    rules?:dateRules,
+    type?:string,
+    rateRules?:RateRules
+
 }
 
 export interface exceptionsDeadlineRules {
@@ -36,13 +53,14 @@ export interface exceptionsDeadlineRules {
     rules:dateRules
 }
 
-export interface findDateObj {
-    periods:number,
-    id:string,
-    rules:dateRules,
+export interface findDateObj extends deadlineRule  {
     period:period
 }
 
+export interface findRate extends deadlineRule {
+    period:period,
+    rateNumber:number
+}
 
 export interface deadlineDate {
     type:string,
@@ -51,11 +69,15 @@ export interface deadlineDate {
     txt?:string
 }
 
+export interface periodExternal extends period {
+    id?:string 
+}
+
 export interface deadlineManualDate {
     id:string,
-    deadline:string,
-    period:period,
-    txt?:string
+    Frist:string,
+    txt?:string,
+    children:periodExternal
 }
 
 export interface checkbox {
@@ -75,7 +97,10 @@ export interface data {
     EUsalgUdenMoms:string[],
     OneStopMoms:string[],
     selvangivelse:string[],
-    punktafgifter:string[]
+    punktafgifter:string[],
+    selskabsskat:string[],
+    bSkatteRater:string[],
+    momsRefusion:string[]
 
 }
 

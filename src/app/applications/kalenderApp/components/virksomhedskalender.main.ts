@@ -1,5 +1,5 @@
 import { Component, OnInit} from '@angular/core';
-import { getJSONdata,languageText,listValues,CalenderServices } from '../../../shared/shared'
+import { getJSONdata,languageText,listValues,CalenderServices,MathCalc,multiGears } from '../../../shared/shared'
 import { Observable } from 'rxjs/Observable'; 
 import { Deadline } from '../services/deadline.service'
 import { findDateObj,deadlineInfo,period} from '../infrastructure/types'
@@ -14,18 +14,18 @@ interface EventTarget {
     selector:'my-app',
     template:`
         <div class = "virksomheds-kalender" id = "#virkCalender">
-           
+   
             <div class = "clearfix calculator-header">
                 <div class = "pull-left">
                     <h2>{{getText('general','header') | async}}</h2>
                 </div>
                 <div class = "pull-right">
                     <a class = 'indstillinger-toggle' href = "#virkCalender" (click) = "toggleSettings = !toggleSettings;pligtService.isViewed = true">
-                        <span class = "skts-rounded-icon">#</span>
+                        <span class = "indstillinger-icon"> </span>
                     </a>
                 </div>
             </div>
-            
+     
             <settings-calender [hidden] = "toggleSettings" (changesOut) = "updateDeadline()"> </settings-calender>
 
             <p class = "calender-empty text-center" *ngIf = "pligtService.getPligterForCurrentState().length == 0">
@@ -44,6 +44,10 @@ interface EventTarget {
                         </span>
                         <span class = "frist-type-total"> 
                             <span class = "seperator">-</span>
+                            <span *ngIf = "frist.period.rate > 0"> 
+                                {{frist.period.rate}}.
+                                {{getText('general','rate') | async}}
+                            </span>
                             <span class = "sub-level">
                                 {{getNameOfFrist(frist.id) | async}}
                             </span>  
@@ -62,7 +66,7 @@ interface EventTarget {
                                 {{getText('weekDaysNames',frist.date.getDay()) | async}}
                             </span>
                             <span class = "day-of-month date-format">
-                                {{frist.date.getDate()}}.
+                                d. {{frist.date.getDate()}}.
                             </span> 
                             <span class = "month-name date-format">
                                 {{getText('monthNames',frist.date.getMonth()) | async}}
@@ -78,8 +82,8 @@ interface EventTarget {
 
 
             <div class = "clearfix buttons-in-bottom" [hidden] = "pligtService.getPligterForCurrentState().length == 0">
-                <span [hidden] = "!pligtService.goBackShown"><button (click) = "moveCalender('back')" class = "pull-left btn flow-directions-button"><</button></span>
-                <span [hidden] = "!pligtService.goForwardShown"><button (click) = "moveCalender('next')" class = "pull-right btn flow-directions-button">></button></span>
+                <span [hidden] = "!pligtService.goBackShown"><button type = "button" (click) = "moveCalender('back')" class = "pull-left btn flow-directions-button"><</button></span>
+                <span [hidden] = "!pligtService.goForwardShown"><button type = "button" (click) = "moveCalender('next')" class = "pull-right btn flow-directions-button">></button></span>
             </div>
 
             <div class = "triangle"> </div>
@@ -100,17 +104,19 @@ export class virksomhedsKalenderApp {
     }
 
     language:string = 'da';
-    toggleSettings:boolean = true;;
+    toggleSettings:boolean = true;
     closeRangeTo:number = 7;
     closeRangeFrom:number = this.pligtService.showDaysBefore + 1;
     firstView:boolean = true;
 
     test:Promise<string>;
     frister:deadlineInfo[] = []
+    index:number = 0
+
 
     ngOnInit () { 
 
-        this.initSetUp()
+        this.initSetUp();
         this.updateDeadline();
 
         window.addEventListener('click',(event:Event) => {
@@ -123,14 +129,14 @@ export class virksomhedsKalenderApp {
            if (!clickOnToggleButton && !clickInsideIndstillinger) this.toggleSettings = true
 
         })    
-
+        
     }
 
     closests (HTMLElement:HTMLElement,parentClass:string):any {
 
-        return (HTMLElement.classList.contains(parentClass)) 
+        return (HTMLElement.classList.contains && HTMLElement.classList.contains(parentClass)) 
             ? true
-            : (HTMLElement.tagName == 'BODY') 
+            : (HTMLElement.tagName == 'BODY' || HTMLElement.tagName == 'HTML') 
                 ? false
                 : this.closests(HTMLElement.parentElement,parentClass)
 
@@ -138,9 +144,13 @@ export class virksomhedsKalenderApp {
 
     initSetUp () {
 
-        this.pligtService.url = (this.pligtService.developmentMode) ? 'app/txt.json' : 'XXX'
-        this.pligtService.urlManualDeadlines = (this.pligtService.developmentMode) ? 'app/manualDeadLines.json' : 'XXX'
+        this.pligtService.url = (this.pligtService.developmentMode) ? 'app/txt.json' : 'websrv/jsong.ashx?Id=66594'
+        this.pligtService.urlManualDeadlines = (this.pligtService.developmentMode) ? 'app/manualDeadLines.json' : 'websrv/jsong.ashx?Id=134179'
         this.pligtService.testDate = false;
+
+        this.language = document.getElementsByTagName('html')[0].getAttribute('lang') || 'da';
+
+        this.data.production = (this.pligtService.developmentMode) ? false : true 
 
         if (this.pligtService.testDate) {
 
@@ -148,25 +158,9 @@ export class virksomhedsKalenderApp {
                 currentHour = date.getHours(),
                 currentMinute = date.getMinutes() 
 
-            this.datecalc.now = new Date(2016,11,4,5,currentMinute)
+            this.datecalc.now = new Date(2016,11,12,19,currentMinute)
 
         }
-
-    }
-
-
-    txtCloseDeadline_ (date:Date) {
-
-        return Observable.create((resolve:any) => {
-
-            let daysLeft    = this.datecalc.daysFromtoday(date),
-                fetctTxt    = (daysLeft == 0) ? 'hoursTo' : 'daysTo'
-
-            this.getText('general',fetctTxt).subscribe(txt => {
-                resolve.next(txt)
-            })
-
-        })
 
     }
 
@@ -245,6 +239,7 @@ export class virksomhedsKalenderApp {
                 }  
 
                 this.getText('pligter',superLevel).subscribe(el => {
+            
                     resolve.next(el)
                 })
 
@@ -352,6 +347,11 @@ export class virksomhedsKalenderApp {
         let data = JSON.stringify(this.pligtService.state) 
 
         localStorage.setItem('pligter',data)
+
+   
+
+
+        // måske tjekke at der ikke er nogen overraskelser i data
 
     }
 

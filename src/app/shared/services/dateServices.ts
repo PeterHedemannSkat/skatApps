@@ -77,6 +77,30 @@ export class CalenderServices {
         
     }
 
+    fredagfterKristiHimmelfart (year:number) {
+
+        let easterSunday = this.getEasterDayOfYear(year)
+        return this.moveDateByDays(easterSunday,40) 
+        
+    }
+
+
+    bankHolidays (year:number):Date[] {
+
+        let grundlovsdag                = new Date(year,4,5),
+            fredagfterKristiHimmelfart  = this.fredagfterKristiHimmelfart(year),
+            nytaarsAftensDag            = new Date(year,11,31)
+
+        return [].concat(
+
+                this.getTotalHolidaysDK(year),
+                fredagfterKristiHimmelfart,
+                grundlovsdag,
+                nytaarsAftensDag
+            
+            )
+    }
+
     getFixedHolidaysDK (year:number) {
 
         let juledag         = new Date(year,11,25),
@@ -108,6 +132,14 @@ export class CalenderServices {
 
     }
 
+    isBankHoliday (date:Date) {
+
+        return this.bankHolidays(date.getFullYear()).reduce((p,v) => {
+            return (v.getTime() === date.getTime()) ? true : p 
+        },false)
+
+    }
+
     findClosest (date:Date,flow:string,exclude:excludeDates) {
 
         /* takes a baseDate, tests whether Date is allowed and moves backward/forward and returns first allowed date. 
@@ -118,14 +150,17 @@ export class CalenderServices {
 
         let 
             isWeekend = function (date:Date) {return self.isWeekend(date)},
-            isholiday = function (date:Date) {return self.isHoliday(date)};
+            isholiday = function (date:Date) {return self.isHoliday(date)},
+            isbankHol = function (date:Date) {return self.isBankHoliday(date)};
 
         let val:Function[] = [];
 
         let direction:number = (flow === 'forward') ? 1 : -1;
 
-        if (exclude.weekends) val.push(isWeekend)
-        if (exclude.holidays) val.push(isholiday)
+        if (exclude.weekends)       val.push(isWeekend)
+        if (exclude.holidays)       val.push(isholiday)
+        if (exclude.bankholidays)   val.push(isbankHol)
+
 
         let isExcludedDate = function (date:Date) {    
             return val.reduce((p,v) =>{
@@ -165,7 +200,7 @@ export class CalenderServices {
     } 
 
     copyDate (date:Date) {
-        let copy = new Date ()
+        let copy = new Date()
         copy.setTime(date.getTime())
         return copy
     }

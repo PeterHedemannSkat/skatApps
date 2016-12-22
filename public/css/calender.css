@@ -17,6 +17,10 @@ ul.deadline {
 } 
 */
 
+p.result {
+    font-size: 1.5em
+}
+
 .checkbox-label {
 
     font-weight: bold;
@@ -134,4 +138,23 @@ ul.deadline {
 
 .virksomheds-kalender  .btn:focus, .btn:hover, .btn.active {
     color: black;
+}
+
+.indstillinger-icon {
+    background: url(images/sprite.svg) no-repeat -258px -131px;
+    display: inline-block;
+    width: 2.5em;
+    height:2.5em;
+
+}
+
+.indstillinger-icon:hover {
+    zoom: 1.1
+
+}
+
+.btn:focus {
+    outline:initial
+
+
 }

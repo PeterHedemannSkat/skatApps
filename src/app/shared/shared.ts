@@ -7,11 +7,12 @@ import { selector } from './udgComponents/selectBootStrap.skts'
 import { CheckboxGroup } from './udgComponents/checkboxes.normal'
 import { wizardBar } from './udgComponents/wizardsteps.skts'
 
-import { listValues, excludeDates } from './interfaces/input'
+import { listValues, excludeDates,multiGears } from './interfaces/input'
 
 import { Validator,regMapElement,specialOps } from './services/validator.service';
 import { getJSONdata } from './services/getJsonData.service';
 import { CalenderServices } from './services/dateServices';
+import { MathCalc } from './services/math.services'
 
 
 export {
@@ -28,6 +29,8 @@ export {
     listValues,
     CheckboxGroup,
     CalenderServices,
-    excludeDates
+    excludeDates,
+    MathCalc,
+    multiGears
 
 }

@@ -8,6 +8,12 @@ export interface excludeDates {
 
     weekends:boolean,
     sundays?:boolean,
-    holidays:boolean
+    holidays?:boolean,
+    bankholidays?:boolean
 
+}
+
+export interface multiGears {
+    gears:number,
+    startingPosition:number
 }
