@@ -70,5 +70,44 @@ export class MathCalc {
 
     }
 
+    private getFraction (val:number) {
+        return val - Math.floor(val) 
+    }
+
+    maskInteger (number:Number, seperator:string) {
+
+        /* 
+            transforming 6453 -> [6,453] (array) -> joing 6 453
+            Recursively chopping the three last digits and inserting the last-three block into an array. When number is smaller than 3 charecters the element will be smaller. 
+            Stops when there are not remaining numbers and returns array 
+        */
+
+        let masking = function (number:string,cached:string[]):string[] {
+
+            let stringFormat    = number.toString(), 
+                lastThreeDigits = stringFormat.slice(-3),
+                remainingDigits = stringFormat.slice(0,-3)
+            
+            cached.unshift(lastThreeDigits)           
+
+            return (remainingDigits.length > 0) ? masking(remainingDigits,cached) : cached
+        
+        }
+
+        return masking(number.toString(),[]).join(seperator)
+
+    }
+
+    maskFloatingNumber (val:number, seperator:string, fractionSize:number) {
+
+        let integer     = Math.floor(val),
+            fraction    = this.getFraction(val),
+            mask        = this.maskInteger(integer,seperator),
+            fractionStr = fraction.toFixed(fractionSize)
+
+        return `${mask},${fractionStr}`
+
+    }
+
 
 }

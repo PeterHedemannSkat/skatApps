@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { ErrorContainer } from '../data/validation.data';
 import { gaveAfgiftBeregninger } from './gaveAfgiftCalculation.service';
 import { Http, Response } from '@angular/http';
+import { importJsonData } from  '../../../shared/shared'
 
 interface basic<T> {
     id:string
@@ -18,8 +19,6 @@ interface languageText {
     children?:languageText[]
 }
 
-
-
 Injectable()
 export class WizardState {
 
@@ -27,68 +26,11 @@ export class WizardState {
 
     
     constructor (@Inject(Http) private http:Http) {
+
         this.calculateGave()
 
-        
-
-        this.getContent<languageText>(['mainCategories'],'app/txt.json')
-            .map(el => el.da)
-
-        this.mainCategories_()
-
-     
     }
 
-    mainCategories():Observable<languageText> {
-
-        return this.getContent<languageText>(['mainCategories'],'app/txt.json')
-
-            
-    }
-
-    mainCategories_(){
-
-        this.getContent<languageText>(['mainCategories'],'app/txt.json')
-            .subscribe(txt => {
-                 console.log(txt)
-            })
-            
-    }
-
-
-
-
-
-    getContent <T extends basic<T>> (ids:string[],url:string):Observable<T> {
-
-        return Observable.create((observer:any) => {
-
-            this.data<T[]>('app/txt.json').subscribe(sats => {
-
-                let level:T[] = sats;
-
-                ids.forEach(id => {
-                    level = <T[]>level.find(el => el.id == id).children
-                })
-
-                observer.next(level)
-                /*
-                level.forEach(node => {
-                    observer.next(node)
-                })*/
-
-            })
-        })   
-    }
-
-    data <T> (url:string):Observable <T> {
-        return this.http.get(url).map(response => {
-            return this.production ? response.json() : response.json().data 
-        }).share()
-
-    }
-
-    
 
 
     beregnService:gaveAfgiftBeregninger = new gaveAfgiftBeregninger()
@@ -100,18 +42,7 @@ export class WizardState {
         this.beregnService.fradrag = 61500;
         this.beregnService.giverBetalerAfgift = true
         
-        let a = this.beregnService.afgiftBeloeb()
-        
-        console.log(a)
 
     }    
 
-   
-    
-
-
-    
-
-    
-   
 }   

@@ -19,27 +19,6 @@ export class gaveAfgiftBeregninger implements gaveAfgiftInput {
  
     constructor () {}
 
-    /* 
-        modtagerInput og giverInput er direkte ref til modellens inputfelter, hvor type og ikke-udfyldt skal håndteres  
-    */
-
-    set modtagerInput (beloeb:string) {
-        this.modtagerFaar = Number(beloeb) 
-    }
-
-    get modtagerInput () {
-        let modtager = this.modtagerFaar
-        return (Number(modtager) > 0) ? modtager.toString() : ''
-    }
-
-    set giverInput (beloeb:string) {
-        this.giverBeloeb = Number(beloeb)
-    }
-
-    get giverInput () {
-        let giver = this.giverBeloeb
-         return (Number(giver) > 0) ? giver.toString() : ''   
-    }
 
     gaveafgiftUser () {
         let afgiftbeloeb = this.afgiftBeloeb()
@@ -98,6 +77,11 @@ export class gaveAfgiftBeregninger implements gaveAfgiftInput {
         return Math.max(0,afgift)
 
     }    
+
+    afgiftsgrundlag () {
+
+        return this.giverBeloeb - (this.giverBetalerAfgift ? this.afgiftBeloeb() : 0) - this.fradrag
+    }
 
     private getdevisor () {
 

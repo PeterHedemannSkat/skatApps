@@ -12,7 +12,7 @@ interface input {
             <div class = "col-sm-12">       
                 <label for = "indkomstTypeChosen">{{label}}<span *ngIf = "showHelper()" class = "skts-rounded-icon hover" (click) = "toggleHelpTxt = !toggleHelpTxt">?</span></label>
                 <div *ngIf = "showHelper()" [hidden] = "toggleHelpTxt" class = "helper-txt">{{helpTxt}}</div>  
-                <select #sel [(ngModel)] = "value" class="form-control" (change) = "valueChange.emit(sel.value);changed.emit(null)" >
+                <select #sel [(ngModel)] = "value" class="form-control skts-select" (change) = "valueChange.emit(sel.value);changed.emit(null)" >
                     <option *ngFor = "let option of options" [value] = "option.value">{{option.text}}</option>
                 </select>
             </div>

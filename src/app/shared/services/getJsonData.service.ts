@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Inject } from '@angular/core'
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable'; 
 import { languageText } from '../interfaces/interfaceslanguage';
@@ -23,13 +22,15 @@ class serviceSpace <T> {
         this.catchedData.forEach(v => {
             observer.next(v)
         })
+
+        observer.complete()
     }
 }
 
 @Injectable()
 export class getJSONdata {
 
-    production:boolean = true;
+    production:boolean = false;
     private catchedServices:serviceSpace<any>[] = []
     
     constructor (private http:Http) {}
@@ -56,8 +57,7 @@ export class getJSONdata {
                 service.executeSubscribe(observer)
   
             } else {
-                service.dataObservable = this.http.get(url).map(response => {
-                    
+                service.dataObservable = this.http.get(url).map(response => {        
                     return this.production ? response.json() : response.json().data 
                 }).share()
 
@@ -65,11 +65,6 @@ export class getJSONdata {
                 service.executeSubscribe(observer)
             }    
         })
-    }
-
-    fetchAlt () {
-
-
     }
 
 }

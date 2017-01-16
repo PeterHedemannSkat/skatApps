@@ -1,28 +1,19 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { MathCalc } from '../services/math.services'
 
 @Pipe({
     name:'tusindtal',
     pure:false
 })
 
+/* better name readableDigitFormat, could add an argument determining the separater sign */
+
 export class tusindtalsSep implements PipeTransform {
 
     transform(value:number,...arg:any[]) {
-        
-        var val:string[]        = value.toString().split("."),
-            fraction:string     = val[1] ? val[1] : "",
-            integer:string      = val[0],
-            len:number          = integer.length,
-            thousands:string[]  = []
 
-        for (var i=len;i > 0;i-=3) {
-            let piece = i - 3;
-            piece = piece < 0 ? 0 : piece; 
-            thousands.unshift(integer.slice((piece),i))
-        
-        }
-        return thousands.join(".") + fraction
-        
+        return (typeof value === 'number') ? new MathCalc().maskInteger(value,' ') : ''
+
     }
 }
 

@@ -14,7 +14,7 @@ let gavePct = [
 let gaveFradragLevel = [
 
     {
-        ids:['boernAfkom','foraeldre','bofaelle','svigerboernAfdød'],
+        ids:['boernAfkom','foraeldre','bofaelle','bedsteforaeldre','svigerboernAfdød','stedforaeldre'],
         fradragType:'naertbeslaegtede'
     },
     {
@@ -23,3 +23,5 @@ let gaveFradragLevel = [
     }
 
 ]
+
+export {gavePct,gaveFradragLevel}

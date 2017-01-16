@@ -1,5 +1,6 @@
 import { languageText } from './interfaces/interfaceslanguage';
 import { tusindtalsSep } from './pipes/tusindtalsSeperator';
+import { decimalDK } from './pipes/decimalDK.pipe'
 
 import { normalInput } from './udgComponents/input.skts';
 import { bootstrapStyleRadioButton } from './udgComponents/radiobutton.skts';
@@ -12,7 +13,9 @@ import { listValues, excludeDates,multiGears } from './interfaces/input'
 import { Validator,regMapElement,specialOps } from './services/validator.service';
 import { getJSONdata } from './services/getJsonData.service';
 import { CalenderServices } from './services/dateServices';
-import { MathCalc } from './services/math.services'
+import { MathCalc } from './services/math.services';
+import { readableDigitFormat } from './udgComponents/numberInput';
+import { importJsonData } from './services/jsonEmitterServices';
 
 
 export {
@@ -31,6 +34,9 @@ export {
     CalenderServices,
     excludeDates,
     MathCalc,
-    multiGears
+    multiGears,
+    readableDigitFormat,
+    importJsonData,
+    decimalDK
 
 }
