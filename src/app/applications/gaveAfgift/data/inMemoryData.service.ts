@@ -20,12 +20,15 @@ export class InMemoryDataService implements InMemoryDataService {
                 naertbeslaegtede:62900,
                 svigerboern:22000
                 
-            },
+            }
+            /*,
             {
                 year:2018,    
-                naertbeslaegtede:63000,
+                naertbeslaegtede:70000,
                 svigerboern:22000
             }
+            */
+            
           
         ]
 
@@ -262,6 +265,18 @@ export class InMemoryDataService implements InMemoryDataService {
                     {
                         id:'placeholder',
                         da:'Skriv beløb'
+                    },
+                    {
+                        id:'juraforbehold',
+                        da:'Forbehold bl.a bl.a'
+                    },
+                    {
+                        id:'linkNameJura',
+                        da:'Link til juridisk vejledning'
+                    },
+                    {
+                        id:'retAar',
+                        da:'| skift år:'
                     }
                 ]
             }

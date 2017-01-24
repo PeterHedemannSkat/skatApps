@@ -1,0 +1,6 @@
+Git process
+
+git add .
+git commit -m "XXX added" (message)
+git push 
+

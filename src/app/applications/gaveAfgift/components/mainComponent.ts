@@ -67,7 +67,15 @@ interface detailed {
 
                 <h3>
                     {{txt('giveSkatteFrit') | async}} {{year}} 
-                    <input type = 'button' [value] = "txtChangeYear() | async" class = "asLink extra-small" (click) = "yearToggle = !yearToggle;year = year + toggleYear();updatingModel()">
+                    <!--<input type = 'button' [value] = "txtChangeYear() | async" class = "asLink extra-small" (click) = "yearToggle = !yearToggle;year = year + toggleYear();updatingModel()">-->
+                     <span class = "small-select">
+                        <label for = "skiftAar">{{txt('retAar') | async}}</label>
+                        <select #Year [value] = "year" (change) = "doUpdate(Year.value)">
+                            <option *ngFor = "let year of getYearsToShown()" [value] = "year">
+                                {{year}}
+                            </option>
+                        </select>
+                    </span>
                 </h3>
 
                 <p>
@@ -139,17 +147,24 @@ interface detailed {
                                 </p>          
                             </div>
 
-                            <h4><i>{{txt('detGoorDu') | async}}</i></h4>
+                            <div class = "row helper-section">
+                                <div class = "col-xs-12">
 
-                                <p>{{txt('process') | async}}</p>
-                        
-                                <ol class = "variables-on-form" type = "a">
-                                    <li>{{txt('process1') | async}}: <i>{{beregnService.giverBeloeb | tusindtal}} {{txt('kr') | async}}</i></li>
-                                    <li>{{txt('process2') | async}}:: <i>{{beregnService.fradrag | tusindtal }} {{txt('kr') | async}}</i></li>
-                                    <li>{{txt('process3') | async}}:: <i>{{beregnService.afgiftsgrundlag() | tusindtal}} {{txt('kr') | async}}</i></li>
-                                    <li>{{txt('process4') | async}}:: <i>{{beregnService.gaveafgiftUser() | tusindtal}} {{txt('kr') | async}}</i></li>
+                                    <h4><i>{{txt('detGoorDu') | async}}</i></h4>
+                                    <p>{{txt('process') | async}}</p>
+                            
+                                    <ol class = "variables-on-form" type = "a">
+                                        <li>{{txt('process1') | async}}: <i>{{beregnService.giverBeloeb | tusindtal}} {{txt('kr') | async}}</i></li>
+                                        <li>{{txt('process2') | async}}: <i>{{beregnService.fradrag | tusindtal }} {{txt('kr') | async}}</i></li>
+                                        <li>{{txt('process3') | async}}: <i>{{beregnService.afgiftsgrundlag() | tusindtal}} {{txt('kr') | async}}</i></li>
+                                        <li>{{txt('process4') | async}}: <i>{{beregnService.gaveafgiftUser() | tusindtal}} {{txt('kr') | async}}</i></li>
 
-                                </ol>
+                                    </ol>
+
+                                    <p>{{txt('juraforbehold') | async}} <a href = "http://www.skat.dk/SKAT.aspx?oId=1947334">{{txt('linkNameJura') | async}}</a></p>
+
+                                </div>
+                            </div>    
                                                
                             <a [href] = "urlForm" class = "action-link" target = "_blank">{{txt('linkTextForm') | async}}</a>
                         </div>
@@ -180,20 +195,25 @@ export class appMain extends importJsonData  {
 
     ngOnInit () {
 
+        this.production = true;
+
        if (this.production) {
            this.data.production = true;
            this.urlData = this.urlDataProduction
            this.urlText = this.urlTxtProduction
        } 
         
-       this.setArrayObservables('app/txt.json','detailedDescription','da')
-       this.familyId = 'boernAfkom'
-       this.beregnService.giverBetalerAfgift = true
-       this.setYear()
+        this.setArrayObservables(this.urlText,'detailedDescription','da')
+        this.familyNames = this.textArrayIdMap(this.urlText,'mainCategories','da')
+        this.svigerboernNames = this.textArrayIdMap(this.urlText,'svigerboern','da')
+        this.familyId = 'boernAfkom'
+        this.beregnService.giverBetalerAfgift = true
+        this.setYear()
 
     }
 
     year:number = new Date().getFullYear();
+    latestYearDateBase:Number = new Date().getFullYear() - 1
 
     /* Key calculations imported here  */
     beregnService:gaveAfgiftBeregninger = new gaveAfgiftBeregninger()
@@ -209,8 +229,10 @@ export class appMain extends importJsonData  {
     yearToggle:boolean = true;
     showDetail:boolean = false;
     calculateAfgift:boolean = false;
-    familyNames = this.textArrayIdMap('app/txt.json','mainCategories','da')
-    svigerboernNames = this.textArrayIdMap('app/txt.json','svigerboern','da')
+    familyNames:any;
+    svigerboernNames:any;
+    //familyNames = this.textArrayIdMap(this.urlText,'mainCategories','da')
+    //svigerboernNames = this.textArrayIdMap(this.urlText,'svigerboern','da')
 
     setYear() {
         /* 
@@ -220,14 +242,17 @@ export class appMain extends importJsonData  {
         in case all other cases we use the latest year available in data
 
          */
+
+
         let currentYear = new Date().getFullYear()
 
-        this.data.fetch<gaveData>('app/gaveAfgiftSatser.json')
+        this.data.fetch<gaveData>(this.urlData)
             .map(yearObj => yearObj.year)
             .reduce((prev,year) => {
                 return (year > prev) ? year : prev
             },0)
             .subscribe(latestYearFromDatabase => {
+                this.latestYearDateBase = latestYearFromDatabase
                 this.year = (currentYear <= latestYearFromDatabase) ? currentYear : latestYearFromDatabase
                 this.updatingModel() 
             })
@@ -262,6 +287,17 @@ export class appMain extends importJsonData  {
         return (this.familyId == 'svigerboern') ? this.svigerbarnIlive : this.familyId 
     }
 
+    getYearsToShown() {
+        let currentYear = new Date().getFullYear(),
+            years:Number[] = [] 
+        
+        for (let year = currentYear - 1; year <= this.latestYearDateBase; year++) {
+            years.push(year)
+        }
+
+        return years
+    }
+
     afgiftsbeloebGeneral() {
        let type = gaveFradragLevel.find(el => {
            return el.ids.indexOf(this.getModtager()) > -1
@@ -270,7 +306,7 @@ export class appMain extends importJsonData  {
     }
 
     afgiftFritBeloeb(year:Number,type:string):Observable<number> {
-        return this.data.fetch<gaveData>('app/gaveAfgiftSatser.json')
+        return this.data.fetch<gaveData>(this.urlData)
             .find(yearObj => yearObj.year == year)
             .map(obj => obj[type])        
     }
@@ -282,7 +318,14 @@ export class appMain extends importJsonData  {
         return type ? type.gavePct : -1
     } 
 
+    doUpdate (year:string) {
+
+        this.year = Number(year);
+        this.updatingModel();
+    }
+
     updatingModel() {
+
         this.beregnService.gaveAfgiftPct = this.skatPctAfGaveBeloeb()
         this.afgiftFritBeloeb(this.year,this.afgiftsbeloebGeneral()).subscribe(el => {
             this.beregnService.fradrag = el;
@@ -292,38 +335,24 @@ export class appMain extends importJsonData  {
 
     /* methods for text in component */
 
-    toggleYear() {
-        return (this.yearToggle) ? 1 : -1
-    }
-
     isDual() {
         let couple = ['foraeldre','bedsteforaeldre','stedforaeldre']
         return !!(couple.indexOf(this.getModtager()) > -1) 
     } 
-
-    txtChangeYear() {
-
-        return Observable.create((observer:any) => {
-            this.txt('changeYear').subscribe(txt => {
-                let txtYear = `${txt} ${this.year + ((this.yearToggle) ? -1 : 1)}`
-                observer.next(txtYear)
-            })
-        })  
-    }
 
    detailedDescription() {
         return this.getArrayValues('detailedDescription',this.familyId)
     }
 
     txt(id:string):Observable<string> {
-        return this.data.fetch<languageText>('app/txt.json')
+        return this.data.fetch<languageText>(this.urlText)
             .find(txt => txt.id == 'textlayer')
             .map(obj => obj.children.find(sub => sub.id == id))
             .map(obj => {return (obj && obj.id) ? obj.da : ''})           
     }
 
     tilRelation():Observable<string> {
-        return this.data.fetch<languageText>('app/txt.json')
+        return this.data.fetch<languageText>(this.urlText)
             .find(txt => txt.id == 'tilRelation')
             .map(obj => obj.children.find(sub => sub.id == this.familyId))
             .map(obj => {return (obj) ? obj.da : ''})           

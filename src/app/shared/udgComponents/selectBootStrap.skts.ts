@@ -9,7 +9,7 @@ interface input {
     selector:'selector',
     template:`
         <div class="row skts-process-form-section form-group">
-            <div class = "col-sm-12">       
+            <div class = "col-xs-12">       
                 <label for = "indkomstTypeChosen">{{label}}<span *ngIf = "showHelper()" class = "skts-rounded-icon hover" (click) = "toggleHelpTxt = !toggleHelpTxt">?</span></label>
                 <div *ngIf = "showHelper()" [hidden] = "toggleHelpTxt" class = "helper-txt">{{helpTxt}}</div>  
                 <select #sel [(ngModel)] = "value" class="form-control skts-select" (change) = "valueChange.emit(sel.value);changed.emit(null)" >
