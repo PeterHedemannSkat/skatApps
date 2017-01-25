@@ -82,11 +82,19 @@ interface EventTarget {
 
 
             <div class = "clearfix buttons-in-bottom" [hidden] = "pligtService.getPligterForCurrentState().length == 0">
-                <span [hidden] = "!pligtService.goBackShown"><button type = "button" (click) = "moveCalender('back')" class = "pull-left btn flow-directions-button"><</button></span>
-                <span [hidden] = "!pligtService.goForwardShown"><button type = "button" (click) = "moveCalender('next')" class = "pull-right btn flow-directions-button">></button></span>
+                <span [hidden] = "!pligtService.goBackShown">
+                    <button type = "button" (click) = "moveCalender('back')" class = "pull-left btn flow-directions-button">
+                        <span class = "arrow-button arrow-left"> </span>
+                    </button>
+                </span>
+                <span [hidden] = "!pligtService.goForwardShown">
+                    <button type = "button" (click) = "moveCalender('next')" class = "pull-right btn flow-directions-button">
+                        <span class = "arrow-button arrow-right"> </span>
+                    </button>
+                </span>
             </div>
 
-            <div class = "triangle"> </div>
+      
 
         </div>
     

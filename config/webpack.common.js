@@ -5,7 +5,7 @@ var helpers = require('./helpers');
 
 // kalenderApp gaveAfgift
 
-var application = "gaveAfgift"
+var application = "kalenderApp"
 
 module.exports = {
   entry: {

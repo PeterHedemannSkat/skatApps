@@ -19,7 +19,7 @@ import { getJSONdata,CheckboxGroup,CalenderServices }  from '../../../shared/sha
       BrowserModule,
       FormsModule,
       HttpModule//,
-      //InMemoryWebApiModule.forRoot( InMemoryDataService )
+      ,InMemoryWebApiModule.forRoot( InMemoryDataService )
   ],
   declarations: [
       virksomhedsKalenderApp,
