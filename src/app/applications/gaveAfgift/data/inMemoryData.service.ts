@@ -277,6 +277,10 @@ export class InMemoryDataService implements InMemoryDataService {
                     {
                         id:'retAar',
                         da:'| skift år:'
+                    },
+                    {
+                        id:'linkTextAarsopgorelsen',
+                        da:'Gå til årsopgørelsen'
                     }
                 ]
             }
