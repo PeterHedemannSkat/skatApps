@@ -1,0 +1,11 @@
+
+
+1. Hvilke parametre mangler?
+        -fx filter,præcis angivelse af året,brændstof
+
+        - hvilke skal vises?
+        - hvike skal skjules?
+
+2. Hvis alle parametre er udfyldt VIS 
+    1. tabel input
+    2. klar til at vise tabel, hvis bruger ønsker det...
