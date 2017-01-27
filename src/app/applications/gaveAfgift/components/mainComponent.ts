@@ -44,7 +44,7 @@ interface detailed {
 
             <div *ngIf = "detailedDescription().length > 0" class = "group-details">
                 <input type = 'button' [value] = "txt('detaljeromRelation_link') | async" class = "asLink" (click) = "showDetail = !showDetail"> 
-                <div *ngIf = "showDetail == true">{{detailedDescription()}}</div>
+                <p *ngIf = "showDetail == true" class = "detailed-description">{{detailedDescription()}}</p>
             </div>         
            
             <div *ngIf = "familyId == 'svigerboern'">
@@ -69,9 +69,9 @@ interface detailed {
 
                 <p>
                    {{txt('duKanGive') | async}} <span class = "focus-on-number"> {{afgiftFritBeloeb(year,afgiftsbeloebGeneral()) | async | tusindtal }} kr. </span>  
-                    {{tilRelation() | async}} {{txt('i') | async}} {{year}}
+                    {{tilRelation() | async}} {{txt('i') | async}} {{year}}.
 
-                    <span class = "small-select">
+                    <span class = "small-select keep-together">
                         <label for = "skiftAar">{{txt('retAar') | async}}</label>
                         <select #Year [value] = "year" (change) = "doUpdate(Year.value)">
                             <option *ngFor = "let year of getYearsToShown()" [value] = "year">
@@ -87,7 +87,11 @@ interface detailed {
                 </p>
 
                 <p *ngIf = "isDual()">
-                    {{txt('duKanGive') | async}} {{beregnService.fradrag | tusindtal }} {{txt('kr') | async}} {{txt('dobbeltGave2') | async}} {{(beregnService.fradrag * 2) | tusindtal}} {{txt('kr') | async}}
+                    {{txt('duKanGive') | async}} {{beregnService.fradrag | tusindtal }} {{txt('kr') | async}} {{txt('dobbeltGave2') | async}} 
+                    
+                    <span class = "keep-together">
+                        {{(beregnService.fradrag * 2) | tusindtal}} {{txt('kr') | async}}
+                    </span>
                 </p>
 
                 <h3>{{txt('giverDuMere') | async}}</h3>
@@ -107,7 +111,7 @@ interface detailed {
             </div>
             <div *ngIf = "(afgiftFritBeloeb(year,afgiftsbeloebGeneral()) | async) > 0">
                 <button type = "button" class = "dap-aktionslink dap-aktionslink-skatdk" (click) = "calculateAfgift = !calculateAfgift">
-                        {{txt('label_beregnGaveAfgift') | async}} <span class = "arrow-dap arrow-pointing-up"> </span>
+                        {{txt('label_beregnGaveAfgift') | async}} <span class = "arrow-dap arrow-pointing-up" [ngClass] = "{'arrow-pointing-up':calculateAfgift,'arrow-pointing-down':!calculateAfgift}"> </span>
                 </button>
             </div>
             
@@ -198,7 +202,7 @@ export class appMain extends importJsonData  {
 
     ngOnInit () {
 
-        this.production = false;
+        this.production = true;
 
        if (this.production) {
            this.data.production = true;

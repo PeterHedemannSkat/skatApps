@@ -1,6 +1,6 @@
 
 
-1. Hvilke parametre mangler?
+1. Hvilke parametre mangler? parametersMissing 
         -fx filter,præcis angivelse af året,brændstof
 
         - hvilke skal vises?
@@ -9,3 +9,9 @@
 2. Hvis alle parametre er udfyldt VIS 
     1. tabel input
     2. klar til at vise tabel, hvis bruger ønsker det...
+    3. vis tabel
+
+3. Alle parametre er udfyldt og gyldig event på tabel input
+
+
+

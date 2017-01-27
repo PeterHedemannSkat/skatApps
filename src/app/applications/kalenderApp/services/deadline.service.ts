@@ -27,7 +27,7 @@ export class Deadline {
     minLimitYears:number = 1;
     topLimitYears:number = 4;
     now:Date = new Date();
-    developmentMode:boolean = true; // remember json-service change and module change !!!
+    developmentMode:boolean = false; // remember json-service change and module change !!!
     url:string = 'websrv/jsong.ashx?Id=66594'; 
     urlManualDeadlines:string = 'websrv/jsong.ashx?Id=134179';
     testDate:boolean = false;
