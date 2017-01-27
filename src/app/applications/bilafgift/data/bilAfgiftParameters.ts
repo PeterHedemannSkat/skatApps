@@ -100,6 +100,10 @@ export class missingParameters {
 
         // en filter
 
+        let a:Object 
+
+        a.
+
         this.parameterMapping.forEach(v => {
             let isinmodel = v.modelIs.reduce((p,v) => {
 
@@ -132,6 +136,28 @@ export class intervalGet {
 
 
 }
+
+/* new valuePair(obj1).isEqualTo(obj2) */
+
+class valuePair {
+
+    constructor (private obj:valuePairs) {}
+
+    isEqualTo(obj:valuePairs) {
+        return (this.obj.prop == obj.prop && this.obj.val == obj.val)
+    }
+
+}
+
+class arrayExtended extends Array {
+
+    constructor (arg:string[]) {
+        super()
+    }
+
+}
+
+
 
 
 
