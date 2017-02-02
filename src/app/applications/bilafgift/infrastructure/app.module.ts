@@ -1,8 +1,9 @@
 import { NgModule}      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule,JsonpModule } from '@angular/http';
 import { routing, appRoutingProviders } from './app.router';
+import { Jsonp } from '@angular/http'
 
 
 import { appMain }  from '../components/mainComponent';
@@ -27,12 +28,15 @@ import { step3 } from '../wizardSteps/step3';
 
 
 
+
+
 @NgModule({
   imports: [ 
     BrowserModule,
     FormsModule, 
-    HttpModule
-    //,InMemoryWebApiModule.forRoot(InMemoryDataService) 
+    HttpModule,
+    JsonpModule
+    ,InMemoryWebApiModule.forRoot(InMemoryDataService) 
   ],
   declarations: [
     appMain,

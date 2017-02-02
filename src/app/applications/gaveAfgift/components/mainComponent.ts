@@ -86,13 +86,14 @@ interface detailed {
                     {{(beregnService.fradrag * 2) | tusindtal}} {{txt('kr') | async}} {{txt('skatteFrit') | async}}.
                 </p>
 
+                <!--
                 <p *ngIf = "isDual()">
                     {{txt('duKanGive') | async}} {{beregnService.fradrag | tusindtal }} {{txt('kr') | async}} {{txt('dobbeltGave2') | async}} 
                     
                     <span class = "keep-together">
                         {{(beregnService.fradrag * 2) | tusindtal}} {{txt('kr') | async}}
                     </span>
-                </p>
+                </p>-->
 
                 <h3>{{txt('giverDuMere') | async}}</h3>
                 <p>
@@ -126,7 +127,7 @@ interface detailed {
                     <div class = "col-xs-12">
                         <label for = "giverBeloeb">{{txt('label_GiverBeloeb') | async}}</label>
                         <div class = "skts-postfix-kr">
-                            <input [(readableDigitFormat)] = "beregnService.giverBeloeb" class = "form-control" id = "giverBeloeb" [attr.placeholder] = "txt('placeholder') | async" />
+                            <input [(readableDigitFormat)] = "beregnService.giverBeloeb" class = "form-control" mask = "."  id = "giverBeloeb" [attr.placeholder] = "txt('placeholder') | async" />
                         </div>
                     </div>
                 </div>
@@ -135,7 +136,7 @@ interface detailed {
                     <div class = "col-xs-12">
                         <label for = "modtagerBeloeb">{{txt('label_ModtagerBeloeb') | async}}</label>                    
                         <div class = "skts-postfix-kr">
-                            <input [(readableDigitFormat)] = "beregnService.modtagerFaar" class = "form-control" id = "modtagerBeloeb" [attr.placeholder] = "txt('placeholder') | async" />
+                            <input [(readableDigitFormat)] = "beregnService.modtagerFaar" mask = "." class = "form-control" id = "modtagerBeloeb" [attr.placeholder] = "txt('placeholder') | async" />
                         </div>
                     </div>
                 </div>
@@ -163,7 +164,7 @@ interface detailed {
                                 <p>{{txt('process') | async}}</p>
                         
                                 <ol class = "variables-on-form" type = "a">
-                                    <li>{{txt('process1') | async}}: <i>{{beregnService.giverBeloeb | tusindtal}} {{txt('kr') | async}}</i></li>
+                                    <li>{{txt('process1') | async}}: <i>{{beregnService.modtagerFaar | tusindtal}} {{txt('kr') | async}}</i></li>
                                     <li>{{txt('process2') | async}}: <i>{{beregnService.fradrag | tusindtal }} {{txt('kr') | async}}</i></li>
                                     <li>{{txt('process3') | async}}: <i>{{beregnService.afgiftsgrundlag() | tusindtal}} {{txt('kr') | async}}</i></li>
                                     <li>{{txt('process4') | async}}: <i>{{beregnService.gaveafgiftUser() | tusindtal}} {{txt('kr') | async}}</i></li>
@@ -202,7 +203,7 @@ export class appMain extends importJsonData  {
 
     ngOnInit () {
 
-        this.production = true;
+        this.production = false;
 
        if (this.production) {
            this.data.production = true;

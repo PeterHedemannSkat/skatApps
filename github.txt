@@ -4,3 +4,15 @@ git add .
 git commit -m "XXX added" (message)
 git push 
 
+
+check at alle opfylder et krav i en array
+    - reduce 
+    - starter som true 
+    - vender baseValue fra true -> false, hvis det i et index ikke opfylder kondition X 
+
+
+opfylder ét krav i en array 
+    - reduce 
+    - starter som false
+    - vender baseValue fra false til true, hvis det i et index opfylder kondition X
+  

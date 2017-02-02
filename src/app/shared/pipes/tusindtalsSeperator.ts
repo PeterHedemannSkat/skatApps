@@ -12,7 +12,7 @@ export class tusindtalsSep implements PipeTransform {
 
     transform(value:number,...arg:any[]) {
 
-        return (typeof value === 'number') ? new MathCalc().maskInteger(value,' ') : ''
+        return (typeof value === 'number') ? new MathCalc().maskInteger(value,'.') : ''
 
     }
 }
