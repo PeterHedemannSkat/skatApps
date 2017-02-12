@@ -12,7 +12,11 @@ export class decimalDK implements PipeTransform {
 
     transform(value:number,...arg:any[]) {
 
-        return (typeof value === 'number') ? value.toString().replace('.',',') : ''
+        return (typeof value === 'number') 
+            ? (value == Number.POSITIVE_INFINITY) 
+                ? ''
+                : value.toString().replace('.',',')
+            : ''
 
     }
 }

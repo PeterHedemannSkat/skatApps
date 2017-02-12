@@ -16,6 +16,7 @@ import { CalenderServices } from './services/dateServices';
 import { MathCalc } from './services/math.services';
 import { readableDigitFormat } from './udgComponents/numberInput';
 import { importJsonData } from './services/jsonEmitterServices';
+import { checkIf,arrayOps } from './services/arrayCheck'
 
 
 export {
@@ -37,6 +38,8 @@ export {
     multiGears,
     readableDigitFormat,
     importJsonData,
-    decimalDK
+    decimalDK,
+    checkIf,
+    arrayOps
 
 }

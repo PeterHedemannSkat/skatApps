@@ -32,7 +32,7 @@ import { step3 } from '../wizardSteps/step3';
     BrowserModule,
     FormsModule, 
     HttpModule
-    ,InMemoryWebApiModule.forRoot(InMemoryDataService) 
+    //,InMemoryWebApiModule.forRoot(InMemoryDataService) 
   ],
   declarations: [
     appMain,

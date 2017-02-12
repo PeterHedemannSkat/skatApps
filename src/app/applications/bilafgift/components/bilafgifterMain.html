@@ -1,0 +1,107 @@
+ <div class = "skts-wizard bilafgift-afgift skts-app">
+        
+    <h1>bilafgifter</h1>
+
+    <p>Du kan her beregne dine årlige udgifter til ejerafgift..</p>
+
+    <p>Er du ved at købe en brugt bil kan du se detaljer, bl.a. om de løbende afgifter ...</p>
+
+    <a href="https://motorregister.skat.dk/dmr-front/appmanager/skat/dmr?_nfls=false&_nfpb=true&_pageLabel=vis_koeretoej_side">
+        Afgifter i motorregister
+    </a>
+
+    <div class="row main-bilafgift-container well">
+        <div class = "col-xs-5">
+            <h3>Indstillinger</h3>
+
+            <p></p>
+            <div *ngFor = "let parameter of model" class = "parameter">
+                
+                <selector 
+                    [options]   = "getOptionsWrapper(parameter.prop) | async"
+                    [label]     = "getLabelForOptions(parameter.prop) | async"
+                    [(value)]   = "parameter.val"
+                    (changed)   = "updateModel()"
+                ></selector>
+                
+            </div>
+        </div>
+
+        <div class = "col-xs-7"  *ngIf = "liveData">
+            <div class = "calculations-area">
+
+                <h3>Beregn din årlig afgift</h3>
+
+                <p></p>
+
+                <label for = "modtagerBeloeb"> 
+                    Brændstofsforbrug {{txt(liveData.inputType) | async}}
+                </label>                    
+                
+                <input [(ngModel)] = "userInput" class = "form-control" id = "modtagerBeloeb" [attr.placeholder] = "txt('placeholder') | async" />
+                
+                <h3>Result</h3>
+
+                <div class = "unique-result" *ngIf = "liveData.getTotal(userInput) == -1">
+
+                    Vises her når du har tastet ...
+
+                </div>
+
+                <div class = "unique-result" *ngIf = "liveData.getTotal(userInput) >= 0">
+                    <div class = "table-like" *ngFor = "let result of liveData.getAllValuesFromUserInput(userInput)">       
+                        <div class = "type-header">
+                            {{printColumnName(result.data.id) | async}}
+                                
+                        </div>                        
+                        <div class = "year-calculations">
+                            <div>
+                                {{result.periodsPrYear()}} 
+                                <span class = "multiplication"> </span> 
+                                {{result.data.val | tusindtal}} kr.
+                            </div>
+                            <div>{{result.sum() | tusindtal}} kr.</div>
+                        </div>
+                        <div class = "special-calculations">
+
+                        </div>
+                    </div>
+                   
+                    <div class = "table-row sum-calculations">
+                        <div>Afgift i alt pr år</div>
+                        <div>{{liveData.getTotal(userInput) | tusindtal}} kr.</div>
+                    </div>
+                   
+                </div>
+
+
+
+                <div class = "result" *ngIf = "liveData">
+  
+                    <h3>Halvårlige afgifter - oversigt</h3>
+
+                    <table class = "table-area">
+                        <tr>
+
+                            <th>Interval</th>
+                            <th *ngFor = "let name of liveData.getColumnNames()">
+                                {{printColumnName(name) | async}}
+                            </th>
+    
+                        </tr>
+                        <tr *ngFor = "let row of liveData?.interval;let i = index">
+                            <td>
+                                {{row.from | decimalDK}} -
+                                {{row.to | decimalDK}} {{txt(liveData.inputType) | async}}
+                            </td>
+                            <td *ngFor = "let name of liveData.getColumnNames()">
+                                {{liveData.getValue_fromIndex(i,name).val | tusindtal}} kr.
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

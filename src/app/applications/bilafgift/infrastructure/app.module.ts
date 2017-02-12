@@ -17,15 +17,10 @@ import {  tusindtalsSep,
           importJsonData,
           decimalDK,
           readableDigitFormat } from '../../../shared/shared';
-import { WizardState,languageText} from '../infrastructure/wizardressources';
-import { globalButtoms } from './app.globalKnapper';
+import { languageText} from '../infrastructure/wizardressources';
 import { InMemoryWebApiModule } from 'angular2-in-memory-web-api';
 import { InMemoryDataService } from '../data/inMemoryData.service';
-
-import { step1 } from '../wizardSteps/step1';
-import { step2 } from '../wizardSteps/step2';
-import { step3 } from '../wizardSteps/step3';
-
+import { columnID } from '../services/columnIDWrapper';
 
 
 
@@ -47,7 +42,7 @@ import { step3 } from '../wizardSteps/step3';
     selector,
     readableDigitFormat
   ],
-  providers: [ getJSONdata, importJsonData, WizardState],
+  providers: [ getJSONdata,importJsonData,columnID],
   bootstrap: [ appMain ]
 })
 export class AppModule { }

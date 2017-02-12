@@ -35,7 +35,7 @@ export class selector {
     @Input()
     helpTxt:string;
 
-    @Input()
+    @Input() /* all options input here, if a 'vælg ...' it needs to be added on init    */
     options:Array<input>
 
     @Output()

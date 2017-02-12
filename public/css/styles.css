@@ -1,9 +1,167 @@
+.well .skts-process-form-section:before{
+    border-top:none;
+    content: "";
+    display: block;
+    margin-bottom: 0em;
+    margin-left: 0rem;
+    margin-right: 0rem;
+    margin-top: 0em;
+    width: auto;
+}
+
+
+
+.parameter {
+
+    width:100%;
+    float:left;
+    box-sizing: border-box;
+
+}
+
+.parameters {
+    margin:auto 0;
+    max-width: 20em;
+}
+
+.parameter select.form-control {
+
+    margin-bottom: 0;
+
+}
+
+.main-bilafgift-container {
+    margin-top: 2.5em;
+}
+
+.parameter .form-group {
+    margin-bottom: 8px;
+}
+
+
+.parameter:nth-child(odd) {
+
+    margin-right: 15px;
+
+}
+
+.multiplication {
+    display:inline-block;
+
+}
+
+.calculations-area {
+    padding-left:1em;
+    border-left: 1px dotted #3f6075;
+}
+
+.result {
+    margin-top:2em;
+}
+
+.multiplication:after {
+
+    content:'\00d7'
+}
+
+.unique-result table td:first-child {
+    text-align: left;
+}
+
+table {
+    width:100%;
+    margin-top:1em;
+}
+
+
+table.table-area td,table.table-area th {
+    padding:0.5em 0.5em;
+    min-width:4em;
+    text-align:right;
+}
+
+table.table-area tr {
+    border-bottom:1px solid #395F77
+}
+
+table.table-area tr th {
+    font-size:0.8em;
+}
+
+table.table-area tr td:first-child, table.table-area tr th:first-child {
+   font-size: 0.8em;
+   text-align: left;
+   padding-left:1em;
+   min-width: 8.5em;
+}
+
+table.table-area tr td:nth-child(2),table.table-area tr th:nth-child(2)  {
+   min-width:6em;
+}
+
+table.table-area tr td:nth-child(3),table.table-area tr th:nth-child(3) {
+   min-width:3em;
+}
+
+.unique-result {
+    margin-bottom: 1.5em;
+    margin-top:0.3em;
+    padding:0.8em 0;
+    border-top:1px dotted slategray;
+    border-bottom:1px dotted slategray;
+}
+
+input ~ h3 {
+    margin-top:1em;
+}
+
+.calculations-info {
+    margin:2em 0;
+    font-size: 1em;
+}
+/*
+
+table.table-area tr:nth-child(odd){
+    background:lightgrey 
+}
+*/
+
+.main-bilafgift-container h3 {
+    font-weight:400;
+    font-size: 1.2em;
+}
+
+.table-like {
+    margin-top:0.3em;
+}
+
+.type-header {
+    font-style:italic;
+}
+
+
+.table-like > div > div,.table-row > div {
+    display: table-cell;
+    width: 100%;
+}
+
+.table-like > div > div:nth-child(2),.table-row > div:nth-child(2) {
+    min-width: 6em;
+    text-align: right;
+}
+    
 .well {
    background-color: #ececec;
 }
 
 .skts-wizard select {
     background: white;
+}
+
+.sum-calculations {
+    border-top: 1px solid gray;
+    padding-top: 0.5em;
+    margin-top:1.5em;
 }
 
 

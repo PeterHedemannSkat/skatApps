@@ -127,7 +127,7 @@ interface detailed {
                     <div class = "col-xs-12">
                         <label for = "giverBeloeb">{{txt('label_GiverBeloeb') | async}}</label>
                         <div class = "skts-postfix-kr">
-                            <input [(readableDigitFormat)] = "beregnService.giverBeloeb" class = "form-control" mask = "."  id = "giverBeloeb" [attr.placeholder] = "txt('placeholder') | async" />
+                            <input [(readableDigitFormat)] = "beregnService.giverBeloeb" class = "form-control" mask = "." id = "giverBeloeb" [attr.placeholder] = "txt('placeholder') | async" />
                         </div>
                     </div>
                 </div>
@@ -203,7 +203,7 @@ export class appMain extends importJsonData  {
 
     ngOnInit () {
 
-        this.production = false;
+        this.production = true;
 
        if (this.production) {
            this.data.production = true;
