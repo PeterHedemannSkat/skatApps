@@ -16,11 +16,11 @@ export class InMemoryDataService implements InMemoryDataService {
                 children:[
                     {
                         id:'vehicle',
-                        da:'køretøj'
+                        da:'Køretøj'
                     },
                     {
                         id:'fuel',
-                        da:'brændstof'
+                        da:'Brændstof'
                     },
                     {
                         id:'period',
@@ -28,15 +28,31 @@ export class InMemoryDataService implements InMemoryDataService {
                     },
                     {
                         id:'particleFilter',
-                        da:'partikelfilter'
+                        da:'Partikelfilter'
                     },
                     {
                         id:'privateUsage',
-                        da:'anvendelse'
+                        da:'Anvendelse'
                     },
                     {
                         id:'totalWeightVan',
-                        da:'totalvægt på varebil'
+                        da:'Totalvægt på varebil'
+                    },
+                    {
+                        id:'subPeriod_car_2',
+                        da:'Hvornår i 1997?'
+                    },
+                    {
+                        id:'subPeriod_van_2',
+                        da:'Hvornår i 2009?'
+                    },
+                    {
+                        id:'subPeriod_van_4',
+                        da:'Hvornår i 2007?'
+                    },
+                    {
+                        id:'specialOptionCar',
+                        da:'Frivillig ordning'
                     }
                 ]
 
@@ -94,6 +110,115 @@ export class InMemoryDataService implements InMemoryDataService {
                         ]
                     },
                     {
+                        id:'periodvan',
+                        children:[
+                            {
+                                id:'1',
+                                da:'_THISYEAR_ - 2010'
+                            },
+                            {
+                                id:'2',
+                                da:'2009'
+                            },
+                            {
+                                id:'3',
+                                da:'2008'
+                            },
+                            {
+                                id:'4',
+                                da:'2007'
+                            },
+                            {
+                                id:'5',
+                                da:'2006 - 1999'
+                            },
+                            {
+                                id:'6',
+                                da:'1998'
+                            },
+                            {
+                                id:'7',
+                                da:'Før 1998'
+                            }
+  
+                        ]
+                    },
+                    {
+                        id:'subPeriodcar_2',
+                        children:[
+                            {
+                                id:'1',
+                                da:'1. - 29. jan'
+                            },
+                            {
+                                id:'2',
+                                da:'30. jan - 30. juni'
+                            },
+                            {
+                                id:'3',
+                                da:'1. juli - 31. dec'
+                            }
+  
+                        ]
+                    },
+                    {
+                        id:'subPeriodvan_2',
+                        children:[
+                            {
+                                id:'1',
+                                da:'1. jan - 17. marts 2009'
+                            },
+                            {
+                                id:'2',
+                                da:'18. marts - 31. december'
+                            }
+
+                        ]
+                    },
+                    {
+                        id:'subPeriodvan_4',
+                        children:[
+                            {
+                                id:'1',
+                                da:'1. januar - 24. april 2007'
+                            },
+                            {
+                                id:'2',
+                                da:'25. april - 31. december 2007'
+                            }
+
+                        ]
+                    },
+                    {
+                        id:'subPeriodvan_6',
+                        children:[
+                            {
+                                id:'1',
+                                da:'1. januar - 2. juni 1998'
+                            },
+                            {
+                                id:'2',
+                                da:'3 juni - 31. december 1998'
+                            }
+
+                        ]
+                    },
+                    {
+                        id:'specialOptionCar',
+                        children:[
+                            {
+                                id:'ejerafgift',
+                                da:'Ejerafgift (efter km/l)'
+                            },
+                            {
+                                id:'vaegtafgift',
+                                da:'Vægtafgift (efter vægt)'
+                            }
+  
+                        ]
+                    
+                    },
+                    {
                         id:'particleFilter',
                         children:[
                             {
@@ -131,11 +256,11 @@ export class InMemoryDataService implements InMemoryDataService {
                         id:'totalWeightVan',
                         children:[
                                 {
-                                    id:'light',
+                                    id:'mindreEnd3tons',
                                     da:'Under 3.000 t'
                                 },
                                 {
-                                    id:'heavy',
+                                    id:'3tonsogTungere',
                                     da:'Over 3.000 t'
                                 }
 
@@ -153,6 +278,10 @@ export class InMemoryDataService implements InMemoryDataService {
                         da:'km/l'
                     },
                     {
+                        id:'vaegtKg',
+                        da:'kg.'
+                    },
+                    {
                         id:'ejerafgift',
                         da:'Ejerafgift'
                     },
@@ -163,6 +292,42 @@ export class InMemoryDataService implements InMemoryDataService {
                     {
                         id:'udligning',
                         da:'Udligningsafgift'
+                    },
+                    {
+                        id:'particleFilter',
+                        da:'Partikelfilterafgift'
+                    },
+                    {
+                        id:'halvaar',
+                        da:'pr. halvår'
+                    },
+                    {
+                        id:'kvartal',
+                        da:'pr. kvartal'
+                    },
+                    {
+                        id:'aar',
+                        da:'pr. år'
+                    },
+                    {
+                        id:'label_isKml',
+                        da:'Km pr. liter - Brændstofsforbrug'
+                    },
+                    {
+                        id:'label_isVaegt',
+                        da:'Køretøjets vægt (kg.)'
+                    },
+                    {
+                        id:'placeHolder_isKml',
+                        da:'Indtast km/l'
+                    },
+                    {
+                        id:'placeHolder_isVaegt',
+                        da:'Indtast kg.'
+                    },
+                    {
+                        id:'privatAnvendelsesAfgift',
+                        da:'Privatanvendelsesafgift'
                     }
                 ]
             }

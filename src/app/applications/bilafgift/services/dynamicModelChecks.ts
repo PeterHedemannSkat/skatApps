@@ -14,10 +14,26 @@ export class checkModelProperties {
 
         return (vehicle == 'car' || vehicle == 'taxa')
                 ? /* car and taxa */
-                    period == '1' || (period == '2' && subPeriod == '1')   
+                    period == '1' || (period == '2' && subPeriod == '3') || this.val('specialOptionCar') == 'ejerafgift'   
                 : /* van */  
-                    vehicle == 'van' && 
-                        ((Number(period) >= 1 && Number(period) <= 5) || (period == '6' && subPeriod == '1'))  
+                    vehicle == 'van' && (period == '1' || period == '2' && subPeriod == '2')  
+                         
+
+    }
+
+    isVaegtAfgift() {
+
+        let period      = this.val('period'),
+            subPeriod   = this.val('subPeriod'),
+            vehicle     = this.val('vehicle')
+        
+        if (vehicle == 'car') {
+            return period == '3' || (period ==  '2' && subPeriod == '1') || this.val('specialOptionCar') == 'vaegtafgift' 
+        } else if (vehicle == 'van') {
+            return (Number(period) >= 3 || (period == '2' && subPeriod == '1')) 
+        }
+
+        return false
 
     }
 

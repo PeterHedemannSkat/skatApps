@@ -77,6 +77,26 @@ export let parametersNeeded:parameterCheck[] = [
         ]
     },
     {
+        modelIsEither:[
+            []
+        ],
+        parametersNeeded:['subPeriod'],
+        dynamicFn:[ /* vælg periode skal også vises for en række år, når   */
+            (model) => {
+                
+                let period = model.find(el => el.prop == 'period'),
+                    vehicle = model.find(el => el.prop == 'vehicle')
+                    
+                if (period && vehicle && vehicle.val == 'van') {
+                    return [2,4,6].indexOf(Number(period.val)) > -1
+                } else {
+                    return false
+                }
+                    
+            }
+        ]
+    },
+    {
         parametersNeeded:['particleFilter'],
         modelIsEither:[
             [
@@ -91,6 +111,16 @@ export let parametersNeeded:parameterCheck[] = [
         ]  
     },
     {
+        parametersNeeded:['specialOptionCar'],
+        modelIsEither:[
+            [
+                { prop:'vehicle',val:'car'},
+                { prop:'subPeriod',val:'2'}
+            ]
+  
+        ]  
+    },
+    {
         parametersNeeded:['totalWeightVan'],
         modelIsEither:[
             [
@@ -100,8 +130,9 @@ export let parametersNeeded:parameterCheck[] = [
             [
                 { prop:'vehicle',val:'van'},
                 { prop:'period',val:'2'},
-                { prop:'subPeriod',val:'1'}
-            ]
+                { prop:'subPeriod',val:'2'}          
+            ],
+
      
         ]
     },

@@ -54,7 +54,7 @@ export class modelEngine {
                 // true if one of the elements in modelIsEither are a part of this.model -- OR         
                 return new checkIf<valuePairs[]>().someIn(el.modelIsEither).areComplientTo(el => {
                     
-                    return new arrayOps<valuePairs>(el).allValuesArePresentIn(this.model)
+                    return  el.length == 0 ? false : new arrayOps<valuePairs>(el).allValuesArePresentIn(this.model)
                 })
                 
             })

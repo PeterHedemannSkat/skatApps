@@ -9,12 +9,16 @@ export let intervalMapping = [
         table:'_ejerAfgift_benzin_'
     },
     {
-        ids:['vaegtafgiftBenzin'],
-        table:'vaegtAfgiftlov'
+        ids:['_car_vaegtAfgift_forbrugsAfgift_kvartal_','_car_vaegtAfgift_forbrugsAfgift_halvaar_','_car&taxa_vaegtAfgift_udligning_'],
+        table:'_car_vaegtAfgift_'
     },
     {
         ids:['_car&van_ejerAfgift_udligning_'],
         table:'_ejerAfgift_diesel_'
+    },
+    {
+        ids:['_van_vaegtAfgift_forbrugsAfgift_','_van_vaegtAfgift_udligning_'],
+        table:'_van_vaegtAfgift_'     
     }
 
 ]
@@ -40,9 +44,9 @@ export const singleDataType =
 
     {
         validFor:{
-            stringSearch:['partikelFilterAfgift','vejAfgift','privatAnvendelsesAfgift']
+            stringSearch:['particleFilter','vejAfgift','privatAnvendelsesAfgift']
         },
-        dataType:'kmPrLiter'
+        dataType:'single'
     }
 
 
@@ -54,7 +58,8 @@ export let specialIntervals:validTypes[] = [
         stringSearch:['bus','camper'],
         columnIds:[
             '_car&taxa_vaegtAfgift_udligning_',
-            '_car_vaegtAfgift_forbrugsAfgift_'
+            '_car_vaegtAfgift_forbrugsAfgift_kvartal_',
+            '_car_vaegtAfgift_forbrugsAfgift_halvaar_'
         ]
     }
 
@@ -64,23 +69,24 @@ export const periodMapping:periods[] = [
 
     {
         validFor:{
-            stringSearch:['truck','bus','trailer','tractor','camper'],
-            columnIds:['_van_vaegtAfgift_forbrugsAfgift_']
+            stringSearch:['truck','bus','trailer','tractor','camper','privatAnvendelsesAfgift'],
+            columnIds:['_van_vaegtAfgift_forbrugsAfgift_','_particleFilter_','_van_vaegtAfgift_udligning_']
         },
-        period:12,
+        period:1,
         same:true
     },
     {
         validFor:{
            stringSearch:['ejerAfgift'],
-           columnIds:['_car_vaegtAfgift_forbrugsAfgift_','_car&taxa_vaegtAfgift_udligning_'],
+           columnIds:['_car_vaegtAfgift_forbrugsAfgift_']
         },
-        period:6,
+        period:2,
         same:true
     },
     {
         validFor:{
-            stringSearch:['mixedKvartal'],
+            stringSearch:['kvartal'],
+            columnIds:['_car&taxa_vaegtAfgift_udligning_']
         },
         periodIndex:[2,2,2,2,4,4,4],
         same:false
@@ -88,6 +94,7 @@ export const periodMapping:periods[] = [
     {
         validFor:{
             columnIds:['_car_vaegtAfgift_forbrugsAfgift_'],
+            stringSearch:['halvaar']
         },
         periodIndex:[2,2,2,2,2,2,4],
         same:false
@@ -124,10 +131,16 @@ export const yearDataMapping:dataMapping[] = [
     },
     {
         validFor:{
-            stringSearch:['vejbenyttelse,privatAnvendelsesAfgift,partikelFilterAfgift']
-        },      
-        
+            stringSearch:['vejbenyttelse','privatAnvendelsesAfgift','particleFilter']
+        },
+        periods:[
+            {
+                baseYear:2017, /* the id where we look */ 
+                from:2010,
+                to:Number.POSITIVE_INFINITY
+            }      
+        ],
         multiYearBase:true,
-        hardcoded:true      
+        hardcoded:false      
     }
 ] 

@@ -58,6 +58,17 @@ interface dynamicBoolean {
     (model:valuePairs[]):boolean
 }
 
+interface dataStore {
+    yearKey:number /* year  */
+    store:subDataStore[]
+}
+
+interface subDataStore {
+
+    dataID:string,
+    content:tableData
+
+}
 
 interface valuePairs {
     prop:string,
@@ -140,7 +151,8 @@ class intervals {
 interface calculatedData extends cellExtract  {
     period:periods,
     id:string,
-    index:number
+    index:number,
+    type:string
 }
 
 export {
@@ -166,5 +178,7 @@ export {
     periods,
     singleData,
     cellExtract,
-    calculatedData
+    calculatedData,
+    dataStore,
+    subDataStore
 }

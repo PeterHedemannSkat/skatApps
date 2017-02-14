@@ -36,13 +36,27 @@ export let columnIDRules:rulesForColumns[] = [
         ],
         getColumn:(model:valuePairs[]) => {
 
-            let isEjerAfgift = new checkModelProperties(model).isEjerAfgift();
+            let isEjerAfgift    = new checkModelProperties(model).isEjerAfgift(),
+                isVaegtAfgift   = new checkModelProperties(model).isVaegtAfgift();
 
-            return isEjerAfgift 
-                ? '_car&van_ejerAfgift_udligning_'  /* no difference on van,car, taxa with with rules */   
-                : (modelVal(model,'vehicle') == 'car') /* ... but old vægtafgiftsregler differs */
-                    ? '_car&taxa_vaegtAfgift_udligning_'
-                    : '_van_vaegtAfgift_udligning_'   
+            if (isEjerAfgift) {
+
+                return '_car&van_ejerAfgift_udligning_' 
+
+            } else if (isVaegtAfgift) {
+
+                if (modelVal(model,'vehicle') == 'car') {
+
+                    return '_car&taxa_vaegtAfgift_udligning_'
+
+                } else if (modelVal(model,'vehicle') == 'van') {
+
+                    return '_van_vaegtAfgift_udligning_'
+
+                }
+            }
+
+            return ''
                           
         }
 
@@ -65,14 +79,37 @@ export let columnIDRules:rulesForColumns[] = [
         ],
         getColumn:(model:valuePairs[]) => {
 
-            let isEjerAfgift = new checkModelProperties(model).isEjerAfgift();
+            let isEjerAfgift    = new checkModelProperties(model).isEjerAfgift(),
+                isVaegtAfgift   = new checkModelProperties(model).isVaegtAfgift();
 
-            return isEjerAfgift 
-                ? '_car&van_ejerAfgift_forbrugsAfgift_' 
-                : /* is then vægtafgift */ (modelVal(model,'vehicle') == 'car') 
-                    ? '_car_vaegtAfgift_forbrugsAfgift_'
-                    : '_van_vaegtAfgift_forbrugsAfgift_'     
-                
+            if (isEjerAfgift) {
+
+                return '_car&van_ejerAfgift_forbrugsAfgift_' 
+
+            } else if (isVaegtAfgift) {
+
+                if (modelVal(model,'vehicle') == 'car') {
+
+                    if (modelVal(model,'fuel') == 'diesel') {
+
+                        return '_car_vaegtAfgift_forbrugsAfgift_kvartal_'
+
+                    } else if (modelVal(model,'fuel') == 'benzin') {
+
+                        return '_car_vaegtAfgift_forbrugsAfgift_halvaar_'
+
+                    }
+
+                } else if (modelVal(model,'vehicle') == 'van') {
+
+                    return '_van_vaegtAfgift_forbrugsAfgift_'
+
+                }
+
+            }
+
+            return ''
+
         }
     },
     {
@@ -172,30 +209,38 @@ export let columnIDRules:rulesForColumns[] = [
 
             [ /* AND && */
                 [ /* OR || one of ... */
-                    [{prop:'vehicle',val:'van'},
-                     {prop:'period',val:'1'}],
-
-                    [{prop:'vehicle',val:'van'},
-                     {prop:'period',val:'2'}],
-
-                    [{prop:'vehicle',val:'van'},
-                     {prop:'period',val:'3'}],
-
-                    [{prop:'vehicle',val:'van'},
-                     {prop:'period',val:'4'},  
-                     {prop:'subPeriod',val:'2'}],  
+                    [{prop:'vehicle',val:'van'}]
 
                 ]
             ]
         ],
         getColumn:(model:valuePairs[]) => {
 
-            let model_ = new checkModelProperties(model),
-                weight = model_.val('weightVan')
+            let model_      = new checkModelProperties(model),
+                isModern    = model_.isModernPrivatAnvendelseRules(),
+                weight      = model_.val('totalWeightVan'),
+                anvendelse  = model_.val('privateUsage')
+            
+            return weight && anvendelse
+                ? `_van_privatAnvendelsesAfgift_modern_${weight}_`
+                : ''
+                     
+        }
+    },
+    {
+        needsEither:[
+            [ /* AND && */
+                [ /* OR || one of ... */
+                    [{prop:'particleFilter',val:'nej'}]
+                ]
+            ]
+        ],
+        getColumn:(model:valuePairs[]) => {
 
-            return `_van_privatAnvendelsesAfgift_modern_${weight}_`
+            return `_particleFilter_`
                        
         }
     }
+   
 
 ] 

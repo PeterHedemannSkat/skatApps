@@ -1,4 +1,4 @@
-import { tableData,singleData,specialValues,cellExtract,calculatedData } from '../infrastructure/interfaces.bilafgifter';
+import { tableData,singleData,specialValues,cellExtract,calculatedData,valuePairs } from '../infrastructure/interfaces.bilafgifter';
 import { intervalConstructer } from './intervalClass.bilafgifter';
 import { intervals } from '../infrastructure/interfaces.bilafgifter' 
 
@@ -6,23 +6,44 @@ import { intervals } from '../infrastructure/interfaces.bilafgifter'
 export class dataHandlerMaster {
 
     private tableColumns:tableData[];
-    private individualData:singleData[];
+    public individualData:tableData[];
+    isReady:boolean;
+    private model:valuePairs[]
+    private isEmpty:boolean = false;
+
+    private allData:tableData[]
 
     inputType:string; 
     interval:intervals[]
 
-    initDataStructure(tableColumns:tableData[]) {
+    initDataStructure(tableColumns:tableData[],model:valuePairs[]) {
         
-        let interval_ = new intervalConstructer(this.getNamesOfColumns(tableColumns))
-     
-        this.inputType      = interval_.inputType()
-        this.interval       = interval_.getInterval()
+         if (tableColumns.length == 0) {
+             this.isEmpty = true
+             return this
+         }
+        
+        this.allData    = tableColumns
+        this.model      = model
+
         this.tableColumns   = tableColumns.filter(el => el.type == 'table').sort((a,b) => {
 
             let isUdligning = a.id.match(/udligning/)
             return (isUdligning) ? 1 : -1
 
         })
+
+        this.individualData = tableColumns.filter(el => el.type == 'singleData')
+
+        /* if we are asked for partikelFilter, privatAnvendelse ect. and tables are undetermined we should not return anything  */
+        if (this.tableColumns.length == 0) {
+            this.isEmpty = true
+            return this  
+        }
+
+        let interval_ = new intervalConstructer(this.getNamesOfColumns(tableColumns))
+        this.inputType      = interval_.inputType()
+        this.interval       = interval_.getInterval()
    
      /* below smaller manipulations due to the data structure, eg. the forbrugsafgift array is suited for both udligning and forbrugsafgift. Therefore we need to chop the last 3 elements  */
         let isSpecialcase = !!this.tableColumns.find(el => el.id == '_car&van_ejerAfgift_forbrugsAfgift_') && this.tableColumns.length == 1 
@@ -33,7 +54,6 @@ export class dataHandlerMaster {
 
         if (this.inputType == 'kmPrLiter') this.reverseColumns()
 
-        console.log(this)
         return this
     }
 
@@ -61,6 +81,26 @@ export class dataHandlerMaster {
                 return (isUdligning) ? 1 : -1
 
             })                     
+    }
+
+    getPeriodOfIndex(index:number) {
+
+        /* assuming that each row in the table has the same period, otherwise something is wrong... looking at first table should do  */
+        
+        return this.tableColumns && this.tableColumns[0] && this.tableColumns[0].period.periodIndex[index]
+
+    }
+
+    getCommonTablePeriod() {
+
+        return this.tableColumns && this.tableColumns[0] && this.tableColumns[0].period.period
+
+    }
+
+    tableRowsHasDifferentPeriods() {
+
+        return this.tableColumns && this.tableColumns[0] && !this.tableColumns[0].period.same
+
     }
 
     getNamesOfColumns(tableColumns:tableData[]) {
@@ -98,16 +138,24 @@ export class dataHandlerMaster {
         let formattedVal    = Number(userValue.replace(/,/,'.')),
              index          = this.getIndex(Number(formattedVal))
 
-        return this.getColumnNames()
-            .map(name => {
+        let allData = this.allData.map(data => {
 
-                let period = {period:this.tableColumns.find(el => el.id == name).period,id:name,index:index},
-                    values = this.getValue_fromIndex(index,name,formattedVal),
-                    prop   = new printValue(Object.assign(values,period))  
+            let period  = {period:data.period,id:data.id,index:index,type:data.type},
+                index_  = (data.type == 'singleData') ? 0 : index,
+                values  = this.getValue_fromIndex(index_,data.id,formattedVal),
+                 prop   = new printValue(Object.assign(values,period))  
+                
+            return prop
+        })
+  
+        return allData
 
-                return prop
-            })
-      
+    }
+
+    containsTable() {
+
+        return this.tableColumns && !!this.tableColumns[0]
+
     }
 
     getTotal(userValue:string) {
@@ -122,8 +170,8 @@ export class dataHandlerMaster {
     getValue_fromIndex(index:number,id:string,value?:number):cellExtract {
 
         let len     = this.interval.length,
-            column_ = this.tableColumns.find(el => el.id == id)
-
+            column_ = this.allData.find(el => el.id == id)
+ 
         if (index == 0 || index == (len - 1)) /* is potential a special type (x pr y), but not necessary ...  */ {
 
             let isSpecial = column_.specialData
@@ -179,9 +227,21 @@ export class dataHandlerMaster {
         }
     }
 
+    private closestHundredUp(value:number) {
+
+        value = Number(value)
+
+        let mod = value % 100
+
+        return (mod > 0) ? (value + 100 - mod) : value
+
+    }
+
     private specialCalculations(special:specialValues, value:number) {
 
         /* default, round up to nearest 100 */
+
+        
 
         let mod = value % 100
 
@@ -200,13 +260,13 @@ export class printValue {
     }
 
     periodsPrYear() {
-        
+       
         let period_ = this.data.period,
              period = this.data.period.same 
                 ? period_.period 
                 : period_.periodIndex[this.data.index] 
         
-        return 12/period
+        return period
 
     }
 
@@ -217,6 +277,10 @@ export class printValue {
     isUdligning() {
         return this.data
         //return  !!this.data.id.match(/udligning/)
+    }
+
+    specialLoad() {
+        return this.data.object ?  this.data.object : undefined 
     }
 
 }

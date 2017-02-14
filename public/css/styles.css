@@ -9,13 +9,18 @@
     width: auto;
 }
 
-
-
 .parameter {
 
     width:100%;
     float:left;
     box-sizing: border-box;
+
+}
+
+
+.parameter:not(.missing-parameter) {
+
+    padding-right: 5px;
 
 }
 
@@ -40,10 +45,10 @@
 
 
 .parameter:nth-child(odd) {
-
     margin-right: 15px;
-
 }
+
+
 
 .multiplication {
     display:inline-block;
@@ -54,6 +59,43 @@
     padding-left:1em;
     border-left: 1px dotted #3f6075;
 }
+
+.special-calculations {
+    margin-left:1em;
+    font-size:0.8em;
+    border-top:1px solid white;
+    border-bottom: 1px solid white;
+}
+
+.missing-parameter {
+    position:relative;
+    left:-5px;
+    padding-left: 5px;
+    border-left:3px solid #3f6075;
+}
+
+.skts-app h3 + p {
+    margin-top:1em;
+}
+
+
+
+@media only screen and (max-width:500px) {
+
+    .calculations-area {
+         padding-left:0;
+        border-left: none;
+    }
+
+
+}
+
+.special-table-value {
+    font-size: 0.8em;
+    text-align: right;
+}
+
+
 
 .result {
     margin-top:2em;
@@ -119,12 +161,7 @@ input ~ h3 {
     margin:2em 0;
     font-size: 1em;
 }
-/*
 
-table.table-area tr:nth-child(odd){
-    background:lightgrey 
-}
-*/
 
 .main-bilafgift-container h3 {
     font-weight:400;

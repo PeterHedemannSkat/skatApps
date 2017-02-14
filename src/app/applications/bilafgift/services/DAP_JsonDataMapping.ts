@@ -60,7 +60,7 @@ export class tableTransformerFromDAPstructure {
         /* assuming it is grouped under COLUMN, when special type  */
 
         let specials = specialIntervals.find(el => new columnSearch(el).checkColumnID(this.id)) 
-
+  
         this.yearArray = (specials) ? this.currentLayer.children.find(el => el.id == 'column').children : this.currentLayer.children
         
         return this
@@ -79,7 +79,7 @@ export class tableTransformerFromDAPstructure {
 
     private formatData(obj:languageText[],year:number) {
 
-         return this.getYearObj(obj,year).da.split(',').map(data => Number(data))
+        return this.getYearObj(obj,year).da.split(',').map(data => Number(data))
 
     }
 

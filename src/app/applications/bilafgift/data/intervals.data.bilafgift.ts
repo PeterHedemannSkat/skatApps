@@ -15,14 +15,14 @@ export let intervalsBilafgifter:interval[] = [
         toMap:-0.1 
     },
     {
-        id:'vaegtAfgiftlov',
+        id:'_car_vaegtAfgift_',
         data:[0,600,800,1100,1300,1500,2000,Number.POSITIVE_INFINITY],
         type:1,
         fromMap:1 
     },
     {
-        id:'vareBilEct',
-        data:[500,1000,2000,2500,3000,4000],
+        id:'_van_vaegtAfgift_',
+        data:[0,500,1000,2000,2500,3000,4000],
         type:1,
         fromMap:1 
     },

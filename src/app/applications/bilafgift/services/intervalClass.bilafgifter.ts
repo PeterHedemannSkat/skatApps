@@ -27,7 +27,7 @@ export class intervalConstructer {
 
         if (type == 'kmPrLiter') {  
             toArray = toArray.map(v => Number((v - 0.1).toFixed(1))); 
-        } else if (type == 'singleData') {
+        } else if (type == 'vaegtKg') {
             fromArray = fromArray.map(v =>v + 1);
         }
 
