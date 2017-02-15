@@ -19,7 +19,54 @@ export let intervalMapping = [
     {
         ids:['_van_vaegtAfgift_forbrugsAfgift_','_van_vaegtAfgift_udligning_'],
         table:'_van_vaegtAfgift_'     
+    },
+    {
+        ids:['_truck_largeTruck_2_roadTrain_1_air_','_truck_largeTruck_2_roadTrain_1_other_'],
+        table:'_largeTruck_2_1'
+    },
+    {
+        ids:['_truck_largeTruck_2_roadTrain_2_air_','_truck_largeTruck_2_roadTrain_2_other_','_truck_largeTruck_3_roadTrain_1_air_','_truck_largeTruck_3_roadTrain_1_other_'],
+        table:'_largeTruck_2_2AND_largeTruck_3_1'
+    },
+    {
+        ids:['_truck_largeTruck_2_roadTrain_3_air_','_truck_largeTruck_2_roadTrain_3_other_'],
+        table:'_largeTruck_2_3'
+    },
+    {
+        ids:['_truck_largeTruck_3_roadTrain_2_air_','_truck_largeTruck_3_roadTrain_2_other_','_truck_largeTruck_3_roadTrain_3_air_','_truck_largeTruck_3_roadTrain_3_other_'],
+        table:'_largeTruck_3_2AND_largeTruck_3_3'
+    },
+    {
+        ids:['_truck_largeTruck_2_air_','_truck_largeTruck_2_other_'],
+        table:'_largeTruck_2'
+    },
+    {
+        ids:['_truck_largeTruck_3_air_','_truck_largeTruck_3_other_'],
+        table:'_largeTruck_3'
+    },
+    {
+        ids:['_truck_largeTruck_4_air_','_truck_largeTruck_4_other_'],
+        table:'_largeTruck_4'
+    },
+    {
+        ids:['_truck_smallTruck_motorKoeretoej_forbrugsAfgift_2_',
+            '_truck_smallTruck_motorKoeretoej_udligning_2_',
+            '_truck_smallTruck_paahaengsKoeretoej_udligning_2_',
+            '_truck_smallTruck_paahaengsKoeretoej_forbrugsAfgift_2_'
+        ],
+        table:'_smallTruck_2'
+    },
+    {
+        ids:['_truck_smallTruck_motorKoeretoej_forbrugsAfgift_3_',
+            '_truck_smallTruck_motorKoeretoej_udligning_3_',
+            '_truck_smallTruck_paahaengsKoeretoej_udligning_3_',
+            '_truck_smallTruck_paahaengsKoeretoej_forbrugsAfgift_3_'
+        ],
+        table:'_smallTruck_3'
     }
+    
+
+
 
 ]
 
@@ -55,11 +102,12 @@ export const singleDataType =
 export let specialIntervals:validTypes[] = [
 
     {
-        stringSearch:['bus','camper'],
+        stringSearch:['bus','camper','smallTruck'],
         columnIds:[
             '_car&taxa_vaegtAfgift_udligning_',
             '_car_vaegtAfgift_forbrugsAfgift_kvartal_',
             '_car_vaegtAfgift_forbrugsAfgift_halvaar_'
+            
         ]
     }
 

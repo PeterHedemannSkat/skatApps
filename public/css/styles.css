@@ -78,6 +78,11 @@
     margin-top:1em;
 }
 
+.val-in-row {
+    background:#3f6075;
+    color:white;
+}
+
 
 
 @media only screen and (max-width:500px) {

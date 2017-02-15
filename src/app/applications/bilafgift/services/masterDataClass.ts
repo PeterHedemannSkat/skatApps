@@ -86,8 +86,9 @@ export class dataHandlerMaster {
     getPeriodOfIndex(index:number) {
 
         /* assuming that each row in the table has the same period, otherwise something is wrong... looking at first table should do  */
-        
-        return this.tableColumns && this.tableColumns[0] && this.tableColumns[0].period.periodIndex[index]
+        return this.tableRowsHasDifferentPeriods()
+            ? this.tableColumns && this.tableColumns[0] && this.tableColumns[0].period.periodIndex[index]
+            : this.tableColumns && this.tableColumns[0] && this.tableColumns[0].period.period
 
     }
 
@@ -116,7 +117,7 @@ export class dataHandlerMaster {
 
     }
 
-    private getIndex(value:number) {
+    getIndex(value:number) {
     
         return this.interval.findIndex((el) => {
             return (value >= el.from && value <= el.to)
@@ -219,6 +220,11 @@ export class dataHandlerMaster {
             }
 
         } else /* is a normal index - not start nor end  */ {
+            /* if start we need to add one! */
+
+            let isSpecial = column_.specialData
+
+            if (isSpecial && isSpecial.find(el => el.id == 'start')) index--;
 
             return {
                 val:column_.columnData[index]                                 
@@ -243,11 +249,11 @@ export class dataHandlerMaster {
 
         
 
-        let mod = value % 100
+        let mod = value % special.units
 
-        let valueRoundedUp = (mod > 0) ? (value + 100 - mod) : value
+        let valueRoundedUp = (mod > 0) ? (value + special.units - mod) : value
 
-        return (valueRoundedUp / special.units) * special.val
+        return Math.round((valueRoundedUp / special.units) * special.val)
 
 
     }

@@ -24,7 +24,7 @@ export let parametersNeeded:parameterCheck[] = [
             ], /* OR */
             [
                 { prop:'vehicle',val:'truck'},
-                { prop:'totalweightAbove12tons',val:'no'}               
+                { prop:'size',val:'small'}               
             ], /* OR */
             [
                 { prop:'vehicle',val:'bus'}
@@ -107,7 +107,15 @@ export let parametersNeeded:parameterCheck[] = [
                 { prop:'vehicle',val:'van'},
                 { prop:'fuel',val:'diesel'},
                 { prop:'period',val:'1'}
-            ]
+            ],
+            [
+                { prop:'vehicle',val:'van'},
+                { prop:'fuel',val:'diesel'},
+                { prop:'period',val:'2'},
+                { prop:'subPeriod',val:'2'}
+
+            ],
+
         ]  
     },
     {
@@ -115,6 +123,7 @@ export let parametersNeeded:parameterCheck[] = [
         modelIsEither:[
             [
                 { prop:'vehicle',val:'car'},
+                { prop:'period',val:'2'},
                 { prop:'subPeriod',val:'2'}
             ]
   
@@ -166,10 +175,67 @@ export let parametersNeeded:parameterCheck[] = [
             [
                 { prop:'vehicle',val:'van'},
                 { prop:'period',val:'6'},
-                { prop:'subPeriod',val:'1'},
+                { prop:'subPeriod',val:'2'}
 
             ]
         ]
 
+    },
+    {
+        parametersNeeded:['size'],
+        modelIsEither:[
+            [
+                { prop:'vehicle',val:'truck' }
+            ]
+        ]
+    },
+    {
+        parametersNeeded:['typeTruck','suspension'],
+        modelIsEither:[
+            [
+                { prop:'vehicle',val:'truck'},
+                { prop:'size',val:'large'}
+            ]
+        ]
+    },
+    {
+        parametersNeeded:['axesTruck_roadTrain','axesTruck_roadTrain_road'],
+        modelIsEither:[
+            [
+                { prop:'vehicle',val:'truck'},
+                { prop:'size',val:'large'},
+                { prop:'typeTruck',val:'roadTrain'}
+            ]
+        ]
+    },
+    {
+        parametersNeeded:['axesTruck_Regular'],
+        modelIsEither:[
+            [
+                { prop:'vehicle',val:'truck'},
+                { prop:'size',val:'large'},
+                { prop:'typeTruck',val:'truck'}
+            ]
+        ]
+    },
+    {
+        parametersNeeded:['axesTruck_small'],
+        modelIsEither:[
+            [
+                { prop:'vehicle',val:'truck'},
+                { prop:'size',val:'small'}
+      
+            ]
+        ]
+    },
+    {
+        parametersNeeded:['smallTruckType'],
+        modelIsEither:[
+            [
+                { prop:'vehicle',val:'truck'},
+                { prop:'size',val:'small'}
+              
+            ]
+        ]
     }
 ]

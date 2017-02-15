@@ -1,6 +1,6 @@
 import { valuePairs,rulesForColumns } from '../infrastructure/interfaces.bilafgifter';
 import { checkIf,arrayOps} from '../../../shared/shared';
-import { checkModelProperties } from './dynamicModelChecks';
+import { checkModelProperties } from './dynamicModelChecks'
 
 export class ColumnPairing {
 
@@ -42,6 +42,8 @@ export class ColumnPairing {
                                           
 
             if (isOldPrivatAnvendelse) columnIDs.push(this.addPrivatAnvendelsesAfgiftOld()) 
+            if (isNewPrivatAnvendelse) columnIDs.push(this.addPrivatAnvendelsesAfgiftNew()) 
+
 
             return columnIDs
 
@@ -52,6 +54,14 @@ export class ColumnPairing {
         let weight = Number(this.userInput) > 2000 ? 'over2tons' : 'mindreEnd2tons';
 
         return `_van_privatAnvendelsesAfgift_old_${weight}_` 
+
+    }
+
+    private addPrivatAnvendelsesAfgiftNew() {
+
+        let weight = Number(this.userInput) > 3000 ? '3tonsogTungere' : 'mindreEnd3tons';
+
+        return `_van_privatAnvendelsesAfgift_modern_${weight}_` 
 
     }
 

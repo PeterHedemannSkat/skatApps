@@ -91,11 +91,22 @@ export class appMain   {
 
     }
 
+    valueIsRow(index:number) {
+
+        if (this.userInput) {
+            let formattedVal    = Number(this.userInput.replace(/,/,'.'))
+            console.log(index)
+            return (this.liveData.getIndex(formattedVal) == index)
+        }
+
+    }
+
     casePrivatAnvendelseOld() {
 
-        let isOld = new checkModelProperties(this.model).isOldPrivatAnvendelseRules() && new checkModelProperties(this.model).val('privateUsage')
+        let isOld = new checkModelProperties(this.model).isOldPrivatAnvendelseRules() && new checkModelProperties(this.model).val('privateUsage'),
+            isNew = new checkModelProperties(this.model).isModernPrivatAnvendelseRules() && new checkModelProperties(this.model).val('privateUsage') && new checkModelProperties(this.model).isVaegtAfgift() 
 
-        if (isOld) this.updateModel('')
+        if (isOld || isNew) this.updateModel('')
         
     
 

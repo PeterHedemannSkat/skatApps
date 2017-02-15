@@ -51,8 +51,44 @@ export class InMemoryDataService implements InMemoryDataService {
                         da:'Hvornår i 2007?'
                     },
                     {
+                        id:'subPeriod_van_6',
+                        da:'Hvornår i 1998?'
+                    },
+                    {
                         id:'specialOptionCar',
                         da:'Frivillig ordning'
+                    },
+                    {
+                        id:'size',
+                        da:'Totalvægt over 12 tons'
+                    },
+                    {
+                        id:'typeTruck',
+                        da:'Vogntog eller lastbil?'
+                    },
+                    {
+                        id:'axesTruck_roadTrain',
+                        da:'Aksler på lastbil'
+                    },
+                    {
+                        id:'suspension',
+                        da:'Affjedringstype'
+                    },
+                    {
+                        id:'axesTruck_roadTrain_road',
+                        da:'Aksler på vogntog'
+                    },
+                    {
+                        id:'axesTruck_Regular',
+                        da:'Aksler på lastbil'
+                    },
+                    {
+                        id:'smallTruckType',
+                        da:'Type'
+                    },
+                    {
+                        id:'axesTruck_small',
+                        da:'Aksler på lastbil'
                     }
                 ]
 
@@ -65,15 +101,15 @@ export class InMemoryDataService implements InMemoryDataService {
                         children:[
                             {
                                 id:'car',
-                                da:'personbil'
+                                da:'Personbil'
                             },
                             {
                                 id:'van',
-                                da:'varebil'
+                                da:'Varebil'
                             },
                             {
                                 id:'truck',
-                                da:'lastbil'
+                                da:'Lastbil'
                             }
                         ]
                     },
@@ -82,11 +118,11 @@ export class InMemoryDataService implements InMemoryDataService {
                         children:[
                             {
                                 id:'benzin',
-                                da:'benzin'
+                                da:'Benzin'
                             },
                             {
                                 id:'diesel',
-                                da:'diesel'
+                                da:'Diesel'
                             }
   
                         ]
@@ -223,11 +259,11 @@ export class InMemoryDataService implements InMemoryDataService {
                         children:[
                             {
                                 id:'ja',
-                                da:'ja'
+                                da:'Ja'
                             },
                             {
                                 id:'nej',
-                                da:'nej'
+                                da:'Nej'
                             }
   
                         ]
@@ -238,15 +274,15 @@ export class InMemoryDataService implements InMemoryDataService {
                         children:[
                             {
                                 id:'private',
-                                da:'privat'
+                                da:'Privat'
                             },
                             {
                                 id:'mixed',
-                                da:'blandet'
+                                da:'Blandet'
                             },
                             {
                                 id:'job',
-                                da:'erhverv'
+                                da:'Erhverv'
                             }
   
                         ]
@@ -265,6 +301,119 @@ export class InMemoryDataService implements InMemoryDataService {
                                 }
 
                             ]
+                    },
+                    {
+                        id:'size',
+                        children:[
+                            {
+                                id:'large',
+                                da:'Ja'
+                            },
+                            {
+                                id:'small',
+                                da:'Nej'
+                            }
+                        ]
+                    },
+                    {
+                        id:'typeTruck',
+                        children:[
+                            {
+                                id:'truck',
+                                da:'Lastbil'
+                            },
+                            {
+                                id:'roadTrain',
+                                da:'Vogntog'
+                            }
+                        ]
+                    },
+                    {
+                        id:'axesTruck_roadTrain',
+                        children:[
+                            {
+                                id:'2',
+                                da:'2 aksler'
+
+                            },
+                            {
+                                id:'3',
+                                da:'3 eller flere aksler'
+                            }
+                        ]
+                    },
+                    {
+                        id:'axesTruck_roadTrain_road',
+                        children:[
+                            {
+                                id:'1',
+                                da:'1 aksel'
+                            },
+                            {
+                                id:'2',
+                                da:'2 aksler'
+                            },
+                            {
+                                id:'3',
+                                da:'3 eller flere aksler'
+                            }
+                        ]
+                    },
+                    {
+                        id:'suspension',
+                        children:[
+                            {
+                                id:'air',
+                                da:'Luftaffjedring'
+                            },
+                            {
+                                id:'other',
+                                da:'Anden affjedring'
+                            }
+                        ]
+                    },
+                    {
+                        id:'axesTruck_Regular',
+                        children:[
+                            {
+                                id:'2',
+                                da:'2 aksler'
+                            },
+                            {
+                                id:'3',
+                                da:'3 aksler'
+                            },
+                            {
+                                id:'4',
+                                da:'4 eller flere aksler'
+                            }
+                        ]
+                    },
+                    {
+                        id:'axesTruck_small',
+                        children:[
+                            {
+                                id:'2',
+                                da:'2 aksel'
+                            },
+                            {
+                                id:'3',
+                                da:'3 eller flere askler'
+                            }
+                        ]
+                    },
+                    {
+                        id:'smallTruckType',
+                        children:[
+                            {
+                                id:'motorKoeretoej',
+                                da:'Motorkøretøj'
+                            },
+                            {
+                                id:'paahaengsKoeretoej',
+                                da:'Påhængskøretøj'
+                            }
+                        ]
                     }
                     
 

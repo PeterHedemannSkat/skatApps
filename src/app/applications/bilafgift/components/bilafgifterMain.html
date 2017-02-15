@@ -32,7 +32,7 @@
             <div class = "calculations-area">
 
 
-                <div class = "waiting-results" *ngIf = "!allParametersHasValue()">
+                <div class = "waiting-results" *ngIf = "!allParametersHasValue() && !error">
                     <h3>Du mangler at udfylde noget</h3>
                     <p><br/>For at du kan beregne din årlige udgift skal alt være udfyldt.</p>
 
@@ -46,8 +46,8 @@
                 <div class = "something-is-wrong" *ngIf = "error">
                     <h3>Beklager - noget gik galt</h3> 
                     <p>
-                        Forsøg igen senere. Måske er din internetopkobling ikke stabil lige nu ...
-                       <a href = "#dd">Genindlæs side</a> 
+                        Prøv at genindlæse siden.        
+                       
                     </p>
                 </div>
                     
@@ -81,6 +81,7 @@
                                 </div>                        
 
                                 <div class = "special-calculations" *ngIf = "result.specialLoad()">
+                                    
                                     {{printDiffentiatedInterval(liveData.getPeriodOfIndex(result.data.index)) | async}}: 
                                     {{liveData.closestHundredUp(userInput)}} {{txt(liveData.inputType) | async}} 
                                     (rundet up) / 
@@ -127,7 +128,7 @@
                                 </th>
         
                             </tr>
-                            <tr *ngFor = "let row of liveData?.interval;let i = index">
+                            <tr *ngFor = "let row of liveData?.interval;let i = index" [class.val-in-row] = "valueIsRow(i)">
                                 <td>
                                     {{row.from | decimalDK}} -
                                     {{row.to | decimalDK}} {{txt(liveData.inputType) | async}}
@@ -145,6 +146,10 @@
                                     <div class = "special-table-value" *ngIf = "liveData.getValue_fromIndex(i,name).val == -1">
                                     {{liveData.getValue_fromIndex(i,name).object.val}} kr. pr. <br/>
                                     {{liveData.getValue_fromIndex(i,name).object.units}} {{txt(liveData.inputType) | async}}
+                                    </div>
+
+                                    <div class = "normal" *ngIf = "liveData.getValue_fromIndex(i,name).val == -2">
+                                       -
                                     </div>
                                     
                                 </td>

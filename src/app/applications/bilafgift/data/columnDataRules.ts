@@ -129,7 +129,9 @@ export let columnIDRules:rulesForColumns[] = [
                 axesTruck   = model_.val('axesTruck_Regular'),
                 suspension  = model_.val('suspension')
 
-            return `_truck_largeTruck_${axesTruck}_${suspension}_`
+            let allset      = axesTruck && suspension
+
+            return allset ? `_truck_largeTruck_${axesTruck}_${suspension}_` : ''
                        
         }
     },
@@ -151,7 +153,9 @@ export let columnIDRules:rulesForColumns[] = [
                 axesRoadTrain   = model_.val('axesTruck_roadTrain_road'),
                 suspension      = model_.val('suspension')
 
-            return `_truck_largeTruck_${axesTruck}_roadTrain_${axesRoadTrain}_${suspension}_`
+            let allset          = axesTruck && axesRoadTrain && suspension
+
+            return  allset ? `_truck_largeTruck_${axesTruck}_roadTrain_${axesRoadTrain}_${suspension}_` : ''
                        
         }
     },
@@ -179,7 +183,9 @@ export let columnIDRules:rulesForColumns[] = [
                 truckType       = model_.val('smallTruckType'), /* paahaengskoretowj eller motorkoretoj */
                 axesTruck       = model_.val('axesTruck_small')
 
-            return `_truck_smallTruck_${truckType}_forbrugsAfgift_${axesTruck}`
+            let allset          = truckType && axesTruck
+
+            return allset ? `_truck_smallTruck_${truckType}_forbrugsAfgift_${axesTruck}_` : ''
                        
         }
     },
@@ -200,7 +206,9 @@ export let columnIDRules:rulesForColumns[] = [
                 truckType       = model_.val('smallTruckType'), /* paahaengskoretoej eller motorkoretoj */
                 axesTruck       = model_.val('axesTruck_small')
 
-            return `_truck_smallTruck_${truckType}_udligning_${axesTruck}`
+            let allset          = truckType && axesTruck
+
+            return allset ? `_truck_smallTruck_${truckType}_udligning_${axesTruck}_` : ''
                        
         }
     },
