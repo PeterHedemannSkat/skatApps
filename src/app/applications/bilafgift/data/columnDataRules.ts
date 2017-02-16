@@ -53,6 +53,10 @@ export let columnIDRules:rulesForColumns[] = [
 
                     return '_van_vaegtAfgift_udligning_'
 
+                } else if (modelVal(model,'vehicle') == 'taxa') {
+
+                    return '_taxa_vaegtAfgift_udligning_'
+
                 }
             }
 
@@ -71,10 +75,9 @@ export let columnIDRules:rulesForColumns[] = [
                 ]
             ],
             [     
-                [ /* OR || one of ... */
-                    [{prop:'vehicle',val:'car'}],
-                    [{prop:'vehicle',val:'van'}]                   
-                ]                    
+                /* OR || one of ... */
+                   vehiclegroups.find(el => el.id == 'normalGroup').vehicles /* is either car,van or taxa  */              
+                                    
             ]
         ],
         getColumn:(model:valuePairs[]) => {
@@ -84,25 +87,31 @@ export let columnIDRules:rulesForColumns[] = [
 
             if (isEjerAfgift) {
 
-                return '_car&van_ejerAfgift_forbrugsAfgift_' 
+                if (modelVal(model,'vehicle') == 'car' || modelVal(model,'vehicle') == 'van') {
+                    return '_car&van_ejerAfgift_forbrugsAfgift_' 
+                } else if (modelVal(model,'vehicle') == 'taxa') {
+                    return '_taxa_ejerAfgift_forbrugsAfgift_'
+                }
+
+                
 
             } else if (isVaegtAfgift) {
 
                 if (modelVal(model,'vehicle') == 'car') {
 
                     if (modelVal(model,'fuel') == 'diesel') {
-
                         return '_car_vaegtAfgift_forbrugsAfgift_kvartal_'
 
                     } else if (modelVal(model,'fuel') == 'benzin') {
-
                         return '_car_vaegtAfgift_forbrugsAfgift_halvaar_'
 
                     }
 
                 } else if (modelVal(model,'vehicle') == 'van') {
-
                     return '_van_vaegtAfgift_forbrugsAfgift_'
+
+                } else if (modelVal(model,'vehicle') == 'taxa') {
+                    return '_taxa_vaegtAfgift_forbrugsAfgift_'
 
                 }
 
@@ -248,7 +257,111 @@ export let columnIDRules:rulesForColumns[] = [
             return `_particleFilter_`
                        
         }
+    },
+    {
+        needsEither:[
+            [ /* AND && */
+                [ /* OR || one of ... */
+                    [{prop:'vehicle',val:'mc'}]
+                ]
+            ]
+        ],
+        getColumn:(model:valuePairs[]) => {
+            return `_mc_forbrugsAfgift_`                  
+        }
+    },
+    {
+        needsEither:[
+            [ /* AND && */
+                [ /* OR || one of ... */
+                    [{prop:'vehicle',val:'mc'},
+                    {prop:'fuel',val:'diesel'}]
+                ]
+            ]
+        ],
+        getColumn:(model:valuePairs[]) => {
+            return `_mc_udligning_`                  
+        }
+    },
+    {
+        needsEither:[
+            [ /* AND && */
+                [ /* OR || one of ... */
+                    [{prop:'vehicle',val:'trailer'}]
+                ]
+            ]
+        ],
+        getColumn:(model:valuePairs[]) => {
+            return `_trailer_forbrugsAfgift_`                  
+        }
+    },
+    {
+        needsEither:[
+            [ /* AND && */
+                [ /* OR || one of ... */
+                    [{prop:'vehicle',val:'camper'}]
+                ]
+            ]
+        ],
+        getColumn:(model:valuePairs[]) => {
+            return `_camper_forbrugsAfgift_`                  
+        }
+    },
+    {
+        needsEither:[
+            [ /* AND && */
+                [ /* OR || one of ... */
+                    [{prop:'vehicle',val:'bus'}]
+                ]
+            ]
+        ],
+        getColumn:(model:valuePairs[]) => {
+
+        let model_      = new checkModelProperties(model),
+            axesBus     = model_.val('axesTruck_small'),
+            fuel        = model_.val('fuel')
+
+        let allSet      = axesBus && fuel
+
+            return allSet ? `_bus_${axesBus}_forbrugsAfgift_` : ''                 
+        }
+    },
+    {
+        needsEither:[
+            [ /* AND && */
+                [ /* OR || one of ... */
+                    [{prop:'vehicle',val:'bus'},
+                    {prop:'fuel',val:'diesel'}]
+                ]
+            ]
+        ],
+        getColumn:(model:valuePairs[]) => {
+
+        let model_      = new checkModelProperties(model),
+            axesBus     = model_.val('axesTruck_small'),
+            fuel        = model_.val('fuel')
+        
+        let allSet      = axesBus && fuel
+
+            return allSet ? `_bus_${axesBus}_udligning_` : ''                  
+        }
+    },
+    {
+        needsEither:[
+            [ /* AND && */
+                [ /* OR || one of ... */
+                    [{prop:'vehicle',val:'tractor'}]
+                ]
+            ]
+        ],
+        getColumn:(model:valuePairs[]) => {
+
+            return '_tractor_'                
+        }
     }
+
+    
+
    
 
 ] 

@@ -1,6 +1,6 @@
-import { tableData,singleData,specialValues,cellExtract,calculatedData,valuePairs } from '../infrastructure/interfaces.bilafgifter';
+import { tableData,singleData,specialValues,cellExtract,calculatedData,valuePairs,intervals } from '../infrastructure/interfaces.bilafgifter';
 import { intervalConstructer } from './intervalClass.bilafgifter';
-import { intervals } from '../infrastructure/interfaces.bilafgifter' 
+
 
 
 export class dataHandlerMaster {
@@ -132,12 +132,33 @@ export class dataHandlerMaster {
         return (index > -1) ? this.getValue_fromIndex(index,id,value) :-1
     }
 
+    isVariableIndependent() {
+
+        return this.allData.reduce((p,v) => {
+
+            return (v.type == 'table') 
+                ? v.columnData.length > 1 || v.specialData
+                    ? false
+                    : p
+                : p
+
+        },true)
+
+    }
+
     getAllValuesFromUserInput(userValue:string) {
 
-        if (!userValue) return []
+        if (!userValue && !(this.isVariableIndependent())) return []
 
-        let formattedVal    = Number(userValue.replace(/,/,'.')),
-             index          = this.getIndex(Number(formattedVal))
+        let formattedVal:number,index:number
+
+        if (userValue) {
+                formattedVal   = Number(userValue.replace(/,/,'.')),
+                index          = this.getIndex(Number(formattedVal))
+        } else {
+                formattedVal   = 1;
+                index          = 0; 
+        }
 
         let allData = this.allData.map(data => {
 
@@ -159,9 +180,13 @@ export class dataHandlerMaster {
 
     }
 
+    singleInterval(interval:intervals) {
+        return interval.from == 1 && interval.to == Number.POSITIVE_INFINITY
+    }
+
     getTotal(userValue:string) {
 
-        if (!userValue) return -1
+        if (!userValue && !this.isVariableIndependent()) return -1
 
         return this.getAllValuesFromUserInput(userValue).reduce((p,v) => {
             return p + v.data.val * v.periodsPrYear()
@@ -172,7 +197,7 @@ export class dataHandlerMaster {
 
         let len     = this.interval.length,
             column_ = this.allData.find(el => el.id == id)
- 
+
         if (index == 0 || index == (len - 1)) /* is potential a special type (x pr y), but not necessary ...  */ {
 
             let isSpecial = column_.specialData
@@ -233,13 +258,13 @@ export class dataHandlerMaster {
         }
     }
 
-    private closestHundredUp(value:number) {
+    private closestHundredUp(value:number,m:number) {
 
         value = Number(value)
 
-        let mod = value % 100
+        let mod = value % m
 
-        return (mod > 0) ? (value + 100 - mod) : value
+        return (mod > 0) ? (value + m - mod) : value
 
     }
 

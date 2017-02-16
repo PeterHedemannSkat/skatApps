@@ -79,7 +79,11 @@ export class tableTransformerFromDAPstructure {
 
     private formatData(obj:languageText[],year:number) {
 
-        return this.getYearObj(obj,year).da.split(',').map(data => Number(data))
+        let contentFromDAP = this.getYearObj(obj,year).da
+
+        return (contentFromDAP) ? contentFromDAP.split(',').map(data => Number(data)) : []
+
+        //return this.getYearObj(obj,year).da.split(',').map(data => Number(data))
 
     }
 

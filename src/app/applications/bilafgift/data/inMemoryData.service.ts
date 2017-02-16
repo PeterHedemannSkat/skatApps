@@ -110,6 +110,34 @@ export class InMemoryDataService implements InMemoryDataService {
                             {
                                 id:'truck',
                                 da:'Lastbil'
+                            },
+                            {
+                                id:'mc',
+                                da:'Motorcykel'
+                            },
+                            {
+                                id:'knallert',
+                                da:'Knallert'
+                            },
+                            {
+                                id:'trailer',
+                                da:'Trailer (anhænger)'
+                            },
+                            {
+                                id:'camper',
+                                da:'Campingvogn'
+                            },
+                            {
+                                id:'bus',
+                                da:'Bus'
+                            },
+                            {
+                                id:'taxa',
+                                da:'Taxi'
+                            },
+                            {
+                                id:'tractor',
+                                da:'Traktor'
                             }
                         ]
                     },
@@ -477,6 +505,18 @@ export class InMemoryDataService implements InMemoryDataService {
                     {
                         id:'privatAnvendelsesAfgift',
                         da:'Privatanvendelsesafgift'
+                    },
+                    {
+                        id:'all',
+                        da:'-'
+                    },
+                    {
+                        id:'knallert_info',
+                        da:'Du skal ikke betale afgift af en knallert'
+                    },
+                    {
+                        id:'tractor_info',
+                        da:'Satsen gælder for godkendte traktorer (skov-,landbrug og gartneri) og registrerede traktorer (Godstransport), der er benzindrevne.'
                     }
                 ]
             }

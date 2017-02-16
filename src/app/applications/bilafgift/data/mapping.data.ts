@@ -5,7 +5,7 @@ import { dataMapping,periods,validTypes,intervalTypeMapping } from '../infrastru
 export let intervalMapping = [
 
     {  
-        ids:['_car&van_ejerAfgift_forbrugsAfgift_'],
+        ids:['_car&van_ejerAfgift_forbrugsAfgift_','_taxa_ejerAfgift_forbrugsAfgift_'],
         table:'_ejerAfgift_benzin_'
     },
     {
@@ -13,12 +13,12 @@ export let intervalMapping = [
         table:'_car_vaegtAfgift_'
     },
     {
-        ids:['_car&van_ejerAfgift_udligning_'],
+        ids:['_car&van_ejerAfgift_udligning_','_taxa_ejerAfgift_udligning_'],
         table:'_ejerAfgift_diesel_'
     },
     {
-        ids:['_van_vaegtAfgift_forbrugsAfgift_','_van_vaegtAfgift_udligning_'],
-        table:'_van_vaegtAfgift_'     
+        ids:['_van_vaegtAfgift_forbrugsAfgift_','_van_vaegtAfgift_udligning_','_trailer_forbrugsAfgift_'],
+        table:'_van_vaegtAfgift_AND_trailer_'     
     },
     {
         ids:['_truck_largeTruck_2_roadTrain_1_air_','_truck_largeTruck_2_roadTrain_1_other_'],
@@ -63,12 +63,36 @@ export let intervalMapping = [
             '_truck_smallTruck_paahaengsKoeretoej_forbrugsAfgift_3_'
         ],
         table:'_smallTruck_3'
+    },
+    {
+        ids:['_mc_udligning_','_mc_forbrugsAfgift_','_bus_3_udligning_','_bus_3_forbrugsAfgift_','_tractor_'],
+        table:'_single_'
+    },
+    {
+        ids:['_camper_forbrugsAfgift_'],
+        table:'_camper_'
+    },
+    {
+        ids:['_bus_2_udligning_','_bus_2_forbrugsAfgift_'],
+        table:'_bus_2_'
+    },
+    {
+        ids:['_taxa_vaegtAfgift_udligning_','_taxa_vaegtAfgift_forbrugsAfgift_'],
+        table:'_taxa_'
     }
-    
 
 
 
 ]
+
+export const specialVehicleInfo = 
+
+    {
+        vehicles:[''],
+        info:'needsInfo'
+    }
+
+
 
 export const smartIntervalTypeMapping:intervalTypeMapping[] = [
 
@@ -106,7 +130,8 @@ export let specialIntervals:validTypes[] = [
         columnIds:[
             '_car&taxa_vaegtAfgift_udligning_',
             '_car_vaegtAfgift_forbrugsAfgift_kvartal_',
-            '_car_vaegtAfgift_forbrugsAfgift_halvaar_'
+            '_car_vaegtAfgift_forbrugsAfgift_halvaar_',
+            '_camper_forbrugsAfgift_'
             
         ]
     }
@@ -118,15 +143,15 @@ export const periodMapping:periods[] = [
     {
         validFor:{
             stringSearch:['truck','bus','trailer','tractor','camper','privatAnvendelsesAfgift'],
-            columnIds:['_van_vaegtAfgift_forbrugsAfgift_','_particleFilter_','_van_vaegtAfgift_udligning_']
+            columnIds:['_van_vaegtAfgift_forbrugsAfgift_','_particleFilter_','_van_vaegtAfgift_udligning_','_taxa_vaegtAfgift_udligning_','_taxa_vaegtAfgift_forbrugsAfgift_']
         },
         period:1,
         same:true
     },
     {
         validFor:{
-           stringSearch:['ejerAfgift'],
-           columnIds:['_car_vaegtAfgift_forbrugsAfgift_']
+           stringSearch:['ejerAfgift','mc'],
+           columnIds:['_car_vaegtAfgift_forbrugsAfgift_','_camper_forbrugsAfgift_']
         },
         period:2,
         same:true
@@ -155,7 +180,7 @@ export const yearDataMapping:dataMapping[] = [
     {
         
         validFor:{
-            stringSearch:['truck','bus','forbrugsAfgift'],
+            stringSearch:['truck','bus','forbrugsAfgift','tractor'],
             columnIds:[''],
             notTheseIds:['']
         },

@@ -48,7 +48,9 @@
     margin-right: 15px;
 }
 
-
+.special-vehicle-info {
+    margin-bottom: 1em;
+}
 
 .multiplication {
     display:inline-block;
@@ -58,6 +60,7 @@
 .calculations-area {
     padding-left:1em;
     border-left: 1px dotted #3f6075;
+    min-height:10em;
 }
 
 .special-calculations {
@@ -158,7 +161,7 @@ table.table-area tr td:nth-child(3),table.table-area tr th:nth-child(3) {
     border-bottom:1px dotted slategray;
 }
 
-input ~ h3 {
+.user-input ~ h3 {
     margin-top:1em;
 }
 

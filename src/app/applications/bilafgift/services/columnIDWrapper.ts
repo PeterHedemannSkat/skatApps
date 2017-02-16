@@ -12,7 +12,6 @@ import { columnIDRules } from '../data/columnDataRules';
 import { dataHandlerMaster } from './masterDataClass';
 
 
-
 @Injectable()
 export class columnID {
 
@@ -38,8 +37,6 @@ export class columnID {
         let columnsNeeded   = new ColumnPairing(model,columnIDRules,userInput).getColumns(),
             observableArray = columnsNeeded.map(id => this.getTableColumnData(id,year))
 
-        console.log(columnsNeeded)
-
         let joined:Observable<tableData[]> = Observable.forkJoin.apply(Observable.forkJoin,observableArray)
 
         if (columnsNeeded.length > 0) this.isLoadingData = true
@@ -48,7 +45,6 @@ export class columnID {
         
         return joined.map(el => {
 
-            console.log(el)
             this.isLoadingData       = false;
 
             return new dataHandlerMaster().initDataStructure(el,model);
@@ -67,12 +63,8 @@ export class columnID {
                 return new tableTransformerFromDAPstructure(response,id).getData(yearKey)
             })
             .map(el => {
-
-                console.log(el)
                 /* determine if columnID should be modifed */
                 return this.modifiersForSpecialCases(el)
-                
-                //return el
             })
 
     }
@@ -128,11 +120,29 @@ export class columnID {
                     return copy
 
                 }
+            },
+            {
+                key:'checkIftaxaUdligning',
+                fn:(el:tableData) => {
+
+                    let vehicle = this.model.find(el => el.prop == 'vehicle').val
+
+                    if (vehicle == 'taxa') {
+                        let copy = Object.assign({},data) 
+                        copy.columnData = copy.columnData.map(el => el * 2)
+
+                        return copy
+
+                    } else {
+                        return el
+                    }    
+                }
             }
        ]
 
         let mapping = [
-            {valid:!!data.id.match('_privatAnvendelsesAfgift_'),key:'privatBenyttelse'}    
+            {valid:!!data.id.match('_privatAnvendelsesAfgift_'),key:'privatBenyttelse'},
+            {valid:data.id == '_car&van_ejerAfgift_udligning_',key:'checkIftaxaUdligning'}    
         ]
 
         /*  here we colud put kw transformation */

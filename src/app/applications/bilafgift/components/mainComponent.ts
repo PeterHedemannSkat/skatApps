@@ -95,7 +95,6 @@ export class appMain   {
 
         if (this.userInput) {
             let formattedVal    = Number(this.userInput.replace(/,/,'.'))
-            console.log(index)
             return (this.liveData.getIndex(formattedVal) == index)
         }
 
@@ -108,16 +107,32 @@ export class appMain   {
 
         if (isOld || isNew) this.updateModel('')
         
-    
+    }
+
+    vehicleName() {
+
+        let vehicle_ = this.model.find(el => el.prop == 'vehicle')
+
+        return vehicle_ ? vehicle_.val : ''
+    }
+
+    extraVehicleInfo() {
+
+        return ['tractor','knallert'].indexOf(this.vehicleName()) > -1
 
     }
    
     getLabelForOptions(id:string) {
 
         let period  = this.model.find(el => el.prop == 'period'),
-            vehicle = this.model.find(el => el.prop == 'vehicle')
+            vehicle_ = this.model.find(el => el.prop == 'vehicle')
 
-        if (period && vehicle && id == 'subPeriod') id = `subPeriod_${vehicle.val}_${period.val}`
+        if (period && vehicle_ && id == 'subPeriod') {
+
+            let vehicle = (vehicle_.val == 'taxa') ? 'car' : vehicle_.val
+            id = `subPeriod_${vehicle}_${period.val}`
+
+        } 
 
         return this.genericDataFecter('parametersSelects',id)
                 .map(obj => {return (obj && obj.id) ? obj.da : ''}) 
@@ -148,6 +163,8 @@ export class appMain   {
 
             let vehicle = this.model.find(el => el.prop == 'vehicle').val
 
+            if (vehicle == 'taxa') vehicle = 'car' 
+
             return this.getOptions(`${id}${vehicle}`).map(el => {
                 return el.map(el => {
                     let special = el.text.match(/_THISYEAR_/g)
@@ -166,6 +183,8 @@ export class appMain   {
 
              let vehicle = this.model.find(el => el.prop == 'vehicle').val,
                 period =  this.model.find(el => el.prop == 'period').val
+
+            if (vehicle == 'taxa') vehicle = 'car' 
 
              return this.getOptions(`${id}${vehicle}_${period}`)
 

@@ -27,7 +27,7 @@ export class checkModelProperties {
             subPeriod   = this.val('subPeriod'),
             vehicle     = this.val('vehicle')
         
-        if (vehicle == 'car') {
+        if (vehicle == 'car' || vehicle == 'taxa') {
             return period == '3' || (period ==  '2' && subPeriod == '1') || this.val('specialOptionCar') == 'vaegtafgift' 
         } else if (vehicle == 'van') {
             return (Number(period) >= 3 || (period == '2' && subPeriod == '1')) 

@@ -31,6 +31,9 @@ export let parametersNeeded:parameterCheck[] = [
             ], /* OR */
             [
                 { prop:'vehicle',val:'taxa'}
+            ],
+            [
+                { prop:'vehicle',val:'mc'}
             ]
         ] 
         
@@ -123,6 +126,11 @@ export let parametersNeeded:parameterCheck[] = [
         modelIsEither:[
             [
                 { prop:'vehicle',val:'car'},
+                { prop:'period',val:'2'},
+                { prop:'subPeriod',val:'2'}
+            ],
+            [
+                { prop:'vehicle',val:'taxa'},
                 { prop:'period',val:'2'},
                 { prop:'subPeriod',val:'2'}
             ]
@@ -224,7 +232,9 @@ export let parametersNeeded:parameterCheck[] = [
             [
                 { prop:'vehicle',val:'truck'},
                 { prop:'size',val:'small'}
-      
+            ],
+            [
+                { prop:'vehicle',val:'bus'}
             ]
         ]
     },

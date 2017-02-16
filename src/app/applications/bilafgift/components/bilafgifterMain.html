@@ -31,6 +31,12 @@
 
             <div class = "calculations-area">
 
+                    
+                    <div class="special-vehicle-info" *ngIf = "extraVehicleInfo()">
+
+                        {{txt(vehicleName() + '_info') | async}}
+                    </div>
+
 
                 <div class = "waiting-results" *ngIf = "!allParametersHasValue() && !error">
                     <h3>Du mangler at udfylde noget</h3>
@@ -59,12 +65,16 @@
 
                         <p></p>
 
-                        <label for = "USER"> 
-                            {{printLabelInput(liveData.inputType) | async}}
-                        </label>                    
-                        
-                        <input [(ngModel)] = "userInput" class = "form-control" id = "USER"  [attr.placeholder] = "printPlaceHolderUSER(liveData.inputType) | async" />
-                        
+                        <div *ngIf = "!liveData?.isVariableIndependent()" class = "user-input">
+
+                            <label for = "USER"> 
+                                {{printLabelInput(liveData.inputType) | async}}
+                            </label>                    
+                            
+                            <input [(ngModel)] = "userInput" class = "form-control" id = "USER"  [attr.placeholder] = "printPlaceHolderUSER(liveData.inputType) | async" />
+                            
+                        </div>
+
                         <h3>Result</h3>
 
                         <div class = "unique-result" *ngIf = "liveData.getTotal(userInput) == -1">
@@ -73,7 +83,7 @@
 
                         </div>
 
-                        <div class = "unique-result" *ngIf = "liveData.getTotal(userInput) >= 0">
+                        <div class = "unique-result" *ngIf = "liveData.getTotal(userInput) >= 0 || liveData?.isVariableIndependent()">
                             <div class = "table-like" *ngFor = "let result of liveData.getAllValuesFromUserInput(userInput)">       
                                 <div class = "type-header">
                                     {{printType(result.data) | async}}
@@ -83,7 +93,7 @@
                                 <div class = "special-calculations" *ngIf = "result.specialLoad()">
                                     
                                     {{printDiffentiatedInterval(liveData.getPeriodOfIndex(result.data.index)) | async}}: 
-                                    {{liveData.closestHundredUp(userInput)}} {{txt(liveData.inputType) | async}} 
+                                    {{liveData.closestHundredUp(userInput,result.data.object.units)}} {{txt(liveData.inputType) | async}} 
                                     (rundet up) / 
                                     {{result.data.object.units}} <span class = "multiplication"> </span> 
                                     {{result.data.object.val}} kr. = 
@@ -111,6 +121,7 @@
 
                     </div>
 
+
                     <div class = "result" *ngIf = "liveData">
     
                         <h3>Tabeloversigt</h3>
@@ -130,12 +141,20 @@
                             </tr>
                             <tr *ngFor = "let row of liveData?.interval;let i = index" [class.val-in-row] = "valueIsRow(i)">
                                 <td>
-                                    {{row.from | decimalDK}} -
-                                    {{row.to | decimalDK}} {{txt(liveData.inputType) | async}}
+                                    <div *ngIf = "!liveData.singleInterval(row)">
+                                        {{row.from | decimalDK}} -
+                                        {{row.to | decimalDK}} {{txt(liveData.inputType) | async}}
 
-                                    <div *ngIf = "liveData.tableRowsHasDifferentPeriods()">
-                                        {{printDiffentiatedInterval(liveData.getPeriodOfIndex(i)) | async}}
+                                        <div *ngIf = "liveData.tableRowsHasDifferentPeriods()">
+                                            {{printDiffentiatedInterval(liveData.getPeriodOfIndex(i)) | async}}
+                                        </div>
                                     </div>
+
+                                    <div *ngIf = "liveData.singleInterval(row)">
+                                        {{txt('all') | async}}
+                                    </div>
+
+                       
                                 </td>
                                 <td *ngFor = "let name of liveData.getColumnNames()">
 

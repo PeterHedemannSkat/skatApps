@@ -65,7 +65,7 @@ export class arrayOps<T> {
                 return true
             })
 
-        console.log(a)
+       
     }
 
     private flatObjectComparision (obj1:Object,obj2:Object):boolean {

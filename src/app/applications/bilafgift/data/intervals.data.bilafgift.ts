@@ -15,7 +15,7 @@ export let intervalsBilafgifter:interval[] = [
         data:[0,600,800,1100,1300,1500,2000,Number.POSITIVE_INFINITY]
     },
     {
-        id:'_van_vaegtAfgift_',
+        id:'_van_vaegtAfgift_AND_trailer_',
         data:[0,500,1000,2000,2500,3000,4000]
     },
     {
@@ -57,7 +57,24 @@ export let intervalsBilafgifter:interval[] = [
     {
         id:'_smallTruck_3',
         data:[0,18000,19000,20000,Number.POSITIVE_INFINITY]
+    },
+    {
+        id:'_single_',
+        data:[0,Number.POSITIVE_INFINITY]
+    },
+    {
+        id:'_camper_',
+        data:[0,600,800,1100,1300,1500,2000,Number.POSITIVE_INFINITY]
+    },
+    {
+        id:'_bus_2_',
+        data:[0,1300,1500,2000,3000,4000,5000,6000,7000,8000,9000,Number.POSITIVE_INFINITY]
+    },
+    {
+        id:'_taxa_',
+        data:[0,800,1100,1300,1500,2000,Number.POSITIVE_INFINITY]
     }
+
     
 ]
     
