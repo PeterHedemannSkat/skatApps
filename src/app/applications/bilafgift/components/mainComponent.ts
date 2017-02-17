@@ -25,8 +25,26 @@ import { checkModelProperties } from '../services/dynamicModelChecks'
 export class appMain   {
 
     constructor (private data:getJSONdata, private getData:columnID) {}
-    private userInput_:string;
+    
+    urlText:string = 'app/txt.json';
+    liveData:dataHandlerMaster 
+    production:boolean = false;
+    
+    years:number[];
 
+    model:valuePairs[] = [{prop:'vehicle',val:'car'},{prop:'fuel',val:'benzin'},{prop:'period',val:'1'}] 
+
+    year:number 
+    get yearStr() {
+        return (this.year) ? this.year.toString() : '' 
+    }
+
+    set yearStr(year:string) {
+        this.year = Number(year)
+        this.updateModel('')
+    }
+
+    private userInput_:string;
     get userInput() {
         return this.userInput_
     }
@@ -40,7 +58,32 @@ export class appMain   {
     private error:boolean
 
     ngOnInit() {
-        this.updateModel('')
+
+        if (this.production) {
+            this.data.production = true
+            this.urlText = 'websrv/jsong.ashx?Id=138055&clear=1'
+        }
+
+        this.initYears()
+
+    }
+
+    initYears() {
+
+        let defaultYearObs_     = this.genericDataFecter('yearRules','defaultYear'),
+            possibleYearsObs_   = this.genericDataFecter('yearRules','possibleYears')
+
+        Observable.forkJoin(defaultYearObs_,possibleYearsObs_).subscribe(el => {
+                
+                this.year = Number(el.find(el => el.id == 'defaultYear').da),
+                this.years = el
+                    .find(el => el.id == 'possibleYears').da
+                    .split(',')
+                    .map(el => Number(el))
+
+                this.updateModel('')
+
+            })
     }
 
     updateModel(changed:string) {
@@ -53,12 +96,10 @@ export class appMain   {
 
         this.model = new modelEngine(this.model).newModelBuild();
 
-       
-        
         if (this.liveData) this.liveData.isReady = false;
         this.error = false
 
-        this.getData.getDataAllSource(this.model,2017,this.userInput).subscribe(el => {
+        this.getData.getDataAllSource(this.model,this.year,this.userInput).subscribe(el => {
         
             this.liveData = el;
             this.getData.isLoadingData = false
@@ -71,12 +112,6 @@ export class appMain   {
         })
 
     }
-
-    urlText:string = 'app/txt.json';
-    liveData:dataHandlerMaster 
-    production:boolean = false;
-
-    model:valuePairs[] = [{prop:'vehicle',val:'car'},{prop:'fuel',val:'benzin'},{prop:'period',val:'1'}]  
 
     isEmptyParameter(val:valuePairs) {
         return !!(!val || val.val == '')
@@ -209,6 +244,10 @@ export class appMain   {
                 {
                     id:'privatAnvendelsesAfgift',
                     state:!!data.id.match(/privatAnvendelsesAfgift/)
+                },
+                {
+                    id:'vejbenyttelsesAfgift',
+                    state:!!data.id.match(/vejbenyttelsesAfgift/)
                 }
             ]
 

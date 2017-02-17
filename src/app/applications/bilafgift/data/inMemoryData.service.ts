@@ -89,6 +89,10 @@ export class InMemoryDataService implements InMemoryDataService {
                     {
                         id:'axesTruck_small',
                         da:'Aksler på lastbil'
+                    },
+                    {
+                        id:'euroStandard',
+                        da:'Euro-standard'
                     }
                 ]
 
@@ -442,6 +446,23 @@ export class InMemoryDataService implements InMemoryDataService {
                                 da:'Påhængskøretøj'
                             }
                         ]
+                    },
+                    {
+                        id:'euroStandard',
+                        children:[
+                            {
+                                id:'nonEuro',
+                                da:'Ikke-euro'
+                            },
+                            {
+                                id:'euro1',
+                                da:'Euro-1'
+                            },
+                            {
+                                id:'euro2',
+                                da:'Euro-2'
+                            }
+                        ]
                     }
                     
 
@@ -517,6 +538,87 @@ export class InMemoryDataService implements InMemoryDataService {
                     {
                         id:'tractor_info',
                         da:'Satsen gælder for godkendte traktorer (skov-,landbrug og gartneri) og registrerede traktorer (Godstransport), der er benzindrevne.'
+                    },
+                    {
+                        id:'vejbenyttelsesAfgift',
+                        da:'Vejbenyttelsesafgift'
+                    },
+                    {
+                        id:'sumAfgifter',
+                        da:'Afgift i alt pr år'
+                    },
+                    {
+                        id:'venterpaaIndtastning',
+                        da:'Vises her når du har tastet ...'
+                    },
+                    {
+                        id:'tabeloversigt',
+                        da:'Tabeloversigt'
+                    },
+                    {
+                        id:'interval',
+                        da:'Interval'
+                    },
+                    {
+                        id:'kr.',
+                        da:'kr.'
+                    },
+                    {
+                        id:'rundet_op',
+                        da:'(rundet op)'
+                    },
+                    {
+                        id:'resultatOverskrift',
+                        da:'Resultat'
+                    },
+                    {
+                        id:'beregnOverskrift',
+                        da:'Beregn din årlig afgift'
+                    },
+                    {
+                        id:'fejlOverskrift',
+                        da:'Beklager - noget gik galt'
+                    },
+                    {
+                        id:'fejlTekst',
+                        da:'Prøv at genindlæse siden.'
+                    },
+                    {
+                        id:'loaderOverskrift',
+                        da:' Loader data ...'
+                    },
+                    {
+                        id:'manglerInfoOverskrift',
+                        da:'Du mangler at udfylde noget'
+                    },
+                    {
+                        id:'manglerInfoTekst',
+                        da:'For at du kan beregne din årlige udgift skal alt være udfyldt.'
+                    },
+                    {
+                        id:'seTabel',
+                        da:'De generelle satser ser du i tabellen herunder:'
+                    },
+                    {
+                        id:'IndstillingerOverskift',
+                        da:'Indstillinger'
+                    },
+                    {
+                        id:'Aar',
+                        da:'År'
+                    }
+                ]
+            },
+            {
+                id:'yearRules',
+                children:[
+                    {
+                        id:'defaultYear',
+                        da:'2017'
+                    },
+                    {
+                        id:'possibleYears',
+                        da:'2017,2016'
                     }
                 ]
             }

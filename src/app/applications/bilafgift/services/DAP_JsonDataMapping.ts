@@ -7,7 +7,9 @@ import { periodMapping,singleDataType } from '../data/mapping.data';
 
 export class tableTransformerFromDAPstructure {
 
-    constructor(private allValues:languageText[],private id:string) {}
+    constructor(private allValues:languageText[],private id:string) {
+        
+    }
 
     getData(year:number):tableData {
 

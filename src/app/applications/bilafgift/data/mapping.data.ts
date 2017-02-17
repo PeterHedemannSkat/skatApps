@@ -115,7 +115,7 @@ export const singleDataType =
 
     {
         validFor:{
-            stringSearch:['particleFilter','vejAfgift','privatAnvendelsesAfgift']
+            stringSearch:['particleFilter','vejbenyttelsesAfgift','privatAnvendelsesAfgift']
         },
         dataType:'single'
     }
@@ -142,8 +142,8 @@ export const periodMapping:periods[] = [
 
     {
         validFor:{
-            stringSearch:['truck','bus','trailer','tractor','camper','privatAnvendelsesAfgift'],
-            columnIds:['_van_vaegtAfgift_forbrugsAfgift_','_particleFilter_','_van_vaegtAfgift_udligning_','_taxa_vaegtAfgift_udligning_','_taxa_vaegtAfgift_forbrugsAfgift_']
+            stringSearch:['truck','bus','trailer','tractor','camper','privatAnvendelsesAfgift','vejbenyttelsesAfgift'],
+            columnIds:['_van_vaegtAfgift_forbrugsAfgift_','_particleFilter_','_van_vaegtAfgift_udligning_','_taxa_vaegtAfgift_udligning_','_taxa_vaegtAfgift_forbrugsAfgift_','_van_particleFilter_vaegtAfgift_']
         },
         period:1,
         same:true
@@ -197,14 +197,16 @@ export const yearDataMapping:dataMapping[] = [
     },
     {
         validFor:{
-            stringSearch:['udligning']
+            stringSearch:['udligning'],
+            columnIds:['_van_particleFilter_vaegtAfgift_']
         },
         multiYearBase:false,
         hardcoded:false
     },
     {
         validFor:{
-            stringSearch:['vejbenyttelse','privatAnvendelsesAfgift','particleFilter']
+            stringSearch:['vejbenyttelsesAfgift','privatAnvendelsesAfgift'],
+            columnIds:['_particleFilter_']
         },
         periods:[
             {

@@ -108,16 +108,8 @@ export let parametersNeeded:parameterCheck[] = [
             ],
             [
                 { prop:'vehicle',val:'van'},
-                { prop:'fuel',val:'diesel'},
-                { prop:'period',val:'1'}
-            ],
-            [
-                { prop:'vehicle',val:'van'},
-                { prop:'fuel',val:'diesel'},
-                { prop:'period',val:'2'},
-                { prop:'subPeriod',val:'2'}
-
-            ],
+                { prop:'fuel',val:'diesel'}
+            ]
 
         ]  
     },
@@ -247,5 +239,15 @@ export let parametersNeeded:parameterCheck[] = [
               
             ]
         ]
-    }
+    },
+    {
+        parametersNeeded:['euroStandard'],
+        modelIsEither:[
+            [
+                { prop:'vehicle',val:'truck'},
+                { prop:'size',val:'large'}
+              
+            ]
+        ]
+    },
 ]

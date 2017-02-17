@@ -74,6 +74,15 @@ export class checkModelProperties {
   
     }
 
+    numberOfAxesOnTruck() {
+
+        let vehicle    = this.val('vehicle'),
+            axesTotal  = Number(this.val('axesTruck_roadTrain')) + Number(this.val('axesTruck_roadTrain_road')) + Number(this.val('axesTruck_Regular'))
+
+        return vehicle ? axesTotal : -1
+
+    }
+
     val(id:string) {
 
         let obj_ = this.model.find(el => el.prop == id)

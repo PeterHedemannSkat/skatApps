@@ -17,11 +17,25 @@
 
 }
 
+.make-borders {
+    border-top:1px dotted gray;
+    border-bottom:1px dotted gray;
+    padding:1em 0;
+}
+
 
 .parameter:not(.missing-parameter) {
-
     padding-right: 5px;
+}
 
+.year-picker > div {
+    display: table-cell;
+    width: 100%;
+}
+
+.year-chosen {
+    min-width: 8em;
+    text-align: right;
 }
 
 .parameters {
@@ -207,6 +221,7 @@ table.table-area tr td:nth-child(3),table.table-area tr th:nth-child(3) {
     border-top: 1px solid gray;
     padding-top: 0.5em;
     margin-top:1.5em;
+    font-weight: bold;
 }
 
 

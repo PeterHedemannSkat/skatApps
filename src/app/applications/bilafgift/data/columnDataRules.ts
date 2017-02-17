@@ -254,8 +254,15 @@ export let columnIDRules:rulesForColumns[] = [
         ],
         getColumn:(model:valuePairs[]) => {
 
-            return `_particleFilter_`
-                       
+            let model_          = new checkModelProperties(model),
+                vehicle         = model_.val('vehicle'),
+                isVaegtAfgift   = model_.isVaegtAfgift()
+
+            return vehicle != 'van' 
+                ? `_particleFilter_` 
+                : isVaegtAfgift 
+                    ? '_van_particleFilter_vaegtAfgift_' 
+                    : `_particleFilter_`   
         }
     },
     {
@@ -358,7 +365,56 @@ export let columnIDRules:rulesForColumns[] = [
 
             return '_tractor_'                
         }
+    },
+    {
+        needsEither:[
+            [ /* AND && */
+                [ /* OR || one of ... */
+                    [{prop:'vehicle',val:'truck'},
+                    {prop:'size',val:'large'},
+                    {prop:'typeTruck',val:'roadTrain'}]
+                ]
+            ]
+        ],
+        getColumn:(model:valuePairs[]) => {
+
+            let model_          = new checkModelProperties(model),
+                axesTruck       = model_.val('axesTruck_roadTrain'),
+                axesRoadTrain   = model_.val('axesTruck_roadTrain_road'),
+                euro            = model_.val('euroStandard'),
+                allSet          = axesTruck && axesRoadTrain && euro,
+                total           = allSet ? (Number(axesTruck) + Number(axesRoadTrain)) : -1,
+                getSet          = total > 3 ? '4' : '3'
+
+            return allSet ? `_truck_vejbenyttelsesAfgift_${getSet}_${euro}_` : ''
+            
+        }
+
+    },
+    {
+        needsEither:[
+            [ /* AND && */
+                [ /* OR || one of ... */
+                    [{prop:'vehicle',val:'truck'},
+                    {prop:'size',val:'large'},
+                    {prop:'typeTruck',val:'truck'}]
+                ]
+            ]
+        ],
+        getColumn:(model:valuePairs[]) => {
+
+            let model_          = new checkModelProperties(model),
+                axesTruck       = model_.val('axesTruck_Regular'),
+                euro            = model_.val('euroStandard'),
+                total           = axesTruck && euro ? Number(axesTruck) : -1,
+                getSet          = total > 3 ? '4' : '3'
+
+            return axesTruck ? `_truck_vejbenyttelsesAfgift_${getSet}_${euro}_` : ''
+            
+        }
+
     }
+
 
     
 
