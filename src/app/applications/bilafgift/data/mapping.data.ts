@@ -142,7 +142,7 @@ export const periodMapping:periods[] = [
 
     {
         validFor:{
-            stringSearch:['truck','bus','trailer','tractor','camper','privatAnvendelsesAfgift','vejbenyttelsesAfgift'],
+            stringSearch:['truck','bus','trailer','tractor','privatAnvendelsesAfgift_old','privatAnvendelsesAfgift_modern_onceAYear','vejbenyttelsesAfgift','mc'],
             columnIds:['_van_vaegtAfgift_forbrugsAfgift_','_particleFilter_','_van_vaegtAfgift_udligning_','_taxa_vaegtAfgift_udligning_','_taxa_vaegtAfgift_forbrugsAfgift_','_van_particleFilter_vaegtAfgift_']
         },
         period:1,
@@ -150,7 +150,7 @@ export const periodMapping:periods[] = [
     },
     {
         validFor:{
-           stringSearch:['ejerAfgift','mc'],
+           stringSearch:['ejerAfgift','privatAnvendelsesAfgift_modern_twiceAYear'],
            columnIds:['_car_vaegtAfgift_forbrugsAfgift_','_camper_forbrugsAfgift_']
         },
         period:2,

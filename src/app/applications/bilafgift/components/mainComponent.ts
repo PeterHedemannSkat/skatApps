@@ -28,7 +28,7 @@ export class appMain   {
     
     urlText:string = 'app/txt.json';
     liveData:dataHandlerMaster 
-    production:boolean = false;
+    production:boolean = true;
     
     years:number[];
 
@@ -142,6 +142,14 @@ export class appMain   {
 
         if (isOld || isNew) this.updateModel('')
         
+    }
+
+    extraLabel() {
+
+        let vehicle = this.model.find(el => el.prop == 'vehicle').val
+
+        return this.txt(`label_${vehicle}`)
+
     }
 
     vehicleName() {

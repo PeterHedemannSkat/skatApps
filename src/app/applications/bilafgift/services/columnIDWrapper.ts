@@ -73,7 +73,7 @@ export class columnID {
 
        return (this.totalStore && this.totalStore.length > 1) 
             ?  Observable.from([this.totalStore])
-            :  this.jsonp.get('http://skat.dk/websrv/jsong.ashx?Id=137464&callback=JSONP_CALLBACK&clear=1')
+            :  this.jsonp.get('//skat.dk/websrv/jsong.ashx?Id=137464&callback=JSONP_CALLBACK&clear=1')
                 .map(res => {
                     let data = res.json()
                     this.totalStore = data

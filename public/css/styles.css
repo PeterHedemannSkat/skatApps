@@ -100,6 +100,14 @@
     color:white;
 }
 
+.extra-label-info {
+    display: inline-block;
+    font-size: 0.8em;
+}
+
+.special-info {
+    font-size: 0.8em;
+}
 
 
 @media only screen and (max-width:500px) {

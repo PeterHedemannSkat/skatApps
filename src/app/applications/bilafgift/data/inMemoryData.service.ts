@@ -164,7 +164,7 @@ export class InMemoryDataService implements InMemoryDataService {
                         children:[
                             {
                                 id:'1',
-                                da:'_THISYEAR_ - 1997'
+                                da:'_THISYEAR_ - 1998'
                             },
                             {
                                 id:'2',
@@ -606,7 +606,16 @@ export class InMemoryDataService implements InMemoryDataService {
                     {
                         id:'Aar',
                         da:'År'
+                    },
+                    {
+                        id:'label_camper',
+                        da:'Vær opmærksom på at du skal indtaste egenvægten'
+                    },
+                    {
+                        id:'tabelErUsikker',
+                        da:'Obs! Tabellen er ikke udtryk for de samlede årlige udgifter. Dem får du ved at udfylde alt og skrive køretøjets vægt eller forbrug i km/l'
                     }
+
                 ]
             },
             {

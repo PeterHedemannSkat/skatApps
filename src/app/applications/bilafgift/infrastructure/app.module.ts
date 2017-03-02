@@ -31,7 +31,7 @@ import { columnID } from '../services/columnIDWrapper';
     FormsModule, 
     HttpModule,
     JsonpModule
-    ,InMemoryWebApiModule.forRoot(InMemoryDataService) 
+    //,InMemoryWebApiModule.forRoot(InMemoryDataService) 
   ],
   declarations: [
     appMain,

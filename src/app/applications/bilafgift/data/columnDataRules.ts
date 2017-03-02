@@ -236,10 +236,11 @@ export let columnIDRules:rulesForColumns[] = [
             let model_      = new checkModelProperties(model),
                 isModern    = model_.isModernPrivatAnvendelseRules(),
                 weight      = model_.val('totalWeightVan'),
-                anvendelse  = model_.val('privateUsage')
+                anvendelse  = model_.val('privateUsage'),
+                type        = isModern ? 'twiceAYear' : 'onceAYear'  
             
             return weight && anvendelse
-                ? `_van_privatAnvendelsesAfgift_modern_${weight}_`
+                ? `_van_privatAnvendelsesAfgift_modern_${type}_${weight}_`
                 : ''
                      
         }

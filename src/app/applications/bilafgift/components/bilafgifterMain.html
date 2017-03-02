@@ -78,10 +78,12 @@
 
                             <label for = "USER"> 
                                 {{printLabelInput(liveData.inputType) | async}}
+                                <span class = "extra-label-info">{{extraLabel() | async}}</span>
                             </label>                    
                             
                             <input [(ngModel)] = "userInput" class = "form-control" id = "USER"  [attr.placeholder] = "printPlaceHolderUSER(liveData.inputType) | async" />
-                            
+
+
                         </div>
 
                         <h3>{{txt('resultatOverskrift') | async}}</h3>
@@ -133,6 +135,10 @@
     
                         <h3>{{txt('tabeloversigt') | async}}</h3>
     
+                        <p *ngIf = "liveData.containsSingleData() || !allParametersHasValue()" class = "special-info">
+                            {{txt('tabelErUsikker') | async}}
+                        </p> 
+
                         <p *ngIf = "!liveData.tableRowsHasDifferentPeriods()">Viser satser 
                             {{ printDiffentiatedInterval(liveData.getCommonTablePeriod()) | async }}
                         </p>

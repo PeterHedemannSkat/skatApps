@@ -44,6 +44,8 @@ export class ColumnPairing {
             if (isOldPrivatAnvendelse) columnIDs.push(this.addPrivatAnvendelsesAfgiftOld()) 
             if (isNewPrivatAnvendelse) columnIDs.push(this.addPrivatAnvendelsesAfgiftNew()) 
 
+            console.log(columnIDs)
+
 
             return columnIDs
 
@@ -59,9 +61,13 @@ export class ColumnPairing {
 
     private addPrivatAnvendelsesAfgiftNew() {
 
-        let weight = Number(this.userInput) > 3000 ? '3tonsogTungere' : 'mindreEnd3tons';
+        let weight       = Number(this.userInput) > 3000 ? '3tonsogTungere' : 'mindreEnd3tons',
+            isEjerAfgift = new checkModelProperties(this.model).isEjerAfgift(),
+            type         = isEjerAfgift ? 'twiceAYear' : 'onceAYear'  
 
-        return `_van_privatAnvendelsesAfgift_modern_${weight}_` 
+        
+
+        return `_van_privatAnvendelsesAfgift_modern_${type}_${weight}_` 
 
     }
 

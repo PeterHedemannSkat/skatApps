@@ -258,6 +258,11 @@ export class dataHandlerMaster {
         }
     }
 
+    containsSingleData() {
+        console.log(this.individualData)
+        return this.individualData.length > 0
+    }
+
     private closestHundredUp(value:number,m:number) {
 
         value = Number(value)
