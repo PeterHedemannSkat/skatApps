@@ -88,6 +88,8 @@
 
                         <h3>{{txt('resultatOverskrift') | async}}</h3>
 
+
+
                         <div class = "unique-result text-center" *ngIf = "liveData.getTotal(userInput) == -1">
                             {{txt('venterpaaIndtastning') | async}}
                         </div>
@@ -95,7 +97,13 @@
                         <div class = "unique-result" *ngIf = "liveData.getTotal(userInput) >= 0 || liveData?.isVariableIndependent()">
                             <div class = "table-like" *ngFor = "let result of liveData.getAllValuesFromUserInput(userInput)">       
                                 <div class = "type-header">
-                                    {{printType(result.data) | async}}
+                                    <div>
+                                        {{printType(result.data) | async}}    
+                                    </div>
+                                    <div>
+                                        {{result.data.val | tusindtal}} kr.
+                                    </div>
+                                    
                                         
                                 </div>                        
 
@@ -110,21 +118,35 @@
                                     {{result.data.val | tusindtal}} kr.
                                 </div>
 
+                                <!--
                                 <div class = "year-calculations">
+                                    
                                     <div>
+                                        
                                         {{result.periodsPrYear()}} 
                                         <span class = "multiplication"> </span> 
                                         {{result.data.val | tusindtal}} kr.
                                     </div>
+
                                     <div>{{result.sum() | tusindtal}} kr.</div>
                                 </div>
+                                -->
 
                             </div>
-                        
-                            <div class = "table-row sum-calculations">
+                            <div class = "table-row sum-calculations" *ngIf = "liveData.getPeriodOfIndex(liveData.getIndex(userInput)) > 1">
+                                
+                                <div>Afgift {{printDiffentiatedInterval(liveData.getPeriodOfIndex(liveData.getIndex(userInput))) | async}}</div>
+                                <div>{{liveData.getTotalPeriod(userInput) | tusindtal}} kr.</div>
+                            </div>
+                            
+                            <div class = "table-row sum-calculations year-sum">
                                 <div>{{txt('sumAfgifter') | async}}</div>
                                 <div>{{liveData.getTotal(userInput) | tusindtal}} kr.</div>
                             </div>
+
+                            
+                        
+
                         
                         </div>
 

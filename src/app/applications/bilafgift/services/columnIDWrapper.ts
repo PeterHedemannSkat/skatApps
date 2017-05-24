@@ -47,7 +47,7 @@ export class columnID {
 
             this.isLoadingData       = false;
 
-            return new dataHandlerMaster().initDataStructure(el,model);
+            return new dataHandlerMaster().initDataStructure(el,model,userInput);
 
         })
 
@@ -73,7 +73,7 @@ export class columnID {
 
        return (this.totalStore && this.totalStore.length > 1) 
             ?  Observable.from([this.totalStore])
-            :  this.jsonp.get('//skat.dk/websrv/jsong.ashx?Id=137464&callback=JSONP_CALLBACK&clear=1')
+            :  this.jsonp.get('//www.skat.dk.sktpinf01iis03.skat.dk/test/websrv/jsong.ashx?Id=137464&callback=JSONP_CALLBACK&clear=1')
                 .map(res => {
                     let data = res.json()
                     this.totalStore = data
@@ -81,6 +81,9 @@ export class columnID {
 
                 })
                 .share()
+
+                // 'http://www.skat.dk. www.skat.dk.sktpinf01iis03.skat.dk/test/websrv/jsong.ashx?Id=137464&callback=JSONP_CALLBACK&clear=1 
+                // http://www.skat.dk.sktpinf01iis03.skat.dk/test/websrv/jsong.ashx?Id=137464&callback=whatever&clear=1
             
     }
 
@@ -138,6 +141,7 @@ export class columnID {
                     }    
                 }
             }
+
        ]
 
         let mapping = [

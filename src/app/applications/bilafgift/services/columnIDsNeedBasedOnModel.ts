@@ -40,12 +40,8 @@ export class ColumnPairing {
                 new checkModelProperties(this.model).isVaegtAfgift()
 
                                           
-
             if (isOldPrivatAnvendelse) columnIDs.push(this.addPrivatAnvendelsesAfgiftOld()) 
             if (isNewPrivatAnvendelse) columnIDs.push(this.addPrivatAnvendelsesAfgiftNew()) 
-
-            console.log(columnIDs)
-
 
             return columnIDs
 

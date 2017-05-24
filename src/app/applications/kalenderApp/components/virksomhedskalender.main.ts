@@ -13,6 +13,7 @@ interface EventTarget {
 @Component({
     selector:'my-app',
     template:`
+        
         <div class = "virksomheds-kalender" id = "#virkCalender">
    
             <div class = "clearfix calculator-header">
@@ -137,6 +138,9 @@ export class virksomhedsKalenderApp {
            if (!clickOnToggleButton && !clickInsideIndstillinger) this.toggleSettings = true
 
         })    
+
+        
+        
         
     }
 

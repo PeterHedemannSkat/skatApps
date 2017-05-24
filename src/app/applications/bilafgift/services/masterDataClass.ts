@@ -1,5 +1,6 @@
 import { tableData,singleData,specialValues,cellExtract,calculatedData,valuePairs,intervals } from '../infrastructure/interfaces.bilafgifter';
 import { intervalConstructer } from './intervalClass.bilafgifter';
+import { period } from '../../kalenderApp/infrastructure/types';
 
 
 
@@ -11,12 +12,12 @@ export class dataHandlerMaster {
     private model:valuePairs[]
     private isEmpty:boolean = false;
 
-    private allData:tableData[]
+    allData:tableData[]
 
     inputType:string; 
     interval:intervals[]
 
-    initDataStructure(tableColumns:tableData[],model:valuePairs[]) {
+    initDataStructure(tableColumns:tableData[],model:valuePairs[],userInput?:string) {
         
          if (tableColumns.length == 0) {
              this.isEmpty = true
@@ -53,8 +54,46 @@ export class dataHandlerMaster {
         }
 
         if (this.inputType == 'kmPrLiter') this.reverseColumns()
+        
+        let filterAfgift_ = this.allData.find(el => el.id === '_particleFilter_' || el.id === '_van_particleFilter_vaegtAfgift_')
+
+       
+
+        if (filterAfgift_ && this.allData.length > 1  ) {
+            
+             console.log(filterAfgift_.columnData[0])
+
+            let period = this.getPeriodOfIndex(this.getIndex(Number(userInput)) )
+            console.log(period)
+
+            if (period > 1) {
+                filterAfgift_.columnData[0] = filterAfgift_.columnData[0]/period
+                filterAfgift_.period.period = period;
+            }
+        }
 
         return this
+    }
+
+    update(input: string) {
+        console.log('inputChange')
+        let filterAfgift_ = this.allData.find(el => el.id === '_particleFilter_' || el.id === '_van_particleFilter_vaegtAfgift_')
+
+       
+
+        if (filterAfgift_ && this.allData.length > 1  ) {
+            
+             console.log(filterAfgift_.columnData[0])
+
+            let period = this.getPeriodOfIndex(this.getIndex(Number(input)) )
+            console.log(period)
+
+            if (period > 1) {
+                filterAfgift_.columnData[0] = filterAfgift_.columnData[0]/period
+                filterAfgift_.period.period = period;
+            }
+        }
+        return false
     }
 
     reverseColumns() {
@@ -83,7 +122,7 @@ export class dataHandlerMaster {
             })                     
     }
 
-    getPeriodOfIndex(index:number) {
+    getPeriodOfIndex(index?:number) {
 
         /* assuming that each row in the table has the same period, otherwise something is wrong... looking at first table should do  */
         return this.tableRowsHasDifferentPeriods()
@@ -193,6 +232,15 @@ export class dataHandlerMaster {
         },0)
     }
 
+    getTotalPeriod(userValue:string) {
+
+        if (!userValue && !this.isVariableIndependent()) return -1
+
+        return this.getAllValuesFromUserInput(userValue).reduce((p,v) => {
+            return p + v.data.val
+        },0)
+    }
+
     getValue_fromIndex(index:number,id:string,value?:number):cellExtract {
 
         let len     = this.interval.length,
@@ -259,7 +307,7 @@ export class dataHandlerMaster {
     }
 
     containsSingleData() {
-        console.log(this.individualData)
+        
         return this.individualData.length > 0
     }
 

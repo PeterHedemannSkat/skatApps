@@ -556,7 +556,9 @@ export class Deadline {
         return new Promise((resolve:any) => {
 
             this.checkForManuelExceptions(defaultRules).subscribe(el => {
+                    
                 let date = el ? el : this.checkForExceptionRule(defaultRules)
+                
                 resolve(date)
             }) 
         })
@@ -579,19 +581,22 @@ export class Deadline {
 
                 let returndate:any;
 
-                let isSame =    defaultRules.id                == el.id &&
-                                defaultRules.period.period     == el.children.period && 
-                                defaultRules.period.year       == el.children.year 
+                /* 
+                    el.children[0].period 
+                    el.children[0].year   
+                */
 
+                let isSame =    defaultRules.id                == el.Id &&
+                                defaultRules.period.period     == el.children[0].Periode && 
+                                defaultRules.period.year       == el.children[0].year 
 
                                 //(defaultRules.period.rate       == Number(el.children.id))
 
                 if (defaultRules.period.rate > 0) {
 
-                    isSame = isSame && defaultRules.period.rate == Number(el.children.id)
+                    isSame = isSame && defaultRules.period.rate == Number(el.children[0].Id)
 
                 } 
-
     
                 if (isSame) {
 

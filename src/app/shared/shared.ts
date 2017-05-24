@@ -16,7 +16,9 @@ import { CalenderServices } from './services/dateServices';
 import { MathCalc } from './services/math.services';
 import { readableDigitFormat } from './udgComponents/numberInput';
 import { importJsonData } from './services/jsonEmitterServices';
-import { checkIf,arrayOps } from './services/arrayCheck'
+import { checkIf,arrayOps } from './services/arrayCheck';
+
+import { DatovaelgerInputFeltComponent } from './udgComponents/datovaelger-input-felt.component'
 
 
 export {
@@ -40,6 +42,7 @@ export {
     importJsonData,
     decimalDK,
     checkIf,
-    arrayOps
+    arrayOps,
+    DatovaelgerInputFeltComponent
 
 }

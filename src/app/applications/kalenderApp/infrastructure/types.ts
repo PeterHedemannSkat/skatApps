@@ -69,15 +69,18 @@ export interface deadlineDate {
     txt?:string
 }
 
-export interface periodExternal extends period {
-    id?:string 
+interface periodAlt {
+    Id:string;
+    Periode:number;
+    year: number,
 }
 
+
 export interface deadlineManualDate {
-    id:string,
+    Id:string,
     Frist:string,
     txt?:string,
-    children:periodExternal
+    children:periodAlt[]
 }
 
 export interface checkbox {

@@ -199,12 +199,34 @@ export let parametersNeeded:parameterCheck[] = [
         ]
     },
     {
-        parametersNeeded:['axesTruck_roadTrain','axesTruck_roadTrain_road'],
+        parametersNeeded:['godkendtSammenkobling'],
         modelIsEither:[
             [
                 { prop:'vehicle',val:'truck'},
                 { prop:'size',val:'large'},
                 { prop:'typeTruck',val:'roadTrain'}
+              
+            ]
+        ]
+    },
+    { /* axesTruck_roadTrain_road  */
+        parametersNeeded:['axesTruck_roadTrain'],
+        modelIsEither:[
+            [
+                { prop:'vehicle',val:'truck'},
+                { prop:'size',val:'large'},
+                { prop:'typeTruck',val:'roadTrain'}
+            ]
+        ]
+    },
+    { 
+        parametersNeeded:['axesTruck_roadTrain_road'],
+        modelIsEither:[
+            [
+                { prop:'vehicle',val:'truck'},
+                { prop:'size',val:'large'},
+                { prop:'typeTruck',val:'roadTrain'},
+                { prop: 'godkendtSammenkobling', val:'no'}
             ]
         ]
     },
@@ -249,5 +271,6 @@ export let parametersNeeded:parameterCheck[] = [
               
             ]
         ]
-    },
+    }
+
 ]

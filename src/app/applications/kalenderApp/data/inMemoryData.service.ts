@@ -7,13 +7,25 @@ export class InMemoryDataService implements InMemoryDataService {
     createDb() {
 
         let manualDeadLines:deadlineManualDate[] = [
-            { /* dummy  */
+            /*
+            {
                 id:'moms_kvartal',
                 children:{
                     year:2000,
                     period:4
                 },
                 Frist:'10-03-2017 16:45'
+
+            },
+            */
+            { /* dummy  */
+                Id:'erhvervsdrivende',
+                children:[{
+                    year:2016,
+                    Periode:1,
+                    Id:'erhvervsdrivende'
+                }],
+                Frist:'2-07-2017 16:45'
 
             }
         ]

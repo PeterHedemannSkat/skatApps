@@ -93,6 +93,10 @@ export class InMemoryDataService implements InMemoryDataService {
                     {
                         id:'euroStandard',
                         da:'Euro-standard'
+                    },
+                    {
+                        id:'godkendtSammenkobling',
+                        da:'Godkendt til sammenkobling'
                     }
                 ]
 
@@ -463,6 +467,19 @@ export class InMemoryDataService implements InMemoryDataService {
                                 da:'Euro-2'
                             }
                         ]
+                    },
+                    {
+                        id:'godkendtSammenkobling',
+                        children:[
+                            {
+                                id:'yes',
+                                da:'Ja'
+                            },
+                            {
+                                id:'no',
+                                da:'Nej'
+                            }
+                        ]
                     }
                     
 
@@ -513,7 +530,15 @@ export class InMemoryDataService implements InMemoryDataService {
                     },
                     {
                         id:'label_isVaegt',
-                        da:'Køretøjets vægt (kg.)'
+                        da:'Køretøjets totalvægt (kg.)'
+                    },
+                    {
+                        id:'label_isEgenvaegt',
+                        da:'Køretøjets egenvægt (kg.)'
+                    },
+                    {
+                        id:'label_isTotalVaegt',
+                        da:'Køretøjets totalvægt (kg.)'
                     },
                     {
                         id:'placeHolder_isKml',
@@ -545,7 +570,7 @@ export class InMemoryDataService implements InMemoryDataService {
                     },
                     {
                         id:'sumAfgifter',
-                        da:'Afgift i alt pr år'
+                        da:'Årlige afgift:'
                     },
                     {
                         id:'venterpaaIndtastning',

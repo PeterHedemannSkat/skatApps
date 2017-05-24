@@ -12,6 +12,7 @@ import { columnID } from '../services/columnIDWrapper'
 import { dataHandlerMaster } from '../services/masterDataClass'
 import { yearDataMapping } from '../data/mapping.data';
 import { checkModelProperties } from '../services/dynamicModelChecks'
+import { period } from '../../kalenderApp/infrastructure/types';
 
 
 
@@ -53,6 +54,7 @@ export class appMain   {
 
         this.userInput_ = value
         this.casePrivatAnvendelseOld() 
+        this.casePartikelFilter()
 
     }
     private error:boolean
@@ -131,6 +133,19 @@ export class appMain   {
         if (this.userInput) {
             let formattedVal    = Number(this.userInput.replace(/,/,'.'))
             return (this.liveData.getIndex(formattedVal) == index)
+        }
+
+    }
+
+    casePartikelFilter() {
+
+        let particleFilter_ = 
+            this.liveData &&
+            this.liveData.allData.length > 0 &&
+            this.liveData.allData.find(el => el.id === '_particleFilter_')
+
+        if (particleFilter_) {
+            this.updateModel('')
         }
 
     }
@@ -313,7 +328,15 @@ export class appMain   {
     }
 
     printLabelInput(type:string) {
-        return (type == 'kmPrLiter') ? this.txt('label_isKml') : this.txt('label_isVaegt')       
+
+        const vehicle       = this.model.find(v => v.prop == 'vehicle').val,
+            vehiclesTypes   = ['van','truck','trailer']
+            /*  totalvægt */
+        const vaegtType     = (vehiclesTypes.indexOf(vehicle) > -1) ? 'label_isVaegt' : 'label_isEgenvaegt';
+
+        //return this.txt(vaegtType)
+
+        return (type == 'kmPrLiter') ? this.txt('label_isKml') : this.txt(vaegtType)       
     }
 
     printPlaceHolderUSER(type:string) {

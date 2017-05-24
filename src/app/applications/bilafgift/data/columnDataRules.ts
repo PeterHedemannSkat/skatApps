@@ -158,11 +158,14 @@ export let columnIDRules:rulesForColumns[] = [
         getColumn:(model:valuePairs[]) => {
 
             let model_          = new checkModelProperties(model),
+                synsfri          = model_.val('godkendtSammenkobling'),
                 axesTruck       = model_.val('axesTruck_roadTrain'),
-                axesRoadTrain   = model_.val('axesTruck_roadTrain_road'),
+                axesRoadTrain   = (synsfri == 'yes') ? '2' : model_.val('axesTruck_roadTrain_road'),
                 suspension      = model_.val('suspension')
 
-            let allset          = axesTruck && axesRoadTrain && suspension
+            console.log(axesRoadTrain)
+
+            let allset          = axesTruck && axesRoadTrain  && suspension
 
             return  allset ? `_truck_largeTruck_${axesTruck}_roadTrain_${axesRoadTrain}_${suspension}_` : ''
                        

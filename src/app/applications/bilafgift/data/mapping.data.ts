@@ -219,3 +219,15 @@ export const yearDataMapping:dataMapping[] = [
         hardcoded:false      
     }
 ] 
+
+export const vaegtType = [
+    {
+        validFor:['truck','van','trailer'],
+        value:'total'
+    },
+    {
+        validFor:['car','camper','taxa','mc'],
+        value:'egen'  
+    }
+    
+]
