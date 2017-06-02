@@ -57,13 +57,10 @@ export class dataHandlerMaster {
         
         let filterAfgift_ = this.allData.find(el => el.id === '_particleFilter_' || el.id === '_van_particleFilter_vaegtAfgift_')
 
-       
-
         if (filterAfgift_ && this.allData.length > 1  ) {
             
-             console.log(filterAfgift_.columnData[0])
-
             let period = this.getPeriodOfIndex(this.getIndex(Number(userInput)) )
+            console.log(this.tableColumns)
             console.log(period)
 
             if (period > 1) {
@@ -76,10 +73,7 @@ export class dataHandlerMaster {
     }
 
     update(input: string) {
-        console.log('inputChange')
         let filterAfgift_ = this.allData.find(el => el.id === '_particleFilter_' || el.id === '_van_particleFilter_vaegtAfgift_')
-
-       
 
         if (filterAfgift_ && this.allData.length > 1  ) {
             

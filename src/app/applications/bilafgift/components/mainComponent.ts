@@ -119,6 +119,11 @@ export class appMain   {
         return !!(!val || val.val == '')
     }
 
+    mikkelJuan() {
+        console.log('****')
+        return 'forever'
+    }
+
 
     allParametersHasValue() {
 

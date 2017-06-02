@@ -63,6 +63,9 @@ export class columnID {
                 return new tableTransformerFromDAPstructure(response,id).getData(yearKey)
             })
             .map(el => {
+
+                console.log('*** enkelt tabel/data *****')
+                console.log(el)
                 /* determine if columnID should be modifed */
                 return this.modifiersForSpecialCases(el)
             })
@@ -82,7 +85,8 @@ export class columnID {
                 })
                 .share()
 
-                // 'http://www.skat.dk. www.skat.dk.sktpinf01iis03.skat.dk/test/websrv/jsong.ashx?Id=137464&callback=JSONP_CALLBACK&clear=1 
+                // '//www.skat.dk.sktpinf01iis03.skat.dk/test/websrv/jsong.ashx?Id=137464&callback=JSONP_CALLBACK&clear=1'
+                //'http://www.skat.dk. www.skat.dk.sktpinf01iis03.skat.dk/test/websrv/jsong.ashx?Id=137464&callback=JSONP_CALLBACK&clear=1 
                 // http://www.skat.dk.sktpinf01iis03.skat.dk/test/websrv/jsong.ashx?Id=137464&callback=whatever&clear=1
             
     }

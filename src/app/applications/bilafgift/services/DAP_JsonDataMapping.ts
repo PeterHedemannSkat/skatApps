@@ -24,9 +24,12 @@ export class tableTransformerFromDAPstructure {
 
     private getPeriod() {
 
-        return periodMapping.find(el => {
+        let periodData = periodMapping.find(el => {
              return new columnSearch(el.validFor).checkColumnID(this.id)  
         })
+
+        // bug fix - need to assign to other object as it is potential overwritten CS june 2017 
+        return Object.assign({},periodData)
 
     }
 
