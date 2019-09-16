@@ -1,0 +1,488 @@
+.well .skts-process-form-section:before{
+    border-top:none;
+    content: "";
+    display: block;
+    margin-bottom: 0em;
+    margin-left: 0rem;
+    margin-right: 0rem;
+    margin-top: 0em;
+    width: auto;
+}
+
+.parameter {
+
+    width:100%;
+    float:left;
+    box-sizing: border-box;
+
+}
+
+.make-borders {
+    border-top:1px dotted gray;
+    border-bottom:1px dotted gray;
+    padding:1em 0;
+}
+
+
+.parameter:not(.missing-parameter) {
+    padding-right: 5px;
+}
+
+.year-picker > div {
+    display: table-cell;
+    width: 100%;
+}
+
+.year-chosen {
+    min-width: 8em;
+    text-align: right;
+}
+
+.parameters {
+    margin:auto 0;
+    max-width: 20em;
+}
+
+.parameter select.form-control {
+
+    margin-bottom: 0;
+
+}
+
+.main-bilafgift-container {
+    margin-top: 2.5em;
+}
+
+.parameter .form-group {
+    margin-bottom: 8px;
+}
+
+
+.parameter:nth-child(odd) {
+    margin-right: 15px;
+}
+
+.special-vehicle-info {
+    margin-bottom: 1em;
+}
+
+.multiplication {
+    display:inline-block;
+
+}
+
+.calculations-area {
+    padding-left:1em;
+    border-left: 1px dotted #3f6075;
+    min-height:10em;
+}
+
+.special-calculations {
+    margin-left:1em;
+    font-size:0.8em;
+    border-top:1px solid white;
+    border-bottom: 1px solid white;
+}
+
+.missing-parameter {
+    position:relative;
+    left:-5px;
+    padding-left: 5px;
+    border-left:3px solid #3f6075;
+}
+
+.skts-app h3 + p {
+    margin-top:1em;
+}
+
+.val-in-row {
+    background:#3f6075;
+    color:white;
+}
+
+.extra-label-info {
+    display: inline-block;
+    font-size: 0.8em;
+}
+
+.special-info {
+    font-size: 0.8em;
+}
+
+
+@media only screen and (max-width:500px) {
+
+    .calculations-area {
+         padding-left:0;
+        border-left: none;
+    }
+
+
+}
+
+.special-table-value {
+    font-size: 0.8em;
+    text-align: right;
+}
+
+
+
+.result {
+    margin-top:2em;
+}
+
+.multiplication:after {
+
+    content:'\00d7'
+}
+
+.unique-result table td:first-child {
+    text-align: left;
+}
+
+table {
+    width:100%;
+    margin-top:1em;
+}
+
+
+table.table-area td,table.table-area th {
+    padding:0.5em 0.5em;
+    min-width:4em;
+    text-align:right;
+}
+
+table.table-area tr {
+    border-bottom:1px solid #395F77
+}
+
+table.table-area tr th {
+    font-size:0.8em;
+}
+
+table.table-area tr td:first-child, table.table-area tr th:first-child {
+   font-size: 0.8em;
+   text-align: left;
+   padding-left:1em;
+   min-width: 8.5em;
+}
+
+table.table-area tr td:nth-child(2),table.table-area tr th:nth-child(2)  {
+   min-width:6em;
+}
+
+table.table-area tr td:nth-child(3),table.table-area tr th:nth-child(3) {
+   min-width:3em;
+}
+
+.unique-result {
+    margin-bottom: 1.5em;
+    margin-top:0.3em;
+    padding:0.8em 0;
+    border-top:1px dotted slategray;
+
+}
+
+.user-input ~ h3 {
+    margin-top:1em;
+}
+
+.calculations-info {
+    margin:2em 0;
+    font-size: 1em;
+}
+
+
+.main-bilafgift-container h3 {
+    font-weight:400;
+    font-size: 1.2em;
+}
+
+.table-like {
+    margin-top:0.3em;
+}
+
+.type-header {
+    font-style:italic;
+}
+
+.sum-calculations.year-sum {
+    margin: 1em 0;
+    padding: 0.5em 0;
+    margin-top:2em;
+    border-top:1px dotted gray;
+    border-bottom:1px dotted gray;
+}
+
+
+.table-like > div > div,.table-row > div {
+    display: table-cell;
+    width: 100%;
+}
+
+.table-like > div > div:nth-child(2),.table-row > div:nth-child(2) {
+    min-width: 6em;
+    text-align: right;
+}
+    
+.well {
+   background-color: #ececec;
+}
+
+.skts-wizard select {
+    background: white;
+}
+
+.sum-calculations {
+    border-top: 1px solid gray;
+    padding-top: 0.5em;
+    margin-top:1.5em;
+    font-weight: bold;
+}
+
+
+.dap-aktionslink-skatdk:focus,.dap-aktionslink-skatdk:active {
+    outline:none;
+}
+
+.dap-aktionslink-skatdk:hover {
+    background: #FFAE1E;
+    color: black;
+}
+
+.dap-aktionslink-skatdk {
+    background: #FFC61E;
+    color: black;
+}
+.dap-aktionslink {
+    background-color: #395F77;
+    display: block;
+    padding: 2.3rem 6.3rem;
+    color: #FFF;
+    text-decoration: none;
+    margin: 1rem 0 0;
+    text-align: center;
+    -webkit-transition: all 300ms;
+    -moz-transition: all 300ms;
+    -o-transition: all 300ms;
+    transition: all 300ms;
+}
+button:hover {
+    color: #14364c;
+}
+button:hover, button:focus {
+    color: #14364c;
+    text-decoration: underline;
+}
+button:active, button:hover {
+    outline: 0;
+}
+.dap-aktionslink-skatdk {
+    background: #FFC61E;
+}
+.dap-aktionslink {
+    display: block;
+    padding: 0.7em;
+    color: #000 !important;
+    text-decoration: none !important;
+    margin: 1em 0 0;
+    border:none;
+    width:100%;
+    text-align: center;
+    -webkit-transition: all 300ms;
+    -moz-transition: all 300ms;
+    -o-transition: all 300ms;
+    transition: all 300ms;
+}
+
+.asLink {
+    background:transparent;
+    border:none;
+    color:#1a0dab;;
+    padding:0;
+    text-decoration:underline;
+
+}
+
+.gave-afgift h3 {
+
+    font-size:1.5em;
+    font-weight:100;
+    margin-top:0.7em;
+    margin-bottom:0.3em
+
+}
+
+.gave-afgift h4 {
+
+    font-size:1.3em;
+    font-weight:100;
+    margin-top:0.7em;
+    margin-bottom:0.3em
+
+}
+
+.arrow {
+    background: url(../images/sprite.svg) -222px -66px no-repeat;
+    display: inline-block;
+    color: transparent;
+    outline: transparent;
+    white-space: pre-wrap;
+    border: none;
+    padding: 0;
+    width: 1.7em;
+    height: 1.7em;
+
+
+}
+
+.arrow-dap {
+
+    display: inline-block;
+    position: relative;
+}
+
+
+.arrow-dap:after {
+
+    content: '\e903';
+    display: block;
+    font-family: 'dap-ikon-font';
+    font-size: 2.5rem;
+    height: 4rem;
+    line-height: 4rem;;
+    left: 0.5em;
+    -webkit-transition: right 300ms;
+    -moz-transition: right 300ms;
+    -ms-transition: right 300ms;
+    -o-transition: right 300ms;
+    transition: right 300ms;
+
+} 
+
+.arrow-pointing-up {
+
+    -ms-transform: rotate(135deg); /* IE 9 */
+    -webkit-transform: rotate(135deg); /* Safari */
+    transform: rotate(135deg); /* Standard syntax */
+    
+}
+
+.arrow-pointing-down {
+
+    -ms-transform: rotate(45deg); /* IE 9 */
+    -webkit-transform: rotate(45deg); /* Safari */
+    transform: rotate(45deg); /* Standard syntax */
+    
+}
+
+@font-face {
+	font-family: 'dap-ikon-font';
+	src: url('http://skat.dk/beta/style/font/dap-ikon-font.ttf?ef86am');
+	/*src: url('font/dap-ikon-font.eot?ef86am#iefix') format('embedded-opentype'),  url('font/dap-ikon-font.ttf?ef86am') format('truetype'),  url('font/dap-ikon-font.woff?ef86am') format('woff'),  url('font/dap-ikon-font.svg?ef86am#dap-ikon-font') format('svg');*/
+	font-weight: normal;
+	font-style: normal;
+}
+[class^="dap-ikon-"], [class*=" dap-ikon-"] {
+	/* use !important to prevent issues with browser extensions that change fonts */
+	font-family: 'dap-ikon-font' !important;
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	font-size: 2.4rem;
+	margin: .4rem 1.2rem -.4rem 0;
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+
+.skts-foldout {
+    background: #FFF;
+    width:100%;
+    border: 1px solid #395F77;
+    margin-top:1em;
+    -webkit-transition: all 300ms;
+    -moz-transition: all 300ms;
+    -o-transition: all 300ms;
+    transition: all 300ms;
+
+}
+
+.skts-foldout-clickable {
+    background: #FFF;
+    cursor: pointer;
+    width:100%;
+    border:none;
+    padding:1.3em;
+    -webkit-transition: all 300ms;
+    -moz-transition: all 300ms;
+    -o-transition: all 300ms;
+    transition: all 300ms;
+}
+
+.skts-foldout-clickable:hover {
+    background: #e2e8eb
+
+}
+
+.skts-foldout-clickable:focus,.asLink {
+    outline:none;
+}
+
+.skts-foldout-clickable-is-open {
+    border-bottom: 1px solid #395F77
+}
+
+.foldout-body {
+    padding:1.3em;
+}
+
+.keep-together {
+    display: inline-block   
+}
+
+.semi-large {
+    display: inline-block;
+    font-size:1.5em;
+}
+
+.focus-on-number {
+    display: inline-block;
+    font-size:2em;
+}
+
+.group-details {
+    margin-top:-1.5em;
+    font-size:0.8em;
+}
+
+.info-section {
+    padding-bottom: 1em;
+}
+
+.action-link {
+    display: block;
+    border:1px solid gray;
+    padding:1.3em;
+    text-align: center;
+    text-decoration: none;
+    margin:1em 0;
+    
+}
+
+ol.variables-on-form {
+    margin:0.5em 0;
+}
+
+.extra-small {
+    font-size: 0.5em;
+}
+
+.small-select {
+    display: inline-block;
+    font-size:0.9em;
+}

@@ -1,0 +1,196 @@
+ <div class = "skts-wizard bilafgift-afgift skts-app">
+        
+    <div class="row main-bilafgift-container well">
+        <div class = "col-md-5">
+
+            <h3 class = "year-picker">
+                <div>
+                    {{txt('IndstillingerOverskift') | async}}
+                </div>
+                <div class = "small year-chosen">
+                    <label for = "year">{{txt('Aar') | async}}: </label>
+
+                    <select [(ngModel)] = "yearStr">
+                        <option *ngFor = "let year of years" [value] = "year">
+                            {{year}}
+                        </option>
+                    </select>        
+
+                </div>
+            </h3>
+
+            <p></p>
+            <div *ngFor = "let parameter of model" class = "parameter" [class.missing-parameter] = "isEmptyParameter(parameter)">
+                
+                <selector 
+                    [options]   = "getOptionsWrapper(parameter.prop) | async"
+                    [label]     = "getLabelForOptions(parameter.prop) | async"
+                    [(value)]   = "parameter.val"
+                    (changed)   = "updateModel($event)"
+                ></selector>
+
+            </div>
+        </div>
+
+        <div class = "col-md-7">
+
+            <div class = "calculations-area">
+
+                    
+                    <div class="special-vehicle-info" *ngIf = "extraVehicleInfo()">
+
+                        {{txt(vehicleName() + '_info') | async}}
+                    </div>
+
+
+                <div class = "waiting-results" *ngIf = "!allParametersHasValue() && !error">
+                    <h3>{{txt('manglerInfoOverskrift') | async}}</h3>
+                    <p class = "make-borders">
+                        
+                        {{txt('manglerInfoTekst') | async}}
+                        <span *ngIf = "liveData?.containsTable()">{{txt('seTabel') | async}}</span>
+
+                    </p>
+
+                  
+                </div>
+
+                <div class = "waiting-results" *ngIf = "getData.isLoadingData">
+                    <h3>{{txt('loaderOverskrift') | async}}</h3>
+                </div>
+
+                <div class = "something-is-wrong" *ngIf = "error">
+                    <h3>{{txt('fejlOverskrift') | async}}</h3> 
+                    <p>
+                       {{txt('fejlTekst') | async}}              
+                    </p>
+                </div>
+                    
+                <div *ngIf = "liveData && !liveData?.isEmpty">
+
+                    <div class = "user-input" *ngIf = "allParametersHasValue()">
+
+                        <h3>{{txt('beregnOverskrift') | async}}</h3>
+
+                        <p></p>
+
+                        <div *ngIf = "!liveData?.isVariableIndependent()" class = "user-input">
+
+                            <label for = "USER"> 
+                                {{printLabelInput(liveData.inputType) | async}}
+                                <span class = "extra-label-info">{{extraLabel() | async}}</span>
+                            </label>                    
+                            
+                            <input [(ngModel)] = "userInput" class = "form-control" id = "USER"  [attr.placeholder] = "printPlaceHolderUSER(liveData.inputType) | async" />
+
+
+                        </div>
+
+                        <h3>{{txt('resultatOverskrift') | async}}</h3>
+
+                        <div class = "unique-result text-center" *ngIf = "liveData.getTotal(userInput) == -1">
+                            {{txt('venterpaaIndtastning') | async}}
+                        </div>
+
+                        <div class = "unique-result" *ngIf = "liveData.getTotal(userInput) >= 0 || liveData?.isVariableIndependent()">
+                            <div class = "table-like" *ngFor = "let result of liveData.getAllValuesFromUserInput(userInput)">       
+                                <div class = "type-header">
+                                    {{printType(result.data) | async}}
+                                        
+                                </div>                        
+
+                                <div class = "special-calculations" *ngIf = "result.specialLoad()">
+                                    
+                                    {{printDiffentiatedInterval(liveData.getPeriodOfIndex(result.data.index)) | async}}: 
+                                    {{liveData.closestHundredUp(userInput,result.data.object.units)}} {{txt(liveData.inputType) | async}} 
+                                    {{txt('rundet_op') | async}} / 
+                                    {{result.data.object.units}} <span class = "multiplication"> </span> 
+                                    {{result.data.object.val}} kr. = 
+                                    
+                                    {{result.data.val | tusindtal}} kr.
+                                </div>
+
+                                <div class = "year-calculations">
+                                    <div>
+                                        {{result.periodsPrYear()}} 
+                                        <span class = "multiplication"> </span> 
+                                        {{result.data.val | tusindtal}} kr.
+                                    </div>
+                                    
+                                    <div>{{result.sum() | tusindtal}} kr.</div>
+                                </div>
+
+                            </div>
+                        
+                            <div class = "table-row sum-calculations">
+                                <div>{{txt('sumAfgifter') | async}}</div>
+                                <div>{{liveData.getTotal(userInput) | tusindtal}} kr.</div>
+                            </div>
+                        
+                        </div>
+
+                    </div>
+
+
+                    <div class = "result" *ngIf = "liveData">
+    
+                        <h3>{{txt('tabeloversigt') | async}}</h3>
+    
+                        <p *ngIf = "liveData.containsSingleData() || !allParametersHasValue()" class = "special-info">
+                            {{txt('tabelErUsikker') | async}}
+                        </p> 
+
+                        <p *ngIf = "!liveData.tableRowsHasDifferentPeriods()">Viser satser 
+                            {{ printDiffentiatedInterval(liveData.getCommonTablePeriod()) | async }}
+                        </p>
+
+                        <table class = "table-area">
+                            <tr>
+
+                                <th>{{txt('interval') | async}}</th>
+                                <th *ngFor = "let name of liveData.getColumnNames()">
+                                    {{printColumnName(name) | async}}
+                                </th>
+        
+                            </tr>
+                            <tr *ngFor = "let row of liveData?.interval;let i = index" [class.val-in-row] = "valueIsRow(i)">
+                                <td>
+                                    <div *ngIf = "!liveData.singleInterval(row)">
+                                        {{row.from | decimalDK}} -
+                                        {{row.to | decimalDK}} {{txt(liveData.inputType) | async}}
+
+                                        <div *ngIf = "liveData.tableRowsHasDifferentPeriods()">
+                                            {{printDiffentiatedInterval(liveData.getPeriodOfIndex(i)) | async}}
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf = "liveData.singleInterval(row)">
+                                        {{txt('all') | async}}
+                                    </div>
+
+                       
+                                </td>
+                                <td *ngFor = "let name of liveData.getColumnNames()">
+
+                                    <div class = "normal" *ngIf = "liveData.getValue_fromIndex(i,name).val > -1">
+                                        {{liveData.getValue_fromIndex(i,name).val | tusindtal}} {{txt('kr.') | async}}
+                                    </div>
+
+                                    <div class = "special-table-value" *ngIf = "liveData.getValue_fromIndex(i,name).val == -1">
+                                    {{liveData.getValue_fromIndex(i,name).object.val}} {{txt('kr.') | async}} / <br/>
+                                    {{liveData.getValue_fromIndex(i,name).object.units}} {{txt(liveData.inputType) | async}}
+                                    </div>
+
+                                    <div class = "normal" *ngIf = "liveData.getValue_fromIndex(i,name).val == -2">
+                                       -
+                                    </div>
+                                    
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
