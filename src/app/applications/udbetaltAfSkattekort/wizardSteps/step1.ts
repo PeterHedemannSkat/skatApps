@@ -1,11 +1,11 @@
-import {Component,OnInit,WizardState} from '../infrastructure/wizardressources';
-import {Validator} from '../../../shared/shared';
+import { Component, OnInit, WizardState } from '../infrastructure/wizardressources';
+import { Validator } from '../../../shared/shared';
 
-@Component ({
+@Component({
 
-    template:`
+    template: `
 
-        <div class = "well">
+        <div class = "">
 
             <p>{{content.overskrift1}}</p>
             <p>{{content.step1GeneralTxt}}</p>
@@ -16,7 +16,7 @@ import {Validator} from '../../../shared/shared';
                 [helpTxt]       = "content.helptraekprocent"
                 [validateType]  = "wizardState.getValitionSet(['notEmpty','number','!range?from=30&to=99'])"
                 [placeholder]   = "content.skrivprocent"
-                postfix         = "procent"     
+                postfix         = "%"     
                 (changed)       = "validate()"
             ></regular-input>
 
@@ -25,7 +25,7 @@ import {Validator} from '../../../shared/shared';
                 [label]         = "content.maanedsfradragLabels" 
                 [helpTxt]       = "content.helpMaanedsfradrag"
                 [validateType]  = "wizardState.getValitionSet(['notEmpty','number'])"
-                postfix         = "kr"
+                postfix         = "kr."
                 [placeholder]   = "content.skrivbeloeb"
                 (changed)       = "validate()"
             ></regular-input>
@@ -36,42 +36,42 @@ import {Validator} from '../../../shared/shared';
 
 export class basicIncome {
 
-    constructor (
-        private wizardState:WizardState
-    ) {}
+    constructor(
+        private wizardState: WizardState
+    ) { }
 
-    content:Object = {};
+    content: Object = {};
 
-    ngOnInit () {
-  
+    ngOnInit() {
+
         this.wizardState.trin = 0;
         this.content = this.wizardState.currentWizardStepContent
-        this.wizardState.printLocalContent([['step1','general'],['general','placeholderTexts']])
+        this.wizardState.printLocalContent([['step1', 'general'], ['general', 'placeholderTexts']])
         this.validate();
 
     }
 
-    getNumberType () {
-        return [this.wizardState.errorTxt['notEmpty'],this.wizardState.errorTxt['number']]
+    getNumberType() {
+        return [this.wizardState.errorTxt['notEmpty'], this.wizardState.errorTxt['number']]
     }
 
 
-    validate () {
+    validate() {
 
         var validateTraekProcent = {
-            element:this.wizardState.taxcard.withHoldingRate,
-            regExContainer: this.wizardState.getValitionSet(['notEmpty','number','!range?from=30&to=99'])
+            element: this.wizardState.taxcard.withHoldingRate,
+            regExContainer: this.wizardState.getValitionSet(['notEmpty', 'number', '!range?from=30&to=99'])
         }
 
         var validateMaanedsFradrag = {
-            element:this.wizardState.taxcard.deduction,
-            regExContainer: this.wizardState.getValitionSet(['notEmpty','number'])
+            element: this.wizardState.taxcard.deduction,
+            regExContainer: this.wizardState.getValitionSet(['notEmpty', 'number'])
         }
-        
-        this.wizardState.stepValidationOk = new Validator().add([validateTraekProcent,validateMaanedsFradrag]).checkAll(); 
+
+        this.wizardState.stepValidationOk = new Validator().add([validateTraekProcent, validateMaanedsFradrag]).checkAll();
 
     }
 
- } 
+}
 
 
