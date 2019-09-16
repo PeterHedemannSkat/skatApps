@@ -20,7 +20,7 @@ import { Component, OnInit, WizardState, taxableIncome } from '../infrastructure
                 <div class = "float-left">{{getIncomeType(i)}}
                     <span *ngIf = "isSaleryIncome(i) && isTyped(i)"><strong>({{result.income.from}})</strong></span> 
                 </div>
-                <div class = "float-right">{{+result.income.sum | tusindtal}} kr.</div>                    
+                <div class = "float-right">{{result.sum() | tusindtal}} kr.</div>                    
             </div>
 
             <div class = "show-result clearfix" *ngIf = "result.sumAMbidrag() > 0">
