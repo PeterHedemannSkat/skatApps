@@ -51,6 +51,10 @@ export class taxableIncome {
         return this.eligible_amBidrag() ? Math.round(+this.income.sum * 0.08) : 0;
     }
 
+    sum(): number {
+        return +this.income.sum;
+    }
+
     eligible_deduction ():boolean {
         return this.income.appliedTaxCard === 'hovedkort'
     }

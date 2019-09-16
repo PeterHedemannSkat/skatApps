@@ -3,15 +3,15 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var helpers = require('./helpers');
 
-// kalenderApp gaveAfgift
+// kalenderApp gaveAfgift bilafgift
 
-var application = "bilafgift"
+var application = "udbetaltAfSkattekort"
 
 module.exports = {
   entry: {
     'polyfills': './src/polyfills.ts',
     'vendor': './src/vendor.ts',
-    'udbetaltAfSkattekort': './src/app/applications/' + application  + '/infrastructure/main.ts'
+    'udbetaltAfSkattekort': './src/app/applications/' + application + '/infrastructure/main.ts'
   },
 
   resolve: {

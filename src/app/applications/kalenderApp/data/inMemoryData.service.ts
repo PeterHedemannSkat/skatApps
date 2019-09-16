@@ -1,12 +1,12 @@
 import { InMemoryDbService } from 'angular2-in-memory-web-api';
-import {deadlineManualDate } from '../infrastructure/types';
+import { deadlineManualDate } from '../infrastructure/types';
 import { languageText } from '../../../shared/shared'
 
 export class InMemoryDataService implements InMemoryDataService {
 
     createDb() {
 
-        let manualDeadLines:deadlineManualDate[] = [
+        let manualDeadLines: deadlineManualDate[] = [
             /*
             {
                 id:'moms_kvartal',
@@ -19,353 +19,420 @@ export class InMemoryDataService implements InMemoryDataService {
             },
             */
             { /* dummy  */
-                Id:'erhvervsdrivende',
-                children:[{
-                    year:2016,
-                    Periode:1,
-                    Id:'erhvervsdrivende'
+                Id: 'erhvervsdrivende',
+                children: [{
+                    year: 2016,
+                    Periode: 1,
+                    Id: 'erhvervsdrivende'
                 }],
-                Frist:'2-07-2017 16:45'
+                Frist: '2-07-2017 16:45'
 
             }
         ]
 
-        let txt:languageText[] = [
+        let txt: languageText[] = [
 
             {
-                id:'pligter',
-                children:[
+                id: 'pligter',
+                children: [
 
                     {
-                        id:'selvangivelse',
-                        da:'Selvangivelse',
-                        children:[
+                        id: 'selvangivelse',
+                        da: 'Oplysningsformular',
+                        en: 'Preliminary income assessment',
+                        children: [
                             {
-                                id:'erhvervsdrivende',
-                                da:'Erhvervsdrivende'
+                                id: 'erhvervsdrivende',
+                                da: 'Erhvervsdrivende',
+                                en: 'Businessperson'
                             }
                         ]
 
                     },
                     {
-                        id:'moms',
-                        da:'Moms',
-                        children:[
+                        id: 'moms',
+                        da: 'Moms',
+                        en: 'VAT',
+                        children: [
                             {
-                                id:'moms_halvaar',
-                                da:'halvårsafregning'
+                                id: 'moms_halvaar',
+                                da: 'halvårsafregning',
+                                en: 'semiannualy'
                             },
                             {
-                                id:'moms_kvartal',
-                                da:'kvartalsafregning'
+                                id: 'moms_kvartal',
+                                da: 'kvartalsafregning',
+                                en: 'quarterly'
                             },
                             {
-                                id:'moms_maaned',
-                                da:'månedsafregning'
-                            }                    
-                        ]
-                    },
-                    {
-                        id:'loonsum',
-                        da:'lønsum',
-                        children:[
-                            {
-                                id:'loonsum_method1',
-                                da:'metode 1'
-                            },
-                            {
-                                id:'loonsum_method2',
-                                da:'metode 2'
-                            },
-                            {
-                                id:'loonsum_method3',
-                                da:'metode 3'
-                            },
-                            {
-                                id:'loonsum_method4B',
-                                da:'metode 4 - med ansatte'
-                            },
-                            {
-                                id:'loonsum_method4A',
-                                da:'metode 4 - uden ansatte'
-                            }   
-      
-                        ]
-
-                    },
-                    {
-                        id:'askat',
-                        da:'A-skat',
-                        children:[
-                            {
-                                id:'AskatStoreVirksomhed',
-                                da:'A-skat for store virksomheder'
-                            },
-                            {
-                                id:'AskatSmaaVirksomheder',
-                                da:'A-skat for små virksomheder'
-                            }
-      
-                        ]
-
-                    },
-                    {
-                        id:'EUsalgUdenMoms',
-                        da:'EU-salg uden Moms (DK-VIES)',
-                        children:[
-                            {
-                                id:'EUsalgUdenMoms',
-                                da:'månedsindberetning'
-                            },
-                            {
-                                id:'EusalgKvartal',
-                                da:'kvartalsindberetning'
+                                id: 'moms_maaned',
+                                da: 'månedsafregning',
+                                en: 'monthly'
                             }
                         ]
-
                     },
                     {
-                        id:'OneStopMoms',
-                        da:'One Stop Moms',
-                        children:[
+                        id: 'loonsum',
+                        da: 'lønsum',
+                        en: 'payroll tax',
+                        children: [
                             {
-                                id:'oneStopMoms',
-                                da:'One Stop Moms'
+                                id: 'loonsum_method1',
+                                da: 'metode 1',
+                                en: 'method 1'
+                            },
+                            {
+                                id: 'loonsum_method2',
+                                da: 'metode 2',
+                                en: 'method 2'
+                            },
+                            {
+                                id: 'loonsum_method3',
+                                da: 'metode 3',
+                                en: 'method 3'
+                            },
+                            {
+                                id: 'loonsum_method4B',
+                                da: 'metode 4 - med ansatte',
+                                en: 'method 4 - with employees'
+                            },
+                            {
+                                id: 'loonsum_method4A',
+                                da: 'metode 4 - uden ansatte',
+                                en: 'method 4 - with no employees'
                             }
+
                         ]
 
                     },
                     {
-                        id:'momsRefusion',
-                        da:'Momsrefusion',
-                        children:[
+                        id: 'askat',
+                        da: 'A-skat',
+                        en: 'A-tax',
+                        children: [
                             {
-                                id:'momsRefusion',
-                                da:'Momsrefusion'
+                                id: 'AskatStoreVirksomhed',
+                                da: 'A-skat for store virksomheder',
+                                en: 'A-tax for large businesses'
+                            },
+                            {
+                                id: 'AskatSmaaVirksomheder',
+                                da: 'A-skat for små virksomheder',
+                                en: 'A-tax for small businesses'
+                            }
+
+                        ]
+
+                    },
+                    {
+                        id: 'EUsalgUdenMoms',
+                        da: 'EU-salg uden Moms (DK-VIES)',
+                        en: 'EU-sale without VAT (DK-VIES)',
+                        children: [
+                            {
+                                id: 'EUsalgUdenMoms',
+                                da: 'månedsindberetning',
+                                en: 'monthly'
+                            },
+                            {
+                                id: 'EusalgKvartal',
+                                da: 'kvartalsindberetning',
+                                en: 'quarterly'
                             }
                         ]
 
                     },
                     {
-                        id:'punktafgifter',
-                        da:'Punktafgifter',
-                        children:[
+                        id: 'OneStopMoms',
+                        da: 'One Stop Moms',
+                        en: 'One Stop Moms',
+                        children: [
                             {
-                                id:'punktafgifter',
-                                da:'Punktafgifter'
+                                id: 'oneStopMoms',
+                                da: 'One Stop Moms',
+                                en: 'One Stop Moms'
+                            }
+                        ]
+
+                    },
+                    {
+                        id: 'momsRefusion',
+                        da: 'Momsrefusion',
+                        en: 'VAT refund',
+                        children: [
+                            {
+                                id: 'momsRefusion',
+                                da: 'Momsrefusion',
+                                en: 'VAT refund'
+                            }
+                        ]
+
+                    },
+                    {
+                        id: 'punktafgifter',
+                        da: 'Punktafgifter',
+                        en: 'Excise duties',
+                        children: [
+                            {
+                                id: 'punktafgifter',
+                                da: 'Punktafgifter',
+                                en: 'Excise duties'
                             }
                         ]
                     },
                     {
-                        id:'selskabsskat',
-                        da:'Selskabsskat',
-                        children:[
+                        id: 'selskabsskat',
+                        da: 'Selskabsskat',
+                        en: 'Corporate tax',
+                        children: [
                             {
-                                id:'selskabsskat',
-                                da:'accontoskat'
+                                id: 'selskabsskat',
+                                da: 'accontoskat',
+                                en: 'accontoskat'
                             }
                         ]
                     },
                     {
-                        id:'bSkatteRater',
-                        da:'B-skatterater',
-                        children:[
+                        id: 'bSkatteRater',
+                        da: 'B-skatterater',
+                        en: 'B-tax rates',
+                        children: [
                             {
-                                id:'bSkatteRater',
-                                da:'b-skat'
+                                id: 'bSkatteRater',
+                                da: 'b-skat',
+                                en: 'b-tax'
                             }
                         ]
                     }
                 ]
             },
             {
-                id:'monthNames',
-                da:'',
-                children:[
+                id: 'monthNames',
+                da: '',
+                en: 'en: ',
+                children: [
                     {
-                        id:'0',
-                        da:'januar'
+                        id: '0',
+                        da: 'januar',
+                        en: 'january'
 
                     },
                     {
-                        id:'1',
-                        da:'februar'
+                        id: '1',
+                        da: 'februar',
+                        en: 'february'
 
                     },
                     {
-                        id:'2',
-                        da:'marts'
+                        id: '2',
+                        da: 'marts',
+                        en: 'march'
 
                     },
                     {
-                        id:'3',
-                        da:'april'
+                        id: '3',
+                        da: 'april',
+                        en: 'april'
 
                     },
                     {
-                        id:'4',
-                        da:'maj'
-                    },                    
-                    {
-                        id:'5',
-                        da:'juni'
+                        id: '4',
+                        da: 'maj',
+                        en: 'may'
                     },
                     {
-                        id:'6',
-                        da:'juli'
+                        id: '5',
+                        da: 'juni',
+                        en: 'june'
                     },
                     {
-                        id:'7',
-                        da:'august'
+                        id: '6',
+                        da: 'juli',
+                        en: 'july'
                     },
                     {
-                        id:'8',
-                        da:'september'
+                        id: '7',
+                        da: 'august',
+                        en: 'august'
                     },
                     {
-                        id:'9',
-                        da:'oktober'
+                        id: '8',
+                        da: 'september',
+                        en: 'september'
                     },
                     {
-                        id:'10',
-                        da:'november'
+                        id: '9',
+                        da: 'oktober',
+                        en: 'october'
                     },
                     {
-                        id:'11',
-                        da:'december'
+                        id: '10',
+                        da: 'november',
+                        en: 'november'
                     },
                     {
-                        id:'ABC',
-                        da:'Danmark'
+                        id: '11',
+                        da: 'december',
+                        en: 'december'
+                    },
+                    {
+                        id: 'ABC',
+                        da: 'Danmark',
+                        en: 'Denmark'
                     }
                 ]
             },
             {
-                id:'weekDaysNames',
-                da:'',
-                children:[
+                id: 'weekDaysNames',
+                da: '',
+                en: 'en: ',
+                children: [
                     {
-                        id:'0',
-                        da:'søndag'
+                        id: '0',
+                        da: 'søndag',
+                        en: 'sunday'
 
                     },
                     {
-                        id:'1',
-                        da:'mandag'
+                        id: '1',
+                        da: 'mandag',
+                        en: 'monday'
 
                     },
                     {
-                        id:'2',
-                        da:'tirsdag'
+                        id: '2',
+                        da: 'tirsdag',
+                        en: 'tuesday'
 
                     },
                     {
-                        id:'3',
-                        da:'onsdag'
+                        id: '3',
+                        da: 'onsdag',
+                        en: 'wednesday'
 
                     },
                     {
-                        id:'4',
-                        da:'torsdag'
-                    },                    
-                    {
-                        id:'5',
-                        da:'fredag'
+                        id: '4',
+                        da: 'torsdag',
+                        en: 'thursday'
                     },
                     {
-                        id:'6',
-                        da:'lørdag'
+                        id: '5',
+                        da: 'fredag',
+                        en: 'friday'
+                    },
+                    {
+                        id: '6',
+                        da: 'lørdag',
+                        en: 'saturday'
                     }
-  
+
                 ]
 
             },
             {
-                id:'general',
-                da:'',
-                children:[
+                id: 'general',
+                da: '',
+                en: 'en: ',
+                children: [
                     {
-                        id:'header',
-                        da:'Frister for virksomheder'
+                        id: 'header',
+                        da: 'Frister for virksomheder',
+                        en: 'Deadlines for companies'
 
                     },
                     {
-                        id:'loonsum_method134',
-                        da:'Metode 1,3 og 4'
+                        id: 'loonsum_method134',
+                        da: 'Metode 1,3 og 4',
+                        en: 'method 1,3 og 4'
 
                     },
                     {
-                        id:'loonsum_method134super',
-                        da:'Lønsum'
-
-                    },                    
-                    {
-                        id:'showHideAll',
-                        da:'Vis/skjul alle'
+                        id: 'loonsum_method134super',
+                        da: 'Lønsum',
+                        en: 'payroll tax'
 
                     },
                     {
-                        id:'kvartal',
-                        da:'kvartal'
+                        id: 'showHideAll',
+                        da: 'Vis/skjul alle',
+                        en: 'Hide/show all'
 
                     },
                     {
-                        id:'wholeyear',
-                        da:'år'
-                    },
-                   {
-                        id:'halvaar',
-                        da:'halvår'
-                        
+                        id: 'kvartal',
+                        da: 'kvartal',
+                        en: 'quarter'
+
                     },
                     {
-                        id:'for',
-                        da:'for'
+                        id: 'wholeyear',
+                        da: 'år',
+                        en: 'year'
                     },
                     {
-                        id:'daysTo',
-                        da:'dage til'
+                        id: 'halvaar',
+                        da: 'halvår',
+                        en: 'half of the year'
+
                     },
                     {
-                        id:'noDeadlines',
-                        da:'Ingen pligter valgt'
+                        id: 'for',
+                        da: 'for',
+                        en: 'for'
                     },
                     {
-                        id:'daysLate',
-                        da:'Frist overskredet'
+                        id: 'daysTo',
+                        da: 'dage til',
+                        en: 'days to'
                     },
                     {
-                        id:'tomorrow',
-                        da:'I morgen'
+                        id: 'noDeadlines',
+                        da: 'Ingen pligter valgt',
+                        en: 'No duties selected'
                     },
                     {
-                        id:'lessThanHours',
-                        da:'Under X timer'
+                        id: 'daysLate',
+                        da: 'Frist overskredet',
+                        en: 'Deadline done'
                     },
                     {
-                        id:'firstTimeView',
-                        da:'Vælg din virksomheds pligter (fx lønsum) ved at klikke på ikonet herover, så viser kalenderen dine frister. Den husker dem næste gang du kommer forbi denne side.'
+                        id: 'tomorrow',
+                        da: 'I morgen',
+                        en: 'tomorrow'
                     },
                     {
-                        id:'rate',
-                        da:'rate'
+                        id: 'lessThanHours',
+                        da: 'Under X timer',
+                        en: 'Under X hours'
                     },
                     {
-                        id:'subTextIndstillinger',
-                        da:'Dine valg gemmes ...'
+                        id: 'firstTimeView',
+                        da: 'Vælg din virksomheds pligter (fx lønsum) ved at klikke på ikonet herover, så viser kalenderen dine frister. Den husker dem næste gang du kommer forbi denne side.',
+                        en: 'long english text, long english text, long english text, long english text, long english text, long english text, long english text, long english text, long english text.'
+                    },
+                    {
+                        id: 'rate',
+                        da: 'rate',
+                        en: 'rate'
+                    },
+                    {
+                        id: 'subTextIndstillinger',
+                        da: 'Dine valg gemmes ...',
+                        en: 'Dine settings are being saved...'
                     }
-                    
+
                 ]
 
             }
 
 
-        
-        ] 
 
-        return {manualDeadLines,txt}
+        ]
+
+        return { manualDeadLines, txt }
 
 
-    }    
+    }
 
 }
