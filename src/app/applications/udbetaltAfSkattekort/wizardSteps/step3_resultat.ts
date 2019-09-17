@@ -1,220 +1,272 @@
-import { Component, OnInit, WizardState, taxableIncome } from '../infrastructure/wizardressources';
+import {
+  Component,
+  OnInit,
+  WizardState,
+  taxableIncome
+} from "../infrastructure/wizardressources";
 
 @Component({
+  template: `
+    <div *ngIf="wizardState.incomes.length > 0">
+      <p class="text-center" *ngIf="!isMixedPeriods()">
+        {{ content.samletUdbetalt }} / {{ getPeriodTxt(0) }}
+      </p>
 
-    template: `
+      <p class="text-center" *ngIf="isMixedPeriods()">
+        {{ content.omregnetTilMaaned }}
+      </p>
+      <p class="text-center">
+        <strong class="skts-row-result skts-row-result--large"
+          >{{ getTotal() | tusindtal }} kr.</strong
+        >
+      </p>
+      <p>{{ content.resultOptionalTxt }}</p>
+      <hr class="skts-divider" />
+    </div>
 
-
-        <div *ngIf = "wizardState.incomes.length > 0">
-            <p class="text-center" *ngIf = "!isMixedPeriods()">{{content.samletUdbetalt}} / {{getPeriodTxt(0)}}</p>
-
-            <p class="text-center" *ngIf = "isMixedPeriods()">{{content.omregnetTilMaaned}}</p>
-            <p class="text-center"><strong class = "skts-row-result skts-row-result--large">{{getTotal() | tusindtal}} kr.</strong></p>
-            <p>{{content.resultOptionalTxt}}</p>
-            <hr class="skts-divider">   
+    <div
+      *ngFor="let result of wizardState.incomes; let i = index"
+      class="result-container"
+    >
+      <div class="show-result clearfix">
+        <div class="float-left">
+          {{ getIncomeType(i) }}
+          <span *ngIf="isSaleryIncome(i) && isTyped(i)"
+            ><strong>({{ result.income.from }})</strong></span
+          >
         </div>
+        <div class="float-right">{{ result.sum() | tusindtal }} kr.</div>
+      </div>
 
-        <div *ngFor = "let result of wizardState.incomes;let i = index" class = "result-container">
-
-            <div class = "show-result clearfix">                
-                <div class = "float-left">{{getIncomeType(i)}}
-                    <span *ngIf = "isSaleryIncome(i) && isTyped(i)"><strong>({{result.income.from}})</strong></span> 
-                </div>
-                <div class = "float-right">{{result.sum() | tusindtal}} kr.</div>                    
-            </div>
-
-            <div class = "show-result clearfix" *ngIf = "result.sumAMbidrag() > 0">
-                <div class = "float-left">{{content.AMbidrag}} 8 {{content.procentAf}} {{+result.income.sum | tusindtal}} kr.</div>
-                <div class = "float-right">- {{result.sumAMbidrag() | tusindtal}} kr.</div>
-            </div>
-
-            <div class = "show-result clearfix">
-                <div class = "float-left">{{content.Askat}} {{result.taxcard.withHoldingRate}} {{content.procentAf}} {{result.netincome() | tusindtal}} kr. <a (click) = "toggleModalMethod(i)" class = "small-link">{{content.Aindkomst}}</a></div>
-                <div class = "float-right">- {{result.taxOfWithHoldingRate() | tusindtal}} kr.</div>  
-            </div>
-
-            <div class = "show-result clearfix sum-line">         
-                <div class = "float-left">{{content.udbetaltEfterSkat}} / {{getPeriodTxt(i)}}:</div>
-                <div class = "float-right"><strong>{{result.paid() | tusindtal}} kr.</strong></div>     
-            </div> 
-
-            <p class = "minor">
-                {{content.anvendtSkattekort}} {{taxcardUsed(i) | lowercase}}
-                <a *ngIf = "result.income.appliedTaxCard === 'bikort' && wizardState.incomes.length > 1" class = "small-link" (click) = "anvendHovedkort(i)">
-                    {{content.anvendHovedkort}}
-                </a> 
-            </p>
-
-            <div class = "clearfix section-small">
-                <button class = "btn skts-btn-secondary float-right" (click) = "edit(i)" routerLink = "/skattekort">{{content.ret}}</button> 
-                <button class = "btn skts-btn-secondary float-ret" (click) = "removeIncome(i)">{{content.slet}}</button> 
-            </div>
-
+      <div class="show-result clearfix" *ngIf="result.sumAMbidrag() > 0">
+        <div class="float-left">
+          {{ content.AMbidrag }} 8 {{ content.procentAf }}
+          {{ +result.income.sum | tusindtal }} kr.
         </div>
-
-        <div class = "clearfix text-center">
-            <a routerLink = "/skattekort" (click) = "addIncome()">
-                <span class = "skts-rounded-icon">+</span>
-                {{content.tilfoejIndkomstButton}}
-            </a>
+        <div class="float-right">
+          - {{ result.sumAMbidrag() | tusindtal }} kr.
         </div>
+      </div>
 
-        <modal-aindkomst *ngIf = "wizardState.incomes.length > 0" [incomeNumber] = "showIncome" [toggle] = "toggleModal" (closed) = "toggleModal = false"></modal-aindkomst>
+      <div class="show-result clearfix">
+        <div class="float-left">
+          {{ content.Askat }} {{ result.taxcard.withHoldingRate }}
+          {{ content.procentAf }} {{ result.netincome() | tusindtal }} kr.
+          <a (click)="toggleModalMethod(i)" class="small-link">{{
+            content.Aindkomst
+          }}</a>
+        </div>
+        <div class="float-right">
+          - {{ result.taxOfWithHoldingRate() | tusindtal }} kr.
+        </div>
+      </div>
 
+      <div class="show-result clearfix sum-line">
+        <div class="float-left">
+          {{ content.udbetaltEfterSkat }} / {{ getPeriodTxt(i) }}:
+        </div>
+        <div class="float-right">
+          <strong>{{ result.paid() | tusindtal }} kr.</strong>
+        </div>
+      </div>
 
-    `,
-    styles: [`
-        .show-result {
-            font-size:17px;
-            padding:0.1em 0;
-            clear:both
-        }
-        .sum-line {
-            border-top:1px solid gray;
-            margin-top: 0.5em;
-            padding-top: 0.5em
-        }
-        .section {
-            margin-top:1.5em
-        }
-        .section-small {
-            margin-top:2em
-        }
-        .result-container {
-            position:relative;
-            padding-top: 2em
-        }
-        .edit {
-            position:absolute;
-            right:0.4em;
-            top:0.3em
-        }
-        .small-link {
-            font-size:0.7em;
-            cursor:pointer
-        }
-        .minor {
-            font-size:0.8em
-        }
-    `]
+      <p class="minor">
+        {{ content.anvendtSkattekort }} {{ taxcardUsed(i) | lowercase }}
+        <a
+          *ngIf="
+            result.income.appliedTaxCard === 'bikort' &&
+            wizardState.incomes.length > 1
+          "
+          class="small-link"
+          (click)="anvendHovedkort(i)"
+        >
+          {{ content.anvendHovedkort }}
+        </a>
+      </p>
 
+      <div class="clearfix section-small">
+        <button
+          class="alt-btn alt-btn-rediger float-right"
+          (click)="edit(i)"
+          routerLink="/skattekort"
+        >
+          {{ content.ret }}
+        </button>
+        <button
+          class="alt-btn alt-btn-slet float-left ml-0"
+          (click)="removeIncome(i)"
+        >
+          {{ content.slet }}
+        </button>
+      </div>
+    </div>
+
+    <div class="clearfix text-center">
+      <a routerLink="/skattekort" (click)="addIncome()">
+        <span class="ikon-rundt mr-2">+</span
+        >{{ content.tilfoejIndkomstButton }}
+      </a>
+    </div>
+
+    <modal-aindkomst
+      *ngIf="wizardState.incomes.length > 0"
+      [incomeNumber]="showIncome"
+      [toggle]="toggleModal"
+      (closed)="toggleModal = false"
+    ></modal-aindkomst>
+  `,
+  styles: [
+    `
+      .show-result {
+        font-size: 17px;
+        padding: 0.1em 0;
+        clear: both;
+      }
+      .sum-line {
+        border-top: 1px solid gray;
+        margin-top: 0.5em;
+        padding-top: 0.5em;
+      }
+      .section {
+        margin-top: 1.5em;
+      }
+      .section-small {
+        margin-top: 2em;
+      }
+      .result-container {
+        position: relative;
+        padding-top: 2em;
+      }
+      .edit {
+        position: absolute;
+        right: 0.4em;
+        top: 0.3em;
+      }
+      .small-link {
+        font-size: 0.7em;
+        cursor: pointer;
+      }
+      .minor {
+        font-size: 0.8em;
+      }
+    `
+  ]
 })
-
 export class resultat {
+  constructor(private wizardState: WizardState) {}
 
-    constructor(
-        private wizardState: WizardState
-    ) { }
+  content: Object = {};
+  hovedkortName: string = "";
+  bikortName: string = "";
+  showIncome: number = 0;
+  toggleModal: boolean = false;
+  indkomstTyper: Object = {};
 
-    content: Object = {}
-    hovedkortName: string = "";
-    bikortName: string = "";
-    showIncome: number = 0;
-    toggleModal: boolean = false;
-    indkomstTyper: Object = {};
+  ngOnInit() {
+    this.wizardState.editingIncome = false;
+    this.wizardState.trin = 2;
+    this.content = this.wizardState.currentWizardStepContent;
+    this.wizardState.printLocalContent([["step3", "general"]]);
 
-    ngOnInit() {
+    this.wizardState
+      .getselect("selects", "loonindkomstTyper")
+      .subscribe(indkomstTyper => {
+        indkomstTyper.forEach(element => {
+          this.indkomstTyper[element.value] = element.text;
+        });
+      });
 
-        this.wizardState.editingIncome = false;
-        this.wizardState.trin = 2;
-        this.content = this.wizardState.currentWizardStepContent
-        this.wizardState.printLocalContent([['step3', 'general']]);
+    window.scrollTo(0, 0);
+  }
 
-        this.wizardState.getselect('selects', 'loonindkomstTyper').subscribe(indkomstTyper => {
-            indkomstTyper.forEach(element => {
-                this.indkomstTyper[element.value] = element.text
-            })
-        })
+  addIncome() {
+    this.wizardState.createIncome();
+    var len = this.wizardState.incomes.length;
+    this.wizardState.thisincome = len - 1;
+  }
 
-        window.scrollTo(0, 0)
+  isMixedPeriods() {
+    var monthly = false,
+      twoweeks = false,
+      both = false;
 
-    }
+    this.wizardState.incomes.forEach(el => {
+      twoweeks = el.income.period === "twoweeks" ? true : twoweeks;
+      monthly = el.income.period === "monthly" ? true : monthly;
+      both = twoweeks && monthly ? true : both;
+    });
 
-    addIncome() {
+    return both;
+  }
 
-        this.wizardState.createIncome()
-        var len = this.wizardState.incomes.length
-        this.wizardState.thisincome = len - 1
-    }
+  getPeriodTxt(index: number) {
+    return this.wizardState.incomes[index].income.period === "monthly"
+      ? this.content["maaned"]
+      : this.content["twoweeks"];
+  }
 
-    isMixedPeriods() {
+  getTotal() {
+    return this.isMixedPeriods()
+      ? this.getMonthlyTotalofMixed()
+      : this.getTotalSamePeriod();
+  }
 
-        var monthly = false,
-            twoweeks = false,
-            both = false
+  getTotalSamePeriod() {
+    return this.wizardState.incomes.reduce((p, c) => {
+      return p + c.paid();
+    }, 0);
+  }
 
-        this.wizardState.incomes.forEach(el => {
-            twoweeks = (el.income.period === 'twoweeks') ? true : twoweeks;
-            monthly = (el.income.period === 'monthly') ? true : monthly;
-            both = (twoweeks && monthly) ? true : both;
-        })
+  getMonthlyTotalofMixed() {
+    return this.wizardState.incomes.reduce((p, c) => {
+      return c.income.period === "twoweeks"
+        ? p + Math.round((c.paid() * 26) / 12)
+        : p + c.paid();
+    }, 0);
+  }
 
-        return both
+  taxcardUsed(index: number) {
+    let taxcard = this.wizardState.incomes[index].income.appliedTaxCard;
+    return taxcard === "hovedkort"
+      ? this.content["hovedkort"]
+      : this.content["bikort"];
+  }
 
-    }
+  toggleModalMethod(index: number) {
+    this.showIncome = index;
+    this.toggleModal = true;
+  }
 
-    getPeriodTxt(index: number) {
-        return this.wizardState.incomes[index].income.period === "monthly" ? this.content['maaned'] : this.content['twoweeks']
-    }
+  anvendHovedkort(index: number) {
+    var indexOfCurrentIncome = this.wizardState.thisincome,
+      numberOfIncomes = this.wizardState.incomes.length;
 
-    getTotal() {
-        return this.isMixedPeriods() ? this.getMonthlyTotalofMixed() : this.getTotalSamePeriod();
-    }
+    let hovedkortExists = this.wizardState.incomes.reduce((p, v, i) => {
+      return v.income.appliedTaxCard === "hovedkort" ? i : p;
+    }, -1);
 
-    getTotalSamePeriod() {
-        return this.wizardState.incomes.reduce((p, c) => {
-            return p + c.paid()
-        }, 0)
-    }
+    this.wizardState.moveHovedkort(hovedkortExists, index);
+  }
 
-    getMonthlyTotalofMixed() {
-        return this.wizardState.incomes.reduce((p, c) => {
-            return (c.income.period === 'twoweeks') ? p + Math.round(c.paid() * 26 / 12) : p + c.paid()
-        }, 0)
-    }
+  removeIncome(index: number): void {
+    this.showIncome = 0;
+    this.wizardState.incomes.splice(index, 1);
+  }
 
-    taxcardUsed(index: number) {
-        let taxcard = this.wizardState.incomes[index].income.appliedTaxCard
-        return (taxcard === 'hovedkort') ? this.content['hovedkort'] : this.content['bikort']
-    }
+  edit(index: number) {
+    this.wizardState.editingIncome = true;
+    this.wizardState.thisincome = index;
+  }
 
-    toggleModalMethod(index: number) {
-        this.showIncome = index;
-        this.toggleModal = true
-    }
+  getIncomeType(index: number) {
+    return this.indkomstTyper[this.wizardState.incomes[index].income.type];
+  }
 
-    anvendHovedkort(index: number) {
+  isSaleryIncome(index: number) {
+    return this.wizardState.incomes[index].income.type === "loonIndkomst";
+  }
 
-        var indexOfCurrentIncome = this.wizardState.thisincome,
-            numberOfIncomes = this.wizardState.incomes.length
-
-        let hovedkortExists = this.wizardState.incomes.reduce((p, v, i) => {
-            return v.income.appliedTaxCard === 'hovedkort' ? i : p
-        }, -1)
-
-        this.wizardState.moveHovedkort(hovedkortExists, index)
-    }
-
-    removeIncome(index: number): void {
-        this.showIncome = 0;
-        this.wizardState.incomes.splice(index, 1)
-    }
-
-    edit(index: number) {
-        this.wizardState.editingIncome = true
-        this.wizardState.thisincome = index
-    }
-
-    getIncomeType(index: number) {
-        return this.indkomstTyper[this.wizardState.incomes[index].income.type]
-    }
-
-    isSaleryIncome(index: number) {
-        return this.wizardState.incomes[index].income.type === 'loonIndkomst'
-    }
-
-    isTyped(index: number) {
-        return this.wizardState.incomes[index].income.from.length > 0;
-    }
-
-} 
+  isTyped(index: number) {
+    return this.wizardState.incomes[index].income.from.length > 0;
+  }
+}
