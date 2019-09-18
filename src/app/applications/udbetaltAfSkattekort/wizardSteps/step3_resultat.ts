@@ -40,7 +40,7 @@ import {
 
       <div class="show-result clearfix" *ngIf="result.sumAMbidrag() > 0">
         <div class="float-left">
-          {{ content.AMbidrag }} 8 {{ content.procentAf }}
+          {{ content.AMbidrag }} 8{{ content.procentAf }}
           {{ +result.income.sum | tusindtal }} kr.
         </div>
         <div class="float-right">
@@ -50,11 +50,15 @@ import {
 
       <div class="show-result clearfix">
         <div class="float-left">
-          {{ content.Askat }} {{ result.taxcard.withHoldingRate }}
-          {{ content.procentAf }} {{ result.netincome() | tusindtal }} kr.
-          <a (click)="toggleModalMethod(i)" class="small-link">{{
-            content.Aindkomst
-          }}</a>
+          {{ content.Askat }} {{ result.taxcard.withHoldingRate
+          }}{{ content.procentAf }} {{ result.netincome() | tusindtal }} kr.
+          <button
+            type="button"
+            (click)="toggleModalMethod(i)"
+            class="ikon-rundt"
+          >
+            ?
+          </button>
         </div>
         <div class="float-right">
           - {{ result.taxOfWithHoldingRate() | tusindtal }} kr.
