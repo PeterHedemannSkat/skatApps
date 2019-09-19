@@ -1,18 +1,18 @@
-import { Component, OnInit} from '@angular/core';
-import { getJSONdata,languageText,listValues,CalenderServices,MathCalc,multiGears } from '../../../shared/shared'
-import { Observable } from 'rxjs/Observable'; 
+import { Component, OnInit } from '@angular/core';
+import { getJSONdata, languageText, listValues, CalenderServices, MathCalc, multiGears } from '../../../shared/shared'
+import { Observable } from 'rxjs/Observable';
 import { Deadline } from '../services/deadline.service'
-import { findDateObj,deadlineInfo,period} from '../infrastructure/types'
+import { findDateObj, deadlineInfo, period } from '../infrastructure/types'
 import { hierachy } from '../data/rulesForPligter';
 import { Rules } from '../data/rulesForPligter';
 
 interface EventTarget {
-    querySelector:Function 
-} 
+    querySelector: Function
+}
 
 @Component({
-    selector:'my-app',
-    template:`
+    selector: 'my-app',
+    template: `
         
         <div class = "virksomheds-kalender" id = "#virkCalender">
    
@@ -64,10 +64,10 @@ interface EventTarget {
 
                         <span [class.olddeadlines] = "datecalc.now > frist.date && !isCloseToDeadline(frist.date)">      
                             <span class = "weekday-name">
-                                {{getText('weekDaysNames',frist.date.getDay()) | async}}
+                                {{getText('weekDaysNames',frist.date.getDay()) | async}},
                             </span>
                             <span class = "day-of-month date-format">
-                                d. {{frist.date.getDate()}}.
+                                {{frist.date.getDate()}}.
                             </span> 
                             <span class = "month-name date-format">
                                 {{getText('monthNames',frist.date.getMonth()) | async}}
@@ -104,57 +104,57 @@ interface EventTarget {
 
 export class virksomhedsKalenderApp {
 
-    constructor (public data:getJSONdata,public pligtService:Deadline,public datecalc:CalenderServices) {
-       
+    constructor(public data: getJSONdata, public pligtService: Deadline, public datecalc: CalenderServices) {
+
     }
 
-    moveCalender(move:string) {
+    moveCalender(move: string) {
         this.pligtService.deadlines = this.pligtService.fetchTenDeadlines(move)
     }
 
-    language:string = 'da';
-    toggleSettings:boolean = true;
-    closeRangeTo:number = 7;
-    closeRangeFrom:number = this.pligtService.showDaysBefore + 1;
-    firstView:boolean = true;
+    language: string = document.getElementsByTagName('html')[0].getAttribute('lang') || 'da';
+    toggleSettings: boolean = true;
+    closeRangeTo: number = 7;
+    closeRangeFrom: number = this.pligtService.showDaysBefore + 1;
+    firstView: boolean = true;
 
-    test:Promise<string>;
-    frister:deadlineInfo[] = []
-    index:number = 0
+    test: Promise<string>;
+    frister: deadlineInfo[] = []
+    index: number = 0
 
 
-    ngOnInit () { 
+    ngOnInit() {
 
         this.initSetUp();
         this.updateDeadline();
 
-        window.addEventListener('click',(event:Event) => {
+        window.addEventListener('click', (event: Event) => {
 
-           let  target                      = <HTMLElement> event.target,
-                clickInsideIndstillinger    = this.closests(target,'indstillinger'),
-                clickOnToggleButton         = this.closests(target,'indstillinger-toggle')
+            let target = <HTMLElement>event.target,
+                clickInsideIndstillinger = this.closests(target, 'indstillinger'),
+                clickOnToggleButton = this.closests(target, 'indstillinger-toggle')
 
             /* hvis man klikker uden for indstillinger og ikke på knappen der toggler indstillinger, så lukkes indstillinger */
-           if (!clickOnToggleButton && !clickInsideIndstillinger) this.toggleSettings = true
+            if (!clickOnToggleButton && !clickInsideIndstillinger) this.toggleSettings = true
 
-        })    
+        })
 
-        
-        
-        
+
+
+
     }
 
-    closests (HTMLElement:HTMLElement,parentClass:string):any {
+    closests(HTMLElement: HTMLElement, parentClass: string): any {
 
-        return (HTMLElement.classList.contains && HTMLElement.classList.contains(parentClass)) 
+        return (HTMLElement.classList.contains && HTMLElement.classList.contains(parentClass))
             ? true
-            : (HTMLElement.tagName == 'BODY' || HTMLElement.tagName == 'HTML') 
+            : (HTMLElement.tagName == 'BODY' || HTMLElement.tagName == 'HTML')
                 ? false
-                : this.closests(HTMLElement.parentElement,parentClass)
+                : this.closests(HTMLElement.parentElement, parentClass)
 
     }
 
-    initSetUp () {
+    initSetUp() {
 
         this.pligtService.url = (this.pligtService.developmentMode) ? 'app/txt.json' : 'websrv/jsong.ashx?Id=66594'
         this.pligtService.urlManualDeadlines = (this.pligtService.developmentMode) ? 'app/manualDeadLines.json' : 'websrv/jsong.ashx?Id=134179'
@@ -162,41 +162,41 @@ export class virksomhedsKalenderApp {
 
         this.language = document.getElementsByTagName('html')[0].getAttribute('lang') || 'da';
 
-        this.data.production = (this.pligtService.developmentMode) ? false : true 
+        this.data.production = (this.pligtService.developmentMode) ? false : true
 
         if (this.pligtService.testDate) {
 
             let date = new Date(),
                 currentHour = date.getHours(),
-                currentMinute = date.getMinutes() 
+                currentMinute = date.getMinutes()
 
-            this.datecalc.now = new Date(2016,11,12,19,currentMinute)
+            this.datecalc.now = new Date(2016, 11, 12, 19, currentMinute)
 
         }
 
     }
 
-    txtCloseDeadline (date:Date) {
+    txtCloseDeadline(date: Date) {
 
-        return Observable.create((resolve:any) => {
+        return Observable.create((resolve: any) => {
 
-            let daysLeft    = this.datecalc.daysFromtoday(date)
+            let daysLeft = this.datecalc.daysFromtoday(date)
 
             if (daysLeft < this.closeRangeTo && daysLeft > 1) {
 
-                this.getText('general','daysTo').subscribe(txt => {
+                this.getText('general', 'daysTo').subscribe(txt => {
                     resolve.next(`${daysLeft} ${txt}`)
                 })
 
             } else if (daysLeft == 1) {
 
-                this.getText('general','tomorrow').subscribe(txt => {
+                this.getText('general', 'tomorrow').subscribe(txt => {
                     resolve.next(`${txt}`)
                 })
 
             } else if (daysLeft == 0) {
 
-                this.getText('general','lessThanHours').subscribe(txt => {
+                this.getText('general', 'lessThanHours').subscribe(txt => {
 
                     let lastMinutPrecision = this.datecalc.copyDate(date)
                     lastMinutPrecision.setHours(23)
@@ -206,58 +206,58 @@ export class virksomhedsKalenderApp {
                     let under = txt.split('X')[0],
                         hours = txt.split('X')[1]
 
-                    let hoursTo = this.datecalc.hoursFromTime(lastMinutPrecision) 
+                    let hoursTo = this.datecalc.hoursFromTime(lastMinutPrecision)
 
-                    if (hoursTo == 1) hours = hours.slice(0,hours.length - 1) 
-                
+                    if (hoursTo == 1) hours = hours.slice(0, hours.length - 1)
+
                     resolve.next(`${under} ${hoursTo} ${hours}`)
-     
+
                 })
 
             } else if (daysLeft < 0) {
-                this.getText('general','daysLate').subscribe(txt => {
+                this.getText('general', 'daysLate').subscribe(txt => {
                     resolve.next(`${txt}`)
                 })
 
-            } 
+            }
         })
     }
 
 
-    timeToDeadline (date:Date) {
-        let daysLeft    = this.datecalc.daysFromtoday(date)
-        return  (daysLeft == 0) ? this.datecalc.hoursFromTime(date) : daysLeft 
+    timeToDeadline(date: Date) {
+        let daysLeft = this.datecalc.daysFromtoday(date)
+        return (daysLeft == 0) ? this.datecalc.hoursFromTime(date) : daysLeft
     }
 
-    isCloseToDeadline (date:Date) {
+    isCloseToDeadline(date: Date) {
         let daysFromToday = this.datecalc.daysFromtoday(date)
-        return daysFromToday > this.closeRangeFrom * -1 && daysFromToday < this.closeRangeTo 
+        return daysFromToday > this.closeRangeFrom * -1 && daysFromToday < this.closeRangeTo
     }
 
-    daysToDeadline (date:Date) {
+    daysToDeadline(date: Date) {
         return this.datecalc.daysFromtoday(date)
     }
 
-    getSuperLevel (id:string):Observable<string> {
+    getSuperLevel(id: string): Observable<string> {
 
-        return Observable.create((resolve:any) => {
+        return Observable.create((resolve: any) => {
 
-            let superLevel:string 
+            let superLevel: string
 
             if (id != 'loonsum_method134') {
 
                 for (let prop in hierachy) {
-                    if (hierachy[prop].indexOf(id) > -1) superLevel = prop 
-                }  
+                    if (hierachy[prop].indexOf(id) > -1) superLevel = prop
+                }
 
-                this.getText('pligter',superLevel).subscribe(el => {
-            
+                this.getText('pligter', superLevel).subscribe(el => {
+
                     resolve.next(el)
                 })
 
             } else {
 
-                this.getText('general',id + 'super').subscribe(el => {
+                this.getText('general', id + 'super').subscribe(el => {
                     resolve.next(el)
                 })
 
@@ -265,102 +265,102 @@ export class virksomhedsKalenderApp {
         })
     }
 
-    getPeriodTxt (id:string,period:period):Observable<string> {
+    getPeriodTxt(id: string, period: period): Observable<string> {
 
-        return Observable.create((resolve:any) => {
+        return Observable.create((resolve: any) => {
 
             let periods = Rules.find(el => el.id == id).periods
 
             switch (periods) {
                 case 1:
-                    
-                    this.getText('general','wholeyear').subscribe(txt => {
+
+                    this.getText('general', 'wholeyear').subscribe(txt => {
                         resolve.next(`${txt} ${period.year}`)
-                    })  
+                    })
                     break;
-                case 2:                    
-                    this.getText('general','halvaar').subscribe(txt => {
+                case 2:
+                    this.getText('general', 'halvaar').subscribe(txt => {
                         resolve.next(`${period.period}. ${txt} ${period.year}`)
                     })
                     break;
 
                 case 4:
-                    this.getText('general','kvartal').subscribe(txt => {
+                    this.getText('general', 'kvartal').subscribe(txt => {
                         resolve.next(`${period.period}. ${txt} ${period.year}`)
                     })
                     break;
 
-                case 12: 
-                    this.getText('monthNames',Number(period.period - 1).toString()).subscribe(txt => {
+                case 12:
+                    this.getText('monthNames', Number(period.period - 1).toString()).subscribe(txt => {
                         resolve.next(`${txt} ${period.year}`)
                     })
                     break;
-            
-            } 
-        })        
+
+            }
+        })
 
     }
 
-    getNameOfFrist (id:string):Observable<string> {
+    getNameOfFrist(id: string): Observable<string> {
 
-        return Observable.create((resolve:any) => {
-            
-            let superLevel:string 
+        return Observable.create((resolve: any) => {
+
+            let superLevel: string
 
             for (let prop in hierachy) {
-                if (hierachy[prop].indexOf(id) > -1) superLevel = prop 
-            }   
+                if (hierachy[prop].indexOf(id) > -1) superLevel = prop
+            }
 
             if (id != 'loonsum_method134') {
-                this.getSubinPligter(superLevel,id).subscribe(el => {
+                this.getSubinPligter(superLevel, id).subscribe(el => {
                     resolve.next(el[this.language])
                 })
-            } else {     
-                this.getText('general',id).subscribe(el => {
+            } else {
+                this.getText('general', id).subscribe(el => {
                     resolve.next(el)
                 })
-            }   
-        }) 
+            }
+        })
     }
 
-    getlist (name:string) {
+    getlist(name: string) {
         return this.data.fetch<languageText>(this.pligtService.url)
-            .find(txtEle =>  name === txtEle.id)
+            .find(txtEle => name === txtEle.id)
             .map(txtEle => txtEle.children)
     }
 
-    getSubinPligter (sub:string,id:string) {
+    getSubinPligter(sub: string, id: string) {
         return this.data.fetch<languageText>(this.pligtService.url)
-            .find(txtEle =>  'pligter' === txtEle.id)
+            .find(txtEle => 'pligter' === txtEle.id)
             .map(txtEle => txtEle.children.find(el => el.id == sub))
             .map(el => el.children.find(el => id == el.id))
-           
+
     }
 
-   getText (name:string,id:string):Observable<string> {
+    getText(name: string, id: string): Observable<string> {
         return this.data.fetch<languageText>(this.pligtService.url)
-            .find(txtEle =>  name === txtEle.id)
+            .find(txtEle => name === txtEle.id)
             .map(txtEle => txtEle.children.find(el => el.id == id)[this.language])
     }
 
-   getdateShort (name:string,id:string):Observable<string> {
-       return this.getText(name,id)
-            .map(el => el.slice(0,3))
+    getdateShort(name: string, id: string): Observable<string> {
+        return this.getText(name, id)
+            .map(el => el.slice(0, 3))
     }
 
-    updateDeadline () {
+    updateDeadline() {
 
-        let from  = this.datecalc.moveDateByDays(this.datecalc.now, this.pligtService.showDaysBefore * -1),
-             to   = this.datecalc.moveDateByDays(this.datecalc.now, 50) 
+        let from = this.datecalc.moveDateByDays(this.datecalc.now, this.pligtService.showDaysBefore * -1),
+            to = this.datecalc.moveDateByDays(this.datecalc.now, 50)
 
-        this.pligtService.setViewDates(from,to)        
+        this.pligtService.setViewDates(from, to)
         this.pligtService.deadlines = this.pligtService.fetchTenDeadlines('state')
 
-        let data = JSON.stringify(this.pligtService.state) 
+        let data = JSON.stringify(this.pligtService.state)
 
-        localStorage.setItem('pligter',data)
+        localStorage.setItem('pligter', data)
 
-   
+
 
 
         // måske tjekke at der ikke er nogen overraskelser i data
