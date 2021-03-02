@@ -9,7 +9,7 @@ import {
   template: `
     <div class="row skts-process-form-section form-group">
       <div class="col-sm-6">
-        <label
+        <label [attr.for]="fieldId"
           >{{ label
           }}<span
             *ngIf="showHelper()"
@@ -25,6 +25,7 @@ import {
         </div>
         <div class="input-group">
           <input
+            [id]="fieldId"
             [(ngModel)]="value"
             [class.text-right]="!!postfix"
             class="form-control"
@@ -91,6 +92,9 @@ export class normalInput {
 
   @Input()
   placeholder: string;
+
+  @Input()
+  fieldId: string;
 
   @Input()
   errormessage: string;

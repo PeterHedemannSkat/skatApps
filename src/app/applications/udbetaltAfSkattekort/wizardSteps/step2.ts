@@ -35,6 +35,7 @@ interface Income {
         [validateType]="[wizardState.errorTxt.notEmpty]"
         [placeholder]="content.udbetalerPlaceholder"
         (changed)="changeIncomeName()"
+        fieldId="udbetalersnavn"
       ></regular-input>
 
       <bootstrapRadio
@@ -54,6 +55,7 @@ interface Income {
         postfix="kr."
         [placeholder]="content.skrivbeloeb"
         (changed)="validate()"
+        fieldId="indkomstmaaned"
       ></regular-input>
 
       <bootstrapRadio

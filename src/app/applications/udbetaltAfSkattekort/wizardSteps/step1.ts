@@ -17,6 +17,7 @@ import { Validator } from '../../../shared/shared';
                 [validateType]  = "wizardState.getValitionSet(['notEmpty','number','!range?from=30&to=99'])"
                 [placeholder]   = "content.skrivprocent"
                 postfix         = "%"     
+                fieldId         = "traekprocent"
                 (changed)       = "validate()"
             ></regular-input>
 
@@ -28,6 +29,7 @@ import { Validator } from '../../../shared/shared';
                 postfix         = "kr."
                 [placeholder]   = "content.skrivbeloeb"
                 (changed)       = "validate()"
+                fieldId         = "maanedsfradrag"
             ></regular-input>
 
         </div>
